@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "valid-framework"
+version = "0.1.0"
+description = "VALID: Validation Architecture for Learning-based Investment Decisions"
+requires-python = ">=3.9"
+license = {text = "MIT"}

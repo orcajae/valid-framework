@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  valid:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../data:/app/data
+      - ../results:/app/results
