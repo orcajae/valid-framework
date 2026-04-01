@@ -13,16 +13,17 @@ Jaewook Kim (2026). SSRN preprint (forthcoming).
 
 ## Key Findings
 
-- **Bull bias**: Crypto ML models predict 58-97% long without class balancing (across BTC, ETH, SOL; tree-based + deep learning architectures)
-- **Statistical-economic disconnect**: PBO=0.000 + permutation p=0.000, yet net Sharpe = 0.135. First empirical confirmation of Witzany's (2021) PBO critique via 100-iteration Monte Carlo.
-- **Cost illusion**: ML fails to beat simple momentum even at 0bp transaction costs (SR 0.640 vs 0.954)
-- **Literature audit**: 72% of 80 crypto ML papers ignore class balance; 53% omit transaction costs; only 1% use CPCV
-- **Ablation**: CPCV/PBO (Item V4) alone prevents 29% false positive rate; removing any other single item has negligible standalone impact
+- **322 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4 timeframes, and 5 model families — 51% produce negative net Sharpe ratios; only 3.7% exceed a simple momentum benchmark
+- **Bull bias**: Crypto ML models predict 58–97% long without class balancing; class balancing eliminates bias but does not improve predictive power (AUC ≈ 0.50)
+- **Statistical-economic disconnect**: PBO=0.000 + permutation p=0.000, yet net Sharpe = 0.135. First empirical confirmation of Witzany's (2021) PBO critique via 200-iteration Monte Carlo
+- **Cost illusion**: ML fails to beat simple momentum even at 0bp transaction costs (SR 0.640 vs 0.954); costs consume 55–91% of gross alpha
+- **Literature audit**: 72% of 75 empirical crypto ML papers ignore class balance; 53% omit transaction costs; 0% use CPCV
+- **Monte Carlo FPR**: AUC-based evaluation produces 27% [21%, 34%] false positives; CPCV+PBO reduces this to 0% [0%, 1.9%]
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/[username]/valid-framework.git
+git clone https://github.com/orcajae/valid-framework.git
 cd valid-framework
 pip install -e ".[ml,dev]"
 
@@ -88,10 +89,11 @@ valid-framework/
 │   ├── features.py         # Feature engineering
 │   └── costs.py            # Transaction cost models
 ├── experiments/            # Reproduce all paper results
-├── audit/                  # Literature audit (80 papers)
+├── audit/                  # Literature audit (80 papers, 75 empirical)
+├── results/reference/      # Reference outputs (322 variants, MC 200)
+├── paper/figures/          # Figures 1-7 (300 DPI)
 ├── figures/                # Figure generation scripts
 ├── tests/                  # Unit tests
-├── paper/                  # Paper manuscript
 └── docker/                 # Docker reproduction environment
 ```
 

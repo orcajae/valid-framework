@@ -17,6 +17,6 @@ TIMEFRAMES = ["15m", "1h", "4h", "1d"]
 CPCV_N = 6
 CPCV_K = 2
 CPCV_PURGE = 20
-MC_ITERATIONS = 100
+MC_ITERATIONS = 200
 TREE_MODELS = ["catboost", "lightgbm", "random_forest"]
 DL_MODELS = ["lstm", "simple_rnn"]
