@@ -1,0 +1,81 @@
+id,authors,year,journal,assets,method,best_metric,D1_cost,D1_cost_bp,D2_class_balance,D3_temporal_split,D4_validation,D5_baselines,D6_net_perf,D7_code
+1,Fang et al.,2022,Financial Innovation,Survey 146 papers,Survey,N/A,Survey notes ~50% omit costs,N/A,Not assessed,Not assessed,Not assessed,Not assessed,Not assessed,No
+2,Jaquart Dann Weinhardt,2021,J Finance Data Science,BTC,RF/SVM/LSTM,Acc 54.3%,No,0,Noted class imbalance issue,Yes temporal,Simple holdout,BnH,No (gross only),No
+3,Gradzki et al.,2025,Financial Innovation,BTC ETH,XGBoost/LSTM,Precision 62%,Yes,10,Not addressed,Yes temporal,Walk-forward,BnH + random,Yes,Partial
+4,Fieberg et al.,2025,JFQA,3244 coins,ElasticNet,SR 1.34,Yes,varies,N/A cross-section,Yes temporal,Expanding window,BnH + factors,Yes,No
+5,Li et al.,2024,SSRN,BTC,12 ML models,AUC 0.82,Partial,5,Not addressed,Yes temporal,Walk-forward,BnH,Partial,No
+6,Xu et al.,2022,ScienceDirect,100 cryptos,LSTM/GRU ensemble,SR 3.23,Yes,10,Not addressed,Yes temporal,Expanding window,BnH + MACD,Yes,No
+7,Yang et al.,2025,Finance Research Letters,BTC,Risk-managed momentum,SR 1.42,Yes,assumed low,N/A momentum,Yes temporal,Walk-forward,BnH + naive momentum,Yes,No
+8,Grobys et al.,2025,FMPM,BTC,Momentum strategies,SR varies,Partial,not specified,N/A momentum,Yes temporal,Full sample,BnH,Partial,No
+9,Arian Mobarekeh Seco,2024,Knowledge-Based Systems,Synthetic,CPCV variants,PBO comparison,N/A synthetic,N/A,N/A,Yes temporal,CPCV/Bagged CPCV,Walk-forward,N/A,Yes GitHub
+10,Lahmiri Bekiros,2024,arXiv/preprint,BTC,ARIMA/GARCH vs ML,Naive beats ML,No,0,Not addressed,Yes temporal,Simple holdout,ARIMA/random walk,No,No
+11,Witzany,2021,Risks,Synthetic,PBO analysis,PBO bias demo,N/A,N/A,N/A,N/A,CSCV/PBO,N/A,N/A,No
+12,Chen Velikov,2023,JFQA,Equities (relevant),Anomaly replication,93% decay,Yes,realistic,N/A equities,Yes temporal,Walk-forward,Factor models,Yes,No
+13,Akyildirim et al.,2021,European J Op Research,8 cryptos,ML classification,Acc 65%,No,0,Not addressed,No random k-fold,5-fold CV,BnH,No,No
+14,Nakano et al.,2018,JJIAM,BTC,DNN,Return 30%+,Yes,25,Not addressed,Yes temporal,Walk-forward,BnH,Yes,No
+15,Huang et al.,2019,Economics Letters,BTC,Ensemble,Acc 66%,No,0,Not addressed,Yes temporal,Simple holdout,Logistic reg,No,No
+16,McNally et al.,2018,ICSC,BTC,LSTM/RNN,Acc 52.8%,No,0,Not addressed,Yes temporal,Simple holdout,ARIMA,No,No
+17,Patel et al.,2020,Expert Sys w/ App,BTC ETH LTC,LSTM-Attention,RMSE based,No,0,Not addressed,No random split,Random holdout,ARIMA/SVM,No,No
+18,Jay et al.,2020,PLOS One,BTC,Stacked LSTM,Return 31.6%,Yes,20,Not addressed,Yes temporal,Walk-forward,BnH,Yes,Partial
+19,Jiang Liang,2017,arXiv,12 cryptos,DRL (EIIE),Return 10x,Yes,25,N/A RL,Yes temporal,Walk-forward,BnH + UBAH,Yes,Yes
+20,Borrageiro et al.,2022,Expert Sys w/ App,BTC,DRL (PPO),SR 1.78,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH,Yes,Partial
+21,Schnaubelt,2022,J Forecasting,BTC,CNN-LSTM ensemble,Return varies,Yes,50,Not addressed,Yes temporal,Walk-forward,BnH + random,Yes,No
+22,Kim et al.,2024,Scientific Reports,BTC,Multi-level DQN,SR 2.74,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH + single DQN,Yes,Partial
+23,Chen He Tao,2021,IEEE Access,BTC,XGBoost+LSTM,Acc 64%,No,0,Not addressed,No random,Random 80/20,BnH,No,No
+24,Khedr et al.,2021,Complexity,BTC,LSTM/GRU/BiLSTM,Acc 64.2%,No,0,Not addressed,Yes temporal,Simple holdout,SVM/RF,No,No
+25,Livieris et al.,2020,Neural Comp App,BTC ETH LTC,CNN-LSTM,RMSE based,No,0,Not addressed,Yes temporal,Walk-forward,LSTM only,No,No
+26,Mudassir et al.,2020,Expert Sys w/ App,BTC ETH XRP,RF/SVM/LR,Acc 65.3%,No,0,Not addressed,Yes temporal,Simple holdout,LR baseline,No,No
+27,Saad et al.,2020,IEEE JSAC,BTC,RNN/LSTM,Acc 53%,No,0,Not addressed,Yes temporal,Simple holdout,Naive,No,No
+28,Sun et al.,2020,PLOS One,BTC,SVM/RF/LSTM,Acc 62%,No,0,Not addressed,Yes temporal,Simple holdout,LR,No,No
+29,Zhang Wei,2025,arXiv,BTC,Multi-head CNN,PF 1.15,Yes,assumed,N/A,Yes temporal,Walk-forward,LSTM variants,Yes,No
+30,Mahmoodi et al.,2023,Int Rev Fin Analysis,BTC ETH,XGBoost/CatBoost,AUC 0.58,No,0,Not addressed,Yes temporal,Walk-forward,BnH,No,No
+31,Yin Liu,2024,Scientific Reports,BTC,AI ensemble,Return 1640%,Yes,50,Not addressed,Yes temporal,Walk-forward,BnH + ML baseline,Yes,Partial
+32,MDPI Info 2025,2025,Information,BTC ETH,9 models compared,MAPE 0.09%,No,0,Not addressed,Yes temporal,Walk-forward,ARIMA/baseline,No,No
+33,Michankow et al.,2023,arXiv/preprint,BTC,LSTM+MADL,Directional acc,Partial,not specified,Proposed MADL for direction,Yes temporal,Walk-forward,MSE-based LSTM,Partial,No
+34,Sebastiao Godinho,2021,Res Int Business Finance,BTC ETH,ML ensemble,SR 1.5+,Yes,10,Not addressed,Yes temporal,Walk-forward,BnH + random,Yes,No
+35,Aboussalah Lee,2020,J Financial Data Sci,BTC ETH,DRL continuous,SR 1.98,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH + UBAH,Yes,Yes GitHub
+36,Alessandretti et al.,2018,Complexity,top 100 cryptos,Gradient boosting,Return varies,No,0,Not addressed,Yes temporal,Walk-forward,BnH,No,No
+37,Vo Yuen,2020,Expert Sys w/ App,BTC ETH,CNN ensemble,Acc 70.4%,No,0,Not addressed,Yes temporal,Walk-forward,BnH + LSTM,No,No
+38,Ortu et al.,2022,PLOS One,BTC,BERT sentiment + LSTM,Acc 57%,No,0,Not addressed,Yes temporal,Walk-forward,LSTM only,No,No
+39,Cakici et al.,2024,Int Rev Fin Analysis,100+ cryptos,12 ML models,AUC varies,Partial,not specified,Not addressed,Yes temporal,Expanding window,BnH + factors,Partial,No
+40,Koutsouri et al.,2023,Expert Sys w/ App,BTC,DRL (A2C/PPO),SR 1.2,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH,Yes,No
+41,Liew Hewlett,2022,J Forecasting,BTC,Random Forest,Acc 67.2%,Partial,assumed,Not addressed,Yes temporal,Walk-forward,LR/naive,Partial,No
+42,Helder et al.,2024,Fin Innovation,BTC ETH SOL,Voting ensemble,SR 0.80,Yes,50,Not addressed,Yes temporal,Walk-forward,BnH,Yes,No
+43,Valencia et al.,2019,Knowledge-Based Systems,BTC ETH,LSTM/Bayesian,Return 24%,No,0,Not addressed,Yes temporal,Walk-forward,BnH + ARIMA,No,No
+44,Slepaczuk Zenkova,2023,MDPI Mathematics,BTC,DQN/Double DQN,SR 0.21,Yes,50,N/A RL,Yes temporal,Walk-forward,BnH,Yes,No
+45,Bu Cho,2023,Expert Sys w/ App,BTC,LSTM-attention,Acc 63%,No,0,Not addressed,Yes temporal,Walk-forward,ARIMA/GRU,No,No
+46,Ji et al.,2023,Applied Soft Computing,BTC,CNN-BiLSTM,RMSE low,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/GRU,No,No
+47,Carta et al.,2021,Expert Sys w/ App,BTC ETH,Multi-objective DRL,Return 18%,Yes,25,N/A RL,Yes temporal,Walk-forward,BnH + DQN,Yes,No
+48,Weng et al.,2024,Applied Soft Computing,BTC,DRL + LSTM features,SR 1.6,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH + PPO,Yes,Partial
+49,Lucarelli Borrotti,2020,Applied Soft Computing,BTC ETH LTC,DQN variants,Return 60%,Yes,25,N/A RL,Yes temporal,Walk-forward,BnH + simple DQN,Yes,Yes GitHub
+50,Zhang et al.,2023,Knowledge-Based Systems,BTC,Transformer,Acc 59%,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/CNN,No,No
+51,Kose,2025,J Forecasting,BTC,XGBoost ensemble,R2 0.98,No,0,Not addressed,Yes temporal,Walk-forward,ARIMA/LSTM,No,No
+52,Sadorsky,2023,Forecasting,BTC ETH,GRU/LSTM/LightGBM,RMSE best,No,0,Not addressed,Yes temporal,Walk-forward,BnH + random walk,No,No
+53,Kim et al.,2023,Mathematics,BTC,BERT sentiment,Acc 55%,No,0,Not addressed,Yes temporal,Walk-forward,LSTM baseline,No,No
+54,Sattarov et al.,2023,IEEE Access,BTC ETH,Transformer+CNN,Acc 68%,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/CNN,No,No
+55,Chowdhury et al.,2020,Intelligent Systems,BTC,Ensemble (RF/LSTM),Acc 63%,No,0,Not addressed,Yes temporal,Walk-forward,Single models,No,No
+56,Dutta et al.,2020,Ann Operations Res,BTC,LSTM/GRU,Return varies,Partial,not specified,Not addressed,Yes temporal,Walk-forward,ARIMA,Partial,No
+57,Huang Rojas Cahill,2022,ScienceDirect,100 cryptos,LSTM/GRU/ensemble,SR 3.23,Yes,10,Not addressed,Yes temporal,Expanding window,BnH + momentum,Yes,No
+58,Liu Tsyvinski,2021,Rev Financial Studies,BTC ETH XRP,Time-series momentum,SR varies,Yes,assumed,N/A momentum,Yes temporal,Full sample,BnH + equity factors,Yes,No
+59,Banerjee et al.,2024,ESWA,BTC,Hybrid CNN-LSTM,Return 85%,No,0,Not addressed,Yes temporal,Walk-forward,Naive + MLP,No,No
+60,Zheng et al.,2023,ESWA,BTC ETH,DDPG + blockchain,SR 2.43,Yes,10,N/A RL,Yes temporal,Walk-forward,BnH + DRL baselines,Yes,Partial
+61,Kwon et al.,2023,Int J Financial Studies,BTC,XGBoost,Acc 64%,No,0,Not addressed,No random k-fold,5-fold CV,SVM/LR,No,No
+62,Abraham et al.,2018,Frontiers,BTC ETH,Twitter sentiment,Acc 77%,No,0,Not addressed,No random split,Random holdout,Naive,No,No
+63,Ferdiansyah et al.,2019,IEEE ICITSI,BTC,LSTM-sentiment,Acc 59%,No,0,Not addressed,Yes temporal,Simple holdout,ARIMA,No,No
+64,Alonso et al.,2024,MDPI Algorithms,BTC,Double DQN + Bayesian,SR positive,Yes,not specified,N/A RL,Yes temporal,Walk-forward,BnH + random,Yes,Partial
+65,Hachicha et al.,2023,Financial Innovation,BTC ETH,NLP + LSTM,Return 15%,No,0,Partial (mentions),Yes temporal,Walk-forward,LSTM only,No,No
+66,Tzouvanas et al.,2024,Annals OR,BTC ETH,Gradient boosting,Return varies,Partial,assumed,Not addressed,Yes temporal,Walk-forward,BnH,Partial,No
+67,Parekh et al.,2022,PLOS One,BTC,LSTM/GRU,Acc 56%,No,0,Not addressed,Yes temporal,Simple holdout,ARIMA/SVM,No,No
+68,Maleki et al.,2023,Applied Intelligence,BTC ETH,GARCH+ML ensemble,Vol forecast,Partial,not specified,Not addressed,Yes temporal,Walk-forward,GARCH,Partial,No
+69,Cohen,2023,Int Rev Financial Analysis,BTC,Black-Litterman+ML,SR 1.15,Yes,10,Not addressed,Yes temporal,Walk-forward,BnH + equal weight,Yes,No
+70,Huang et al.,2024,U Reading WP,BTC,Volume-weighted mom,SR improved,Yes,assumed,N/A momentum,Yes temporal,Walk-forward,BnH + naive mom,Yes,No
+71,Gandal et al.,2023,J Financial Econ,BTC,Market microstructure,N/A,N/A,N/A,N/A,Yes temporal,N/A,N/A,N/A,No
+72,Hachicha Prigent,2024,J Frcsting,BTC,GPT-2 + DL,RMSE low,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/ARIMA,No,No
+73,Sun et al.,2023,Applied Energy,BTC ETH,TCN-attention,RMSE based,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/GRU,No,No
+74,Bustos Pomares-Quimbaya,2020,DYNA Colombia,BTC,Random Forest,Acc 54%,No,0,Not addressed,Yes temporal,Walk-forward,Naive,No,No
+75,Otero Caicedo,2022,IEEE Latin America,BTC,SVM/RF/MLP,Acc 57%,No,0,Not addressed,Yes temporal,Walk-forward,Naive/LR,No,No
+76,Hassan et al.,2024,Stat (Wiley),BTC,Deep Bayesian LSTM,RMSE low,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/ARIMA,No,No
+77,Lee Kim,2024,Expert Sys w/ App,BTC,Hybrid LSTM+XGBoost,R2 0.99,No,0,Not addressed,Yes temporal,Walk-forward,LSTM only,No,No
+78,Chen et al.,2024,Applied Intelligence,BTC ETH,Transformer + GAN,Return varies,No,0,Not addressed,Yes temporal,Walk-forward,LSTM/CNN,No,No
+79,Ozbayoglu et al.,2020,Applied Soft Computing,Survey,DL survey for finance,N/A survey,Survey,N/A,Not assessed,Not assessed,Not assessed,Not assessed,Not assessed,No
+80,Mohapatra et al.,2024,PeerJ Computer Sci,BTC ETH,9 models compared,MAPE varies,No,0,Not addressed,Yes temporal,Walk-forward,ARIMA baseline,No,No

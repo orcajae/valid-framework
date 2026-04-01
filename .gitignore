@@ -12,6 +12,8 @@ results/*.csv
 results/*.json
 results/*.png
 !results/.gitkeep
+!results/reference/
+!results/reference/*.csv
 *.DS_Store
 .env
 venv/
