@@ -9,7 +9,7 @@ A 12-item validation and reporting framework for financial machine learning rese
 
 **"Beyond Accuracy: A Validation Framework for Machine Learning in Cryptocurrency Trading"**
 
-Jaewook Kim (2026). SSRN preprint (forthcoming).
+Jaewook Kim (2026). [SSRN preprint](https://ssrn.com/abstract=5765498).
 
 ## Key Findings
 
@@ -93,6 +93,8 @@ valid-framework/
 ├── results/reference/      # Reference outputs (322 variants, MC 200)
 ├── paper/figures/          # Figures 1-7 (300 DPI)
 ├── figures/                # Figure generation scripts
+├── notebooks/              # Free starter kit (Jupyter)
+├── releases/               # Downloadable assets (PDF checklist)
 ├── tests/                  # Unit tests
 └── docker/                 # Docker reproduction environment
 ```
@@ -105,9 +107,48 @@ valid-framework/
          Learning in Cryptocurrency Trading},
   author={Kim, Jaewook},
   journal={SSRN Electronic Journal},
-  year={2026}
+  year={2026},
+  url={https://ssrn.com/abstract=5765498}
 }
 ```
+
+## For Traders
+
+The VALID framework was built from auditing 80 published crypto trading papers. Here's what we found — and free tools to help you avoid the same mistakes.
+
+### Free Resources
+
+**Backtesting Checklist (PDF)**
+12 things to verify before you trust any backtest. Based on our literature audit where 72% of papers had no class balance check and 53% included zero transaction costs.
+
+[Download PDF](https://github.com/orcajae/valid-framework/releases/latest/download/backtesting_checklist.pdf)
+
+**Crypto Backtesting Starter Kit (Jupyter Notebook)**
+Complete pipeline: fetch data, build SMA strategy, compute metrics, and run cost sensitivity analysis. The cost analysis in Part 5 is what separates real quants from dreamers.
+
+[Open Notebook](https://github.com/orcajae/valid-framework/blob/main/notebooks/crypto_backtesting_starter_kit.ipynb)
+
+### Key Findings for Practitioners
+
+| What we tested | What we found |
+|---|---|
+| 340 strategy variants (BTC, ETH, SOL) | Simple momentum beats complex ML after costs |
+| Spot vs Perpetual futures | Spot saves 11-15%/yr (funding rate drag) |
+| 800 Monte Carlo simulations | Most "alpha" is indistinguishable from noise |
+| 7 deep learning architectures | 58-86% bull bias without class balancing |
+
+### Need a Production Bot?
+
+I build automated crypto trading systems with the same realistic cost models used in this research.
+
+- TradingView webhook automation
+- Multi-strategy bots (Bybit, Binance)
+- Capital Shield risk management
+- Every backtest includes cost sensitivity analysis
+
+**[fiverr.com/jwquant](https://fiverr.com/jwquant)** — Message me before ordering.
+
+*Trading involves risk. Past performance does not guarantee future results.*
 
 ## License
 
