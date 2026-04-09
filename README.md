@@ -9,7 +9,7 @@ A 12-item validation and reporting framework for financial machine learning rese
 
 **"Beyond Accuracy: A Validation Framework for Machine Learning in Cryptocurrency Trading"**
 
-Jaewook Kim (2026). [SSRN preprint](https://ssrn.com/abstract=5765498).
+Jaewook Kim (2026). [SSRN preprint](https://ssrn.com/abstract=6508779).
 
 ## Key Findings
 
@@ -108,7 +108,7 @@ valid-framework/
   author={Kim, Jaewook},
   journal={SSRN Electronic Journal},
   year={2026},
-  url={https://ssrn.com/abstract=5765498}
+  url={https://ssrn.com/abstract=6508779}
 }
 ```
 
