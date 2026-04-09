@@ -19,8 +19,8 @@ warnings.filterwarnings("ignore")
 from catboost import CatBoostClassifier
 from sklearn.metrics import roc_auc_score
 
-RAW = Path(os.path.expanduser("~/jwquant/data/raw"))
-OUT = Path(os.path.expanduser("~/jwquant/results/paper_kbs"))
+RAW = Path(os.path.expanduser("~/data/raw"))
+OUT = Path(os.path.expanduser("~/results/paper_kbs"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 COST_RT = 18 / 10000

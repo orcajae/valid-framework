@@ -4,7 +4,7 @@ setup(
     name="valid-framework",
     version="0.1.0",
     description="VALID: Validation Architecture for Learning-based Investment Decisions",
-    author="Jaewook Kim",
+    author="Anonymous",
     packages=find_packages(),
     python_requires=">=3.9",
     install_requires=[
