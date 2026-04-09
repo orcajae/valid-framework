@@ -18,3 +18,4 @@ results/*.png
 .env
 venv/
 .venv/
+.gitkeep
