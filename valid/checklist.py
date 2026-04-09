@@ -1,7 +1,6 @@
 """VALID 12-item checklist implementation.
 
-Reference: Kim (2026), "Beyond Accuracy: A Validation Framework
-for Machine Learning in Cryptocurrency Trading"
+VALID: A 12-Item Validation Checklist for Financial Machine Learning
 
 Usage:
     from valid.checklist import VALIDChecker

@@ -19,3 +19,6 @@ results/*.png
 venv/
 .venv/
 .gitkeep
+__pycache__/
+*.pyc
+.DS_Store
