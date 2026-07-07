@@ -11,9 +11,11 @@ A 12-item validation and reporting framework for financial machine learning rese
 
 Jaewook Kim (2026). [SSRN preprint](https://ssrn.com/abstract=6508779).
 
+Accepted for oral presentation at the 9th ACM SIGKDD Workshop on Machine Learning in Finance (KDD-MLF 2026), Jeju, August 2026.
+
 ## Key Findings
 
-- **322 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4 timeframes, and 5 model families — 51% produce negative net Sharpe ratios; only 3.7% exceed a simple momentum benchmark
+- **340 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4 timeframes, and 5 model families — 52% produce negative net Sharpe ratios; only 4.4% exceed a simple momentum benchmark
 - **Bull bias**: Crypto ML models predict 58–97% long without class balancing; class balancing eliminates bias but does not improve predictive power (AUC ≈ 0.50)
 - **Statistical-economic disconnect**: PBO=0.000 + permutation p=0.000, yet net Sharpe = 0.135. First empirical confirmation of Witzany's (2021) PBO critique via 200-iteration Monte Carlo
 - **Cost illusion**: ML fails to beat simple momentum even at 0bp transaction costs (SR 0.640 vs 0.954); costs consume 55–91% of gross alpha
