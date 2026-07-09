@@ -1,4 +1,4 @@
-.PHONY: install install-ml test reproduce reproduce-smoke reproduce-real example figures audit clean
+.PHONY: install install-ml test reproduce reproduce-smoke reproduce-real example audit clean
 
 install:
 	pip install -e ".[dev]"
@@ -20,9 +20,6 @@ reproduce-real:
 
 example:
 	python examples/worked_example.py
-
-figures:
-	python figures/generate_all.py
 
 audit:
 	python audit/audit_analysis.py
