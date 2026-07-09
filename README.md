@@ -2,103 +2,133 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<!-- CI badge activates once .github/workflows/ci.yml is live on GitHub:
+[![CI](https://github.com/orcajae/valid-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/orcajae/valid-framework/actions) -->
 
-A 12-item validation and reporting framework for financial machine learning research. VALID is the first domain-specific checklist for financial ML, analogous to [TRIPOD+AI](https://doi.org/10.1136/bmj-2023-078378) for clinical prediction and [REFORMS](https://doi.org/10.1126/sciadv.adk3452) for general ML-based science.
+**What it is.** A 12-item validation checklist for financial machine learning —
+the tests a trading-strategy backtest must survive before you believe it
+(CPCV+PBO, parameter-space variance, permutation tests, cost sensitivity,
+baselines, bear-market evaluation). The first domain-specific checklist for
+financial ML, analogous to [TRIPOD+AI](https://doi.org/10.1136/bmj-2023-078378)
+for clinical prediction and [REFORMS](https://doi.org/10.1126/sciadv.adk3452)
+for ML-based science.
 
-## Paper
+**See it catch an overfit strategy (30 seconds):**
 
-**"Beyond Accuracy: A Validation Framework for Machine Learning in Cryptocurrency Trading"**
+```bash
+git clone https://github.com/orcajae/valid-framework.git && cd valid-framework
+pip install -e ".[dev]"
+python examples/worked_example.py    # mined strategy fails, honest one passes
+make reproduce                       # full pipeline: MC nulls, CPCV, DSR, Romano-Wolf
+```
 
-Jaewook Kim (2026). [SSRN preprint](https://ssrn.com/abstract=6508779).
+`examples/worked_example.py` mines 360 RSI configs the wrong way (selection on
+in-sample gross Sharpe), runs them and an honest SMA baseline through all 12
+checklist items, and shows the mined "winner" collapsing out-of-sample — with
+Romano-Wolf and Deflated-Sharpe leaving 0 of 360 survivors. Everything is
+computed live on deterministic synthetic data; see
+[REPRODUCE.md](REPRODUCE.md) for the smoke / synthetic / real-data tiers.
 
-Accepted for oral presentation at the 9th ACM SIGKDD Workshop on Machine Learning in Finance (KDD-MLF 2026), Jeju, August 2026.
+**Who made it.** Jaewook Kim (2026), *"Beyond Accuracy: A Validation Framework
+for Machine Learning in Cryptocurrency Trading"* —
+[SSRN preprint 6508779](https://ssrn.com/abstract=6508779). Accepted for
+**oral presentation at the 9th ACM SIGKDD Workshop on Machine Learning in
+Finance (KDD-MLF 2026)**, Jeju, August 2026.
 
 ## Key Findings
 
-- **340 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4 timeframes, and 5 model families — 52% produce negative net Sharpe ratios; only 4.4% exceed a simple momentum benchmark
-- **Bull bias**: Crypto ML models predict 58–97% long without class balancing; class balancing eliminates bias but does not improve predictive power (AUC ≈ 0.50)
-- **Statistical-economic disconnect**: PBO=0.000 + permutation p=0.000, yet net Sharpe = 0.135. First empirical confirmation of Witzany's (2021) PBO critique via 200-iteration Monte Carlo
-- **Cost illusion**: ML fails to beat simple momentum even at 0bp transaction costs (SR 0.640 vs 0.954); costs consume 55–91% of gross alpha
-- **Literature audit**: 72% of 75 empirical crypto ML papers ignore class balance; 53% omit transaction costs; 0% use CPCV
-- **Monte Carlo FPR**: AUC-based evaluation produces 27% [21%, 34%] false positives; CPCV+PBO reduces this to 0% [0%, 1.9%]
+- **340 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4
+  timeframes, and 5 model families — 52% (178/340) produce negative net Sharpe
+  ratios; only 4.4% (15/340) exceed a simple momentum benchmark
+- **Bull bias**: crypto ML models predict 58–97% long without class balancing;
+  balancing removes the bias but not the weakness (AUC ≈ 0.50)
+- **Statistical-economic disconnect**: PBO = 0.000 and permutation p = 0.000,
+  yet net Sharpe = 0.135 — first empirical confirmation of Witzany's (2021)
+  PBO critique, via Monte Carlo (200 iterations per setting, seeds 0–199)
+- **Cost illusion**: ML fails to beat simple momentum even at 0bp costs
+  (SR 0.640 vs 0.954); costs consume 55–91% of gross alpha
+- **Literature audit**: of 80 papers surveyed (75 empirical, coded), 72%
+  ignore class balance, 53% omit transaction costs, 0% use CPCV
+- **Monte Carlo false positives**: AUC-based evaluation wrongly passes 27%
+  [21.3%, 33.5%] of signal-free pipelines; CPCV+PBO cuts this to 0% [0%, 1.9%]
 
-## Quick Start
+## The VALID Checklist (12 items)
 
-```bash
-git clone https://github.com/orcajae/valid-framework.git
-cd valid-framework
-pip install -e ".[ml,dev]"
-
-# Run the VALID checker on your strategy
-python -c "
-from valid.checklist import VALIDChecker
-checker = VALIDChecker()
-report = checker.run_all(
-    y_pred_unbal=your_unbalanced_predictions,
-    y_pred_bal=your_balanced_predictions,
-    pbo_value=0.15,
-    var_sr_is=0.05,
-    gross_sr=1.2,
-    net_sr=0.8,
-    cost_bp=18,
-    sr_at_costs={0: 1.2, 18: 0.8, 50: 0.3},
-    baseline_srs={'buy_hold': 0.6, 'sma200': 0.7},
-    has_temporal_split=True,
-    has_permutation_test=True,
-    permutation_p=0.03,
-    has_bear_market_eval=True,
-    trades_per_year=30,
-    gross_alpha=1.2,
-    cost_drag=0.4,
-    code_available=True,
-)
-report.print_summary()
-"
-
-# Run tests
-make test
-
-# Reproduce all paper results (~2-4 hours)
-make reproduce
-```
-
-## VALID Checklist (12 Items)
-
-| # | Item | Stage | Failure Mode |
-|---|------|-------|-------------|
+| # | Item | Stage | Failure mode caught |
+|---|------|-------|---------------------|
 | V1 | Report prediction class distribution | Reporting | Bull bias |
 | V2 | Test with/without class balancing | Reporting | Bull bias |
 | V3 | Use temporal splitting only | Reporting | Temporal leakage |
 | V4 | Apply CPCV with PBO | Reporting | Backtest overfitting |
-| V5 | Report parameter-space variance (Var(SR_IS)) | Reporting | PBO misinterpretation |
-| V6 | Include permutation tests (>=100 shuffles) | Reporting | Spurious patterns |
-| V7 | Report net performance with explicit costs | Deployment | Cost illusion |
-| V8 | Perform cost sensitivity analysis | Deployment | Cost illusion |
+| V5 | Report parameter-space variance Var(SR_IS) | Reporting | PBO misinterpretation |
+| V6 | Permutation tests (≥100 shuffles) | Reporting | Spurious patterns |
+| V7 | Net performance with explicit costs | Deployment | Cost illusion |
+| V8 | Cost sensitivity analysis | Deployment | Cost illusion |
 | V9 | Compare against simple baselines | Reporting | Weak baselines |
 | V10 | Evaluate across bear market periods | Deployment | Regime overfitting |
-| V11 | Report trade frequency and cost-per-alpha | Deployment | Hidden turnover |
+| V11 | Trade frequency and cost-per-alpha | Deployment | Hidden turnover |
 | V12 | Provide code for reproducibility | Reporting | Irreproducibility |
 
-## Repository Structure
+The paper's own study self-assesses at **10/12 (2 partial: V6 permutation
+coverage, V10 two regimes)** — the checklist is meant to be applied honestly,
+including to its authors.
+
+```python
+from valid import VALIDChecker
+
+report = VALIDChecker().run_all(
+    y_pred_unbal=positions,          # see examples/worked_example.py for a
+    y_pred_bal=positions,            # complete, runnable end-to-end usage
+    pbo_value=0.15, var_sr_is=0.05,
+    gross_sr=1.2, net_sr=0.8, cost_bp=18,
+    sr_at_costs={0: 1.2, 18: 0.8, 50: 0.3},
+    ml_sr=0.8, baseline_srs={"buy_hold": 0.6, "sma200": 0.7},
+    has_temporal_split=True, has_permutation_test=True, permutation_p=0.03,
+    has_bear_market_eval=True, trades_per_year=30,
+    gross_alpha=1.2, cost_drag=0.4, code_available=True,
+)
+report.print_summary()
+```
+
+## Statistics library
+
+`valid/` implements the underlying statistics as plain, tested functions:
+
+- `cpcv` — combinatorially purged cross-validation (purge + embargo)
+- `metrics` — PBO (Bailey & López de Prado), Deflated Sharpe Ratio,
+  Var(SR_IS), Wilson and bootstrap CIs
+- `multiple_testing` — Bonferroni, Holm, Benjamini-Hochberg, and
+  **Romano-Wolf stepdown** with a circular block bootstrap
+  (*framework extension beyond the SSRN paper*)
+- `labeling` / `costs` — triple-barrier + CUSUM labeling, round-trip cost model
+
+## Reproduce
+
+```bash
+make reproduce-smoke   # minutes — CI tier, verifies the pipeline end-to-end
+make reproduce         # deterministic synthetic tier, full Monte Carlo
+make reproduce-real    # public Binance OHLCV via ccxt (pip install -e ".[data]")
+```
+
+Outputs land in `results/` with a run summary (`REPRODUCE_SUMMARY.md`)
+comparing against the tracked reference outputs in `results/reference/`.
+Tier definitions, measured runtimes, and deviations from the v0.1 reference
+run are documented in [REPRODUCE.md](REPRODUCE.md).
+
+## Repository structure
 
 ```
 valid-framework/
-├── valid/                  # VALID Python package
-│   ├── checklist.py        # 12-item checker
-│   ├── cpcv.py             # CPCV implementation
-│   ├── metrics.py          # Var(SR_IS), PBO, DSR, Wilson CI
-│   ├── labeling.py         # Triple Barrier + CUSUM
-│   ├── features.py         # Feature engineering
-│   └── costs.py            # Transaction cost models
-├── experiments/            # Reproduce all paper results
-├── audit/                  # Literature audit (80 papers, 75 empirical)
-├── results/reference/      # Reference outputs (322 variants, MC 200)
-├── paper/figures/          # Figures 1-7 (300 DPI)
-├── figures/                # Figure generation scripts
-├── notebooks/              # Free starter kit (Jupyter)
-├── releases/               # Downloadable assets (PDF checklist)
-├── tests/                  # Unit tests
-└── docker/                 # Docker reproduction environment
+├── valid/                  # the library: checklist, cpcv, metrics,
+│                           #   multiple_testing, labeling, costs
+├── examples/               # worked_example.py — the 30-second demo
+├── experiments/            # reproduction pipeline (see REPRODUCE.md)
+├── notebooks/              # worked example + crypto backtesting starter kit
+├── tests/                  # pytest suite
+├── audit/                  # literature audit (80 papers surveyed, 75 coded)
+├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
+├── releases/               # downloadable 12-item checklist PDF
+└── docker/                 # containerized reproduction
 ```
 
 ## Citation
@@ -114,44 +144,22 @@ valid-framework/
 }
 ```
 
-## For Traders
+## For traders
 
-The VALID framework was built from auditing 80 published crypto trading papers. Here's what we found — and free tools to help you avoid the same mistakes.
+Free, self-contained resources from the same research:
 
-### Free Resources
+- **[Backtesting checklist (PDF)](https://github.com/orcajae/valid-framework/releases/latest/download/backtesting_checklist.pdf)** —
+  the 12 items in plain language
+- **[Crypto backtesting starter kit (notebook)](notebooks/crypto_backtesting_starter_kit.ipynb)** —
+  fetch public data, build an SMA strategy, run the cost-sensitivity analysis
+- **[Worked example (notebook)](notebooks/worked_example.ipynb)** — watch the
+  checklist catch a data-mined strategy
 
-**Backtesting Checklist (PDF)**
-12 things to verify before you trust any backtest. Based on our literature audit where 72% of papers had no class balance check and 53% included zero transaction costs.
-
-[Download PDF](https://github.com/orcajae/valid-framework/releases/latest/download/backtesting_checklist.pdf)
-
-**Crypto Backtesting Starter Kit (Jupyter Notebook)**
-Complete pipeline: fetch data, build SMA strategy, compute metrics, and run cost sensitivity analysis. The cost analysis in Part 5 is what separates real quants from dreamers.
-
-[Open Notebook](https://github.com/orcajae/valid-framework/blob/main/notebooks/crypto_backtesting_starter_kit.ipynb)
-
-### Key Findings for Practitioners
-
-| What we tested | What we found |
-|---|---|
-| 340 strategy variants (BTC, ETH, SOL) | Simple momentum beats complex ML after costs |
-| Spot vs Perpetual futures | Spot saves 11-15%/yr (funding rate drag) |
-| 800 Monte Carlo simulations | Most "alpha" is indistinguishable from noise |
-| 7 deep learning architectures | 58-86% bull bias without class balancing |
-
-### Need a Production Bot?
-
-I build automated crypto trading systems with the same realistic cost models used in this research.
-
-- TradingView webhook automation
-- Multi-strategy bots (Bybit, Binance)
-- REDACTED risk management
-- Every backtest includes cost sensitivity analysis
-
-**[REDACTED](https://REDACTED)** — Message me before ordering.
+**VALID Audit** — independent validation of trading-strategy backtests, built
+on this framework: contact [@orcajae](https://github.com/orcajae).
 
 *Trading involves risk. Past performance does not guarantee future results.*
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
