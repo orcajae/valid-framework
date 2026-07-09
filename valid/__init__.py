@@ -11,6 +11,13 @@ from valid.metrics import (
     wilson_ci,
     bootstrap_ci,
 )
+from valid.multiple_testing import (
+    sharpe_pvalues,
+    bonferroni,
+    holm,
+    benjamini_hochberg,
+    romano_wolf,
+)
 
 __all__ = [
     "__version__",
@@ -18,4 +25,5 @@ __all__ = [
     "make_groups", "cpcv_split", "cpcv_paths", "run_cpcv",
     "annualized_sharpe", "var_sr_is", "compute_pbo",
     "deflated_sharpe_ratio", "wilson_ci", "bootstrap_ci",
+    "sharpe_pvalues", "bonferroni", "holm", "benjamini_hochberg", "romano_wolf",
 ]
