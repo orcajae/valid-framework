@@ -148,7 +148,7 @@ valid-framework/
 
 Free, self-contained resources from the same research:
 
-- **[Backtesting checklist (PDF)](https://github.com/orcajae/valid-framework/releases/latest/download/backtesting_checklist.pdf)** —
+- **[Backtesting checklist (PDF)](releases/backtesting_checklist.pdf)** —
   the 12 items in plain language
 - **[Crypto backtesting starter kit (notebook)](notebooks/crypto_backtesting_starter_kit.ipynb)** —
   fetch public data, build an SMA strategy, run the cost-sensitivity analysis

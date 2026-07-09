@@ -27,3 +27,9 @@ for name, mask in checks.items():
     r = mask.mean()
     lo, hi = wilson_ci(r, N)
     print(f"  {name}: {mask.sum()}/{N} ({r:.0%}) [{lo:.0%}, {hi:.0%}]")
+
+print(
+    "\nNote: live recomputation from the coding sheet. D7 computes 84% here; "
+    "the paper reports 85% (1pp coding-sheet deviation). Paper numbers are "
+    "canonical (SSRN 6508779)."
+)
