@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use the VALID framework, please cite the paper below."
+title: "VALID: Validation Architecture for Learning-based Investment Decisions"
+authors:
+  - family-names: Kim
+    given-names: Jaewook
+repository-code: "https://github.com/orcajae/valid-framework"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Beyond Accuracy: A Validation Framework for Machine Learning in Cryptocurrency Trading"
+  authors:
+    - family-names: Kim
+      given-names: Jaewook
+  year: 2026
+  journal: "SSRN Electronic Journal"
+  url: "https://ssrn.com/abstract=6508779"
+  notes: >-
+    Accepted for oral presentation at the 9th ACM SIGKDD Workshop on
+    Machine Learning in Finance (KDD-MLF 2026), Jeju, August 2026.

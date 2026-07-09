@@ -65,11 +65,12 @@ def wilson_ci(p, n, z=1.96):
     return (max(0, c - a), min(1, c + a))
 
 
-def bootstrap_ci(arr, func=np.mean, n_boot=1000, ci=0.95):
-    """Bootstrap confidence interval."""
+def bootstrap_ci(arr, func=np.mean, n_boot=1000, ci=0.95, seed=None):
+    """Bootstrap confidence interval. Deterministic for a fixed seed."""
+    rng = np.random.default_rng(seed)
     vals = []
     for _ in range(n_boot):
-        s = np.random.choice(arr, size=len(arr), replace=True)
+        s = rng.choice(arr, size=len(arr), replace=True)
         vals.append(func(s))
     lo = np.percentile(vals, (1 - ci) / 2 * 100)
     hi = np.percentile(vals, (1 + ci) / 2 * 100)
