@@ -19,3 +19,8 @@ results/*.png
 venv/
 .venv/
 paper/
+
+# IP hygiene: superseded manuscript + deprecated-count figure (untracked 2026-07-09)
+paper/PAPER_VALID_v2.0.md
+paper/figures/fig6_482_distribution.png
+paper/latex/figures/fig6_482_distribution.png
