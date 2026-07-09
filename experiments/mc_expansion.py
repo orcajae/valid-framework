@@ -1,66 +1,89 @@
-"""
-MC Expansion: 3 additional settings (ETH 1h, SOL 1h, BTC daily)
-Each: 200 iterations, seeds 0-199, identical pipeline to BTC 1h.
+"""Monte Carlo null-pipeline FPR experiment.
+
+For each setting, resample the asset's daily returns i.i.d. (a synthetic
+series with NO exploitable signal), run the full ML evaluation pipeline on
+it, and measure how often each evaluation gate wrongly declares success.
+200 iterations per setting (seeds 0-199) in the reference runs.
+
+Settings are daily-bar experiments (btc_daily / eth_daily / sol_daily).
+Historical note: reference CSVs named mc_fpr_eth_1h_200.csv /
+mc_fpr_sol_1h_200.csv were produced by this pipeline on DAILY bars under
+mislabeled setting keys; see REPRODUCE.md for the mapping.
+
+v0.2 deviations from the v0.1 reference run (documented in REPRODUCE.md):
+- Var(SR_IS) and holdout SR now apply the model's positions to
+  event-aligned T+1 forward returns. v0.1 computed them from raw resampled
+  returns at misaligned (event-row) indices and never used the positions.
+- Data source is configurable (deterministic synthetic default, --data real
+  for public Binance CSVs); model registry falls back to sklearn
+  HistGradientBoosting when CatBoost is unavailable (--model to force).
 
 Usage:
-  python mc_expansion.py --setting eth_1h   # ETH 1h CatBoost balanced
-  python mc_expansion.py --setting sol_1h   # SOL 1h CatBoost balanced
-  python mc_expansion.py --setting btc_daily # BTC daily CatBoost balanced
-  python mc_expansion.py --all              # Run all 3 sequentially
+  python experiments/mc_expansion.py --all [--data synthetic|real]
+                                     [--model auto|catboost|hgb]
+                                     [--n-mc 200] [--smoke]
 """
-import os, sys, warnings, argparse, time
-import numpy as np
-import pandas as pd
-from pathlib import Path
+import argparse
+import time
 from itertools import combinations
 
-warnings.filterwarnings("ignore")
+import numpy as np
+import pandas as pd
 
-from catboost import CatBoostClassifier
+try:
+    from experiments import config
+    from experiments.data_sources import load_ohlcv
+except ImportError:
+    import config
+    from data_sources import load_ohlcv
+
 from sklearn.metrics import roc_auc_score
 
-RAW = Path(os.path.expanduser("~/jwquant/data/raw"))
-OUT = Path(os.path.expanduser("~/jwquant/results/paper_kbs"))
-OUT.mkdir(parents=True, exist_ok=True)
+from valid.labeling import cusum_filter, triple_barrier_labels
+from valid.metrics import wilson_ci
 
-COST_RT = 18 / 10000
-N_MC = 200
-N_PERM = 20  # permutation shuffles per iteration
+COST_RT = config.COST_RETAIL_BP / 10000
 
-# ═══ Settings ═══
 SETTINGS = {
-    "eth_1h": {
-        "file": "binance_ethusdt_ohlcv_1d.parquet",
-        "label": "ETH 1h",
-        "out_name": "mc_fpr_eth_1h_200.csv",
-    },
-    "sol_1h": {
-        "file": "binance_solusdt_ohlcv_1d.parquet",
-        "label": "SOL 1h",
-        "out_name": "mc_fpr_sol_1h_200.csv",
-    },
-    "btc_daily": {
-        "file": "binance_btcusdt_ohlcv_1d.parquet",
-        "label": "BTC daily",
-        "out_name": "mc_fpr_btc_daily_200.csv",
-    },
+    "btc_daily": {"asset": "BTC", "label": "BTC daily"},
+    "eth_daily": {"asset": "ETH", "label": "ETH daily"},
+    "sol_daily": {"asset": "SOL", "label": "SOL daily"},
 }
 
 
-def sr_f(r):
-    return r.mean() / r.std() * np.sqrt(252) if len(r) > 1 and r.std() > 0 else 0.0
+def get_model_fn(name="auto", balanced=True, iterations=100):
+    """Model registry. Reference runs used CatBoost; the sklearn
+    HistGradientBoosting fallback keeps the pipeline runnable with core
+    dependencies only (CI). Returns (factory, resolved_name)."""
+    if name in ("auto", "catboost"):
+        try:
+            from catboost import CatBoostClassifier
 
+            kw = {"auto_class_weights": "Balanced"} if balanced else {}
 
-def wilson_ci(p, n, z=1.96):
-    if n == 0:
-        return (0, 0)
-    denom = 1 + z**2 / n
-    centre = (p + z**2 / (2 * n)) / denom
-    adj = z / denom * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2))
-    return max(0, centre - adj), min(1, centre + adj)
+            def make():
+                return CatBoostClassifier(
+                    depth=5, iterations=iterations, learning_rate=0.1,
+                    verbose=0, random_seed=42, **kw)
+
+            return make, "catboost"
+        except ImportError:
+            if name == "catboost":
+                raise
+    from sklearn.ensemble import HistGradientBoostingClassifier
+
+    def make():
+        return HistGradientBoostingClassifier(
+            max_depth=5, max_iter=iterations, learning_rate=0.1,
+            random_state=42, class_weight="balanced" if balanced else None)
+
+    return make, "hgb"
 
 
 def compute_features_simple(df):
+    """Frozen reference-pipeline feature set (do not swap for
+    valid.features — a different feature set would silently change the
+    null-pipeline results)."""
     c = df["close"]
     v = df["volume"]
     ret1 = c.pct_change()
@@ -92,53 +115,9 @@ def compute_features_simple(df):
     return feats
 
 
-def cusum_filter(prices, threshold):
-    events = []
-    s_pos = s_neg = 0.0
-    ret = prices.pct_change().dropna()
-    for i in range(len(ret)):
-        s_pos = max(0, s_pos + ret.iloc[i])
-        s_neg = min(0, s_neg + ret.iloc[i])
-        if s_pos > threshold:
-            events.append(ret.index[i])
-            s_pos = 0
-        elif s_neg < -threshold:
-            events.append(ret.index[i])
-            s_neg = 0
-    return pd.DatetimeIndex(events)
-
-
-def triple_barrier(df, events, pt=2.0, sl=2.5, max_hold=20, vol_win=60):
-    c = df["close"]
-    vol = c.pct_change().ewm(span=vol_win).std()
-    labels = {}
-    for t in events:
-        if t not in c.index:
-            continue
-        loc = c.index.get_loc(t)
-        if loc + 1 >= len(c):
-            continue
-        ep = c.iloc[loc]
-        v = vol.iloc[loc]
-        if pd.isna(v) or v == 0:
-            continue
-        pt_b = ep * (1 + pt * v)
-        sl_b = ep * (1 - sl * v)
-        end = min(loc + max_hold, len(c) - 1)
-        label = 0
-        for j in range(loc + 1, end + 1):
-            if c.iloc[j] >= pt_b:
-                label = 1
-                break
-            elif c.iloc[j] <= sl_b:
-                label = -1
-                break
-        labels[t] = label
-    return pd.Series(labels, name="tb_label")
-
-
-def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
-    """Run one MC iteration with given asset's return distribution."""
+def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, model="auto",
+                     balanced=True, n_perm=20):
+    """Run one MC iteration with the given asset's return distribution."""
     rng = np.random.RandomState(rng_seed)
     synth_ret = rng.choice(ret_actual, size=n_days, replace=True)
     synth_price = 10000 * np.exp(np.cumsum(synth_ret))
@@ -158,11 +137,11 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
     vol = c.pct_change().ewm(span=60).std()
     thr = vol.mean() if vol.mean() > 0 else 0.02
     events = cusum_filter(c, thr)
-    tb = triple_barrier(synth_df, events)
+    tb = triple_barrier_labels(synth_df, events, pt_mult=2.0, sl_mult=2.5,
+                               max_hold=20, vol_window=60)
     feats["tb_label"] = tb
     data = feats.dropna(subset=["tb_label"])
-    mask = data["tb_label"].isin([-1, 1])
-    data = data[mask].copy()
+    data = data[data["tb_label"].isin([-1, 1])].copy()
     feat_cols = [col for col in data.columns if col != "tb_label"]
     usable = [f for f in feat_cols if data[f].isna().mean() < 0.5]
 
@@ -174,29 +153,32 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
     split = int(len(X) * 0.8)
     if split < 30 or len(X) - split < 10:
         return None
+    n_s = len(X)
 
-    kw = {"auto_class_weights": "Balanced"} if balanced else {}
-    m = CatBoostClassifier(depth=5, iterations=100, learning_rate=0.1, verbose=0, random_seed=42, **kw)
+    # Event-row -> bar-position map and T+1 forward return per event
+    # (v0.2 fix: v0.1 indexed raw bar returns with event-row indices).
+    bar_idx = synth_df.index.get_indexer(data.index)
+    fwd_bar = np.append(synth_ret[1:], 0.0)
+    fwd_evt = fwd_bar[bar_idx]
+
+    make_model, model_name = get_model_fn(model, balanced, iterations=100)
+    m = make_model()
     m.fit(X[:split], y[:split])
     try:
         auc = roc_auc_score(y[split:], m.predict_proba(X[split:])[:, 1])
     except Exception:
         auc = 0.5
 
-    # CPCV PBO
-    n_s = len(X)
+    # CPCV PBO + Var(SR_IS)
     gs = n_s // 6
     gids = np.zeros(n_s, dtype=int)
     for g in range(6):
         s = g * gs
         e = (g + 1) * gs if g < 5 else n_s
         gids[s:e] = g
-    combos_mc = list(combinations(range(6), 2))
 
-    is_accs = []
-    oos_accs = []
-    is_srs_list = []
-    for tg in combos_mc:
+    is_accs, oos_accs, is_srs_list = [], [], []
+    for tg in combinations(range(6), 2):
         test_mask = np.isin(gids, tg)
         tr_i = np.where(~test_mask)[0]
         te_i = np.where(test_mask)[0]
@@ -204,22 +186,21 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
         for t in sorted(tg):
             ti = np.where(gids == t)[0]
             s2, e2 = ti[0], ti[-1]
-            pm[max(0, s2 - 20) : s2] = True
-            pm[e2 + 1 : min(n_s, e2 + 21)] = True
+            pm[max(0, s2 - config.CPCV_PURGE):s2] = True
+            pm[e2 + 1:min(n_s, e2 + config.CPCV_PURGE + 1)] = True
         tr_i = tr_i[~pm[tr_i]]
         if len(te_i) < 5 or len(tr_i) < 10:
             continue
         try:
-            mc_m = CatBoostClassifier(depth=5, iterations=100, learning_rate=0.1, verbose=0, random_seed=42, **kw)
+            mc_m = make_model()
             mc_m.fit(X[tr_i], y[tr_i])
-            is_a = np.mean(mc_m.predict(X[tr_i]) == y[tr_i])
-            oos_a = np.mean(mc_m.predict(X[te_i]) == y[te_i])
-            is_accs.append(is_a)
-            oos_accs.append(oos_a)
-            preds_is = mc_m.predict(X[tr_i])
+            preds_is = np.asarray(mc_m.predict(X[tr_i])).ravel()
+            is_accs.append(np.mean(preds_is == y[tr_i]))
+            oos_accs.append(np.mean(np.asarray(mc_m.predict(X[te_i])).ravel() == y[te_i]))
+            # v0.2: strategy IS SR = positions x event-aligned fwd returns
             pos_is = np.where(preds_is == 1, 1.0, -1.0)
-            fwd_is = synth_ret[:n_s][tr_i] if len(synth_ret) >= n_s else np.zeros(len(tr_i))
-            sr_is = fwd_is[: len(pos_is)].mean() / (fwd_is[: len(pos_is)].std() + 1e-10) * np.sqrt(252)
+            strat_is = pos_is * fwd_evt[tr_i]
+            sr_is = strat_is.mean() / (strat_is.std() + 1e-10) * np.sqrt(252)
             is_srs_list.append(sr_is)
         except Exception:
             pass
@@ -227,43 +208,34 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
     pbo = np.nan
     var_sr_is = np.nan
     if len(is_accs) > 3:
-        pbo_count = sum(1 for i, o in zip(is_accs, oos_accs) if i > o)
-        pbo = pbo_count / len(is_accs)
+        pbo = sum(1 for i, o in zip(is_accs, oos_accs) if i > o) / len(is_accs)
     if len(is_srs_list) > 2:
         var_sr_is = np.var(is_srs_list)
 
-    # Net SR
-    preds = m.predict(X[split:])
+    # Holdout net SR (v0.2: event-aligned forward returns)
+    preds = np.asarray(m.predict(X[split:])).ravel()
     pos = np.where(preds == 1, 1.0, -1.0)
-    synth_fwd = synth_ret[split : split + len(preds)]
-    if len(synth_fwd) >= len(preds):
-        synth_fwd = synth_fwd[: len(preds)]
-        strat = synth_fwd * pos
-        trades = np.abs(np.diff(np.concatenate([[0], preds]))).sum()
-        cost_daily = (trades * COST_RT) / len(preds) if len(preds) > 0 else 0
-        net_sr = (strat.mean() - cost_daily) / (strat.std() + 1e-10) * np.sqrt(252)
-        gross_sr = strat.mean() / (strat.std() + 1e-10) * np.sqrt(252)
-    else:
-        net_sr = np.nan
-        gross_sr = np.nan
-
+    strat = pos * fwd_evt[split:]
+    trades = np.abs(np.diff(np.concatenate([[0], preds]))).sum()
+    cost_daily = (trades * COST_RT) / len(preds) if len(preds) > 0 else 0
+    net_sr = (strat.mean() - cost_daily) / (strat.std() + 1e-10) * np.sqrt(252)
+    gross_sr = strat.mean() / (strat.std() + 1e-10) * np.sqrt(252)
     long_pct = (preds == 1).mean()
 
     # Permutation test
-    perm_passed = False
     perm_aucs = []
-    for pi in range(N_PERM):
+    make_perm, _ = get_model_fn(model, balanced, iterations=50)
+    for pi in range(n_perm):
         prng = np.random.RandomState(rng_seed * 1000 + pi)
         ys = prng.permutation(y)
-        pm_m = CatBoostClassifier(depth=5, iterations=50, learning_rate=0.1, verbose=0, random_seed=42, **kw)
+        pm_m = make_perm()
         pm_m.fit(X[:split], ys[:split])
         try:
             pa = roc_auc_score(ys[split:], pm_m.predict_proba(X[split:])[:, 1])
         except Exception:
             pa = 0.5
         perm_aucs.append(pa)
-    perm_p95 = np.percentile(perm_aucs, 95)
-    perm_passed = auc > perm_p95
+    perm_passed = auc > np.percentile(perm_aucs, 95)
 
     return {
         "auc": auc,
@@ -274,110 +246,111 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, balanced=True):
         "long_pct": long_pct,
         "perm_passed": perm_passed,
         "events": len(data),
+        "model": model_name,
     }
 
 
-def run_setting(setting_key):
-    cfg = SETTINGS[setting_key]
-    print(f"\n{'='*70}")
-    print(f"MC EXPANSION: {cfg['label']} — {N_MC} iterations")
-    print(f"{'='*70}")
+GATES = [
+    ("AUC > 0.55", lambda d: d["auc"] > 0.55),
+    ("Permutation", lambda d: d["perm_passed"].astype(bool)),
+    ("PBO < 0.20", lambda d: d["pbo"] < 0.20),
+    ("Net SR > 0", lambda d: d["net_sr"] > 0),
+    ("Full VALID", lambda d: (d["auc"] > 0.55) & (d["pbo"] < 0.20) & (d["net_sr"] > 0)),
+]
 
-    # Load data
-    df = pd.read_parquet(RAW / cfg["file"])
-    df.index = df.index.tz_localize(None) if df.index.tz else df.index
+
+def run_setting(setting_key, data_source="synthetic", model="auto",
+                n_mc=None, n_perm=None, run_cfg=None):
+    run_cfg = run_cfg or config.FULL
+    n_mc = n_mc or run_cfg.n_mc
+    n_perm = n_perm or run_cfg.n_perm
+    cfg = SETTINGS[setting_key]
+    print(f"\n{'=' * 70}")
+    print(f"MC NULL PIPELINE: {cfg['label']} — {n_mc} iterations ({data_source} data)")
+    print(f"{'=' * 70}")
+
+    df = load_ohlcv(data_source, cfg["asset"], n_bars=run_cfg.n_bars)
+    if getattr(df.index, "tz", None) is not None:
+        df.index = df.index.tz_localize(None)
     ret_actual = df["close"].pct_change().dropna().values
     n_days = len(ret_actual)
     ref_index = df.index
 
-    print(f"  Source: {cfg['file']} — {n_days} bars ({df.index[0].date()} to {df.index[-1].date()})")
+    print(f"  Source: {df.attrs.get('source', data_source)} — {n_days} bars")
 
     results = []
     t0 = time.time()
-    for seed in range(N_MC):
-        res = run_mc_iteration(seed, ret_actual, n_days, ref_index, balanced=True)
+    for seed in range(n_mc):
+        res = run_mc_iteration(seed, ret_actual, n_days, ref_index,
+                               model=model, balanced=True, n_perm=n_perm)
         if res is not None:
             res["mc_iter"] = seed
             res["setting"] = setting_key
+            res["data_source"] = data_source
             results.append(res)
         if (seed + 1) % 10 == 0:
             elapsed = time.time() - t0
-            eta = elapsed / (seed + 1) * (N_MC - seed - 1)
-            valid = len(results)
-            print(f"  [{seed+1:3d}/{N_MC}] valid={valid} elapsed={elapsed:.0f}s ETA={eta:.0f}s")
+            eta = elapsed / (seed + 1) * (n_mc - seed - 1)
+            print(f"  [{seed + 1:3d}/{n_mc}] valid={len(results)} "
+                  f"elapsed={elapsed:.0f}s ETA={eta:.0f}s", flush=True)
 
     df_res = pd.DataFrame(results)
-    out_path = OUT / cfg["out_name"]
+    out_path = config.RESULTS_DIR / f"mc_fpr_{setting_key}.csv"
     df_res.to_csv(out_path, index=False)
     print(f"\n  Saved: {out_path} ({len(df_res)} valid iterations)")
 
-    # Summary
     n = len(df_res)
     if n > 0:
-        fpr_auc = (df_res["auc"] > 0.55).mean()
-        fpr_pbo = (df_res["pbo"] < 0.20).mean()
-        fpr_sr = (df_res["net_sr"] > 0).mean()
-        fpr_perm = df_res["perm_passed"].mean()
-        fpr_valid = ((df_res["auc"] > 0.55) & (df_res["pbo"] < 0.20) & (df_res["net_sr"] > 0)).mean()
-
         print(f"\n  === {cfg['label']} FPR Summary (n={n}) ===")
-        for name, fpr in [
-            ("AUC > 0.55", fpr_auc),
-            ("Permutation", fpr_perm),
-            ("PBO < 0.20", fpr_pbo),
-            ("Net SR > 0", fpr_sr),
-            ("Full VALID", fpr_valid),
-        ]:
+        for name, gate in GATES:
+            fpr = gate(df_res).mean()
             lo, hi = wilson_ci(fpr, n)
-            print(f"  {name:20s}: {fpr*100:5.1f}% [{lo*100:.1f}%, {hi*100:.1f}%]")
-
-        mean_auc = df_res["auc"].mean()
-        std_auc = df_res["auc"].std()
+            print(f"  {name:20s}: {fpr * 100:5.1f}% [{lo * 100:.1f}%, {hi * 100:.1f}%]")
         var_sr = df_res["var_sr_is"].dropna()
-        print(f"\n  Mean AUC: {mean_auc:.3f} ± {std_auc:.3f}")
+        print(f"\n  Mean AUC: {df_res['auc'].mean():.3f} ± {df_res['auc'].std():.3f}")
         if len(var_sr) > 0:
             print(f"  Var(SR_IS): mean={var_sr.mean():.3f}, 95th={var_sr.quantile(0.95):.3f}")
 
     return df_res
 
 
+def summarize(frames):
+    """Write per-setting x per-gate FPR summary with Wilson CIs."""
+    rows = []
+    for setting_key, df_res in frames.items():
+        n = len(df_res)
+        if n == 0:
+            continue
+        for name, gate in GATES:
+            fpr = gate(df_res).mean()
+            lo, hi = wilson_ci(fpr, n)
+            rows.append({"setting": setting_key, "gate": name, "fpr": fpr,
+                         "wilson_lo": lo, "wilson_hi": hi, "n": n})
+    out = config.RESULTS_DIR / "mc_fpr_summary.csv"
+    pd.DataFrame(rows).to_csv(out, index=False)
+    print(f"\n  Saved: {out}")
+
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--setting", choices=list(SETTINGS.keys()), help="Which setting to run")
-    parser.add_argument("--all", action="store_true", help="Run all 3 settings")
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--setting", choices=list(SETTINGS.keys()))
+    parser.add_argument("--all", action="store_true", help="Run all settings")
+    parser.add_argument("--data", choices=["synthetic", "real"], default="synthetic")
+    parser.add_argument("--model", choices=["auto", "catboost", "hgb"], default="auto")
+    parser.add_argument("--n-mc", type=int, default=None)
+    parser.add_argument("--n-perm", type=int, default=None)
+    parser.add_argument("--smoke", action="store_true", help="CI tier (n_mc=10)")
     args = parser.parse_args()
 
+    run_cfg = config.get_run_config(smoke=args.smoke)
+    kw = dict(data_source=args.data, model=args.model,
+              n_mc=args.n_mc, n_perm=args.n_perm, run_cfg=run_cfg)
+
     if args.all:
-        all_results = {}
-        for key in SETTINGS:
-            all_results[key] = run_setting(key)
-
-        # Combined summary
-        print(f"\n{'='*70}")
-        print("COMBINED SUMMARY — All 4 Settings")
-        print(f"{'='*70}")
-
-        # Load existing BTC 1h
-        btc_1h = pd.read_csv(OUT / "monte_carlo_fpr_200.csv")
-        btc_1h["setting"] = "btc_1h"
-
-        combined = pd.concat([btc_1h] + list(all_results.values()), ignore_index=True)
-        combined.to_csv(OUT / "mc_fpr_all_settings_200.csv", index=False)
-
-        for setting in ["btc_1h", "eth_1h", "sol_1h", "btc_daily"]:
-            sub = combined[combined["setting"] == setting]
-            n = len(sub)
-            if n == 0:
-                continue
-            fpr_auc = (sub["auc"] > 0.55).mean()
-            fpr_pbo = (sub["pbo"] < 0.20).mean()
-            lo_a, hi_a = wilson_ci(fpr_auc, n)
-            lo_p, hi_p = wilson_ci(fpr_pbo, n)
-            print(f"  {setting:12s} (n={n:3d}): AUC FPR={fpr_auc*100:5.1f}% [{lo_a*100:.1f}%,{hi_a*100:.1f}%]  PBO FPR={fpr_pbo*100:5.1f}% [{lo_p*100:.1f}%,{hi_p*100:.1f}%]")
-
-        print(f"\n  Saved: {OUT / 'mc_fpr_all_settings_200.csv'}")
-
+        frames = {key: run_setting(key, **kw) for key in SETTINGS}
+        summarize(frames)
     elif args.setting:
-        run_setting(args.setting)
+        run_setting(args.setting, **kw)
     else:
         parser.print_help()
