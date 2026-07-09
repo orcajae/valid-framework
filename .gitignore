@@ -8,12 +8,12 @@ data/*.parquet
 data/*.csv
 !data/.gitkeep
 !data/README.md
-results/*.csv
-results/*.json
-results/*.png
+results/*
 !results/.gitkeep
 !results/reference/
+results/reference/*
 !results/reference/*.csv
+catboost_info/
 *.DS_Store
 .env
 venv/
