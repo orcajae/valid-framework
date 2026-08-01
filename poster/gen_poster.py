@@ -480,7 +480,7 @@ REFS = [
     "McLean & Pontiff (2016). Does Academic Research Destroy Return Predictability? JF 71(1).",
     "Hou, Xue & Zhang (2020). Replicating Anomalies. RFS 33(5).",
     "Bailey & López de Prado (2014). The Deflated Sharpe Ratio. J. Portfolio Management 40(5).",
-    "Witzany (2021). A Bayesian Approach to Measure Backtest Overfitting. Bayesian Analysis.",
+    "Witzany (2021). A Bayesian Approach to Measurement of Backtest Overfitting. Risks 9(1).",
     "Kapoor & Narayanan (2023). Leakage and the Reproducibility Crisis in ML-based Science. Patterns 4(9).",
 ]
 for i, r_ in enumerate(REFS):
