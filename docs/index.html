@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VALID — a 12-item validation checklist for financial machine learning</title>
+<meta name="description" content="Score your study against the 12 items of VALID in about five minutes. Built from an audit of 80 papers and 340 crypto ML strategy variants.">
+
+<meta property="og:title" content="VALID — a 12-item gate for financial ML">
+<meta property="og:description" content="340 crypto ML strategy variants: 52% lost money after costs, and the nine that passed every classical significance test were all fully overfit. Score your own study against the 12 items.">
+<meta property="og:url" content="https://orcajae.github.io/valid-framework/">
+<meta name="twitter:card" content="summary">
+
+<link rel="preload" href="assets/fonts/inter-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 1. HERO ============================================================== -->
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">KDD-MLF 2026 · Paper 18 (Oral)</p>
+    <h1>Statistically perfect.<br><span class="hl">Economically worthless.</span></h1>
+    <p class="lede">We built 340 crypto ML strategy variants. 52% lost money after
+      costs. 9 passed every classical significance test — all fully overfit.
+      VALID is the 12-item gate that tells the difference.</p>
+    <p class="cta-row">
+      <a class="btn btn-primary" href="#scorer">Score your strategy — 5 min</a>
+      <a class="btn btn-ghost" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779">Read the paper</a>
+    </p>
+  </div>
+</header>
+
+<main>
+
+<!-- 2. SCORER =========================================================== -->
+<section id="scorer" class="scorer" aria-labelledby="scorer-h">
+  <div class="wrap">
+    <h2 id="scorer-h">Score your own study</h2>
+    <p class="sect-lede">Twelve binary items in a fixed order: the statistical
+      gate first, the economic gate second. Answer for the study in front of you.</p>
+
+    <div class="scorer-grid">
+
+      <form class="items" id="valid-form">
+        <fieldset>
+          <legend><span class="stage-tag">Stage 1</span> Statistical — verifiable from the manuscript alone</legend>
+
+          <label class="item"><input type="checkbox" id="v1" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V1.</b> Do you report the class distribution of your model's predictions?</span>
+              <span class="item-why">On assets that trend, a model can score well by learning the base rate; the prediction split is what exposes it.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v2" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V2.</b> Do you test both with and without class balancing?</span>
+              <span class="item-why">Crypto labels are structurally imbalanced, so the unbalanced run tells you how much of the result is base rate.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v3" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V3.</b> Do you split strictly by time, with purge and embargo gaps?</span>
+              <span class="item-why">Random splits let information leak across time through autocorrelated features and overlapping lookback windows.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v4" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V4.</b> Do you apply CPCV and report the probability of backtest overfitting?</span>
+              <span class="item-why">A single holdout gives one performance estimate, which is insufficient to detect overfitting across a large configuration search.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v5" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V5.</b> Do you report the variance of in-sample Sharpe across configurations?</span>
+              <span class="item-why">A PBO near zero can mean a robust signal — or a search space in which every configuration looks alike.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v6" data-stage="1">
+            <span class="item-body">
+              <span class="item-q"><b>V6.</b> Do you run a permutation test with at least 100 iterations?</span>
+              <span class="item-why">It establishes whether the result survives when the same pipeline is run on shuffled labels.</span>
+            </span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="stage-tag">Stage 2</span> Economic — required before anything is traded</legend>
+
+          <label class="item"><input type="checkbox" id="v7" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V7.</b> Do you report performance net of transaction costs?</span>
+              <span class="item-why">Cost omission inflates alpha, and a gross Sharpe ratio is not a deployment decision.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v8" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V8.</b> Do you show how conclusions hold across a range of cost assumptions?</span>
+              <span class="item-why">Cost assumptions can flip the sign of the alpha you are reporting.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v9" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V9.</b> Do you compare against simple active baselines, not only buy-and-hold?</span>
+              <span class="item-why">Weak baselines inflate relative performance: in a trending market almost any trend-following rule beats buy-and-hold.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v10" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V10.</b> Do you evaluate in bear markets and regime transitions?</span>
+              <span class="item-why">Trend-following measured only on bull-market data says little about the regimes in which the signal has to hold.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v11" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V11.</b> Do you report trade frequency?</span>
+              <span class="item-why">Turnover decides how much of the gross alpha the costs consume.</span>
+            </span></label>
+
+          <label class="item"><input type="checkbox" id="v12" data-stage="2">
+            <span class="item-body">
+              <span class="item-q"><b>V12.</b> Is your code available so the result can be reproduced?</span>
+              <span class="item-why">Without code, independent verification is not possible.</span>
+            </span></label>
+        </fieldset>
+      </form>
+
+      <aside class="readout" aria-labelledby="readout-h">
+        <h3 id="readout-h" class="sr-only">Your score</h3>
+        <div class="score-live" aria-live="polite">
+          <p class="score-big"><output id="total">0</output><span class="of">/ 12</span></p>
+          <p class="score-stages">
+            <span>Stage 1 · statistical <b id="s1">0</b>/6</span>
+            <span>Stage 2 · economic <b id="s2">0</b>/6</span>
+          </p>
+
+          <div class="bar" role="img" id="bar-img" aria-label="Your score of 0 out of 12, against a median of 2.5 out of 12 in an audit of 75 empirical papers.">
+            <div class="bar-track">
+              <div class="bar-fill" id="bar-fill"></div>
+              <div class="bar-median" title="Median published paper: 2.5 / 12"></div>
+            </div>
+            <p class="bar-note">Median published paper: <b>2.5 / 12</b> <span class="muted">(75 empirical papers audited)</span></p>
+          </div>
+
+          <p class="verdict" id="verdict">Check the items your study satisfies.</p>
+          <p class="v4-flag" id="v4-flag" hidden>V4 is unchecked. On signal-free
+            data, screening on AUC alone produced a 27% false-positive rate
+            [21, 34]; adding CPCV with PBO brought it to 0% [0, 1.9].</p>
+
+          <button type="button" class="btn btn-primary btn-copy" id="copy">Copy result</button>
+          <p class="copy-status" id="copy-status" aria-live="polite"></p>
+        </div>
+
+        <div class="disclaimer">
+          <p><b>Self-scoring is not a certification.</b> The audit runs these gates
+            against your actual artifacts.</p>
+          <p class="muted">Your answers never leave this browser.</p>
+          <p><a class="btn btn-ghost btn-sm" href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Request an audit</a></p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- 3. EVIDENCE ========================================================= -->
+<section class="evidence" aria-labelledby="evidence-h">
+  <div class="wrap">
+    <h2 id="evidence-h">What the checklist is built on</h2>
+    <ul class="tiles">
+      <li><span class="tile-n">340</span><span class="tile-l">strategy variants across three assets and four timeframes</span></li>
+      <li><span class="tile-n">52% <span class="tile-n-sub">/ 4.4%</span></span><span class="tile-l">produce negative net returns after costs; 15 variants (4.4%) exceed the benchmark of 0.917, of which 10 are model variants</span></li>
+      <li><span class="tile-n">t up to 21.7</span><span class="tile-l">among the nine variants surviving Bonferroni correction — every one exhibits PBO&nbsp;=&nbsp;1.0</span></li>
+      <li><span class="tile-n">0 of 340</span><span class="tile-l">survive the Deflated Sharpe Ratio</span></li>
+      <li><span class="tile-n">27% → 0%</span><span class="tile-l">false positives on signal-free data: AUC-based validation alone, then CPCV with PBO</span></li>
+      <li><span class="tile-n">2.5 / 12</span><span class="tile-l">median score of the 80 audited papers (75 empirical); none of them used CPCV</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4. WHO IS THIS FOR ================================================== -->
+<section class="audience" aria-labelledby="audience-h">
+  <div class="wrap">
+    <h2 id="audience-h">Who is this for</h2>
+    <div class="cards">
+      <!-- wording mirrors the KDD-MLF poster (poster/gen_poster.py) -->
+      <article class="card">
+        <h3>Reviewers &amp; PCs</h3>
+        <p>Require the 12 items as a minimum reporting standard for financial ML
+          submissions — the role TRIPOD plays in clinical prediction.</p>
+      </article>
+      <article class="card">
+        <h3>Validation &amp; model-risk teams</h3>
+        <p>A two-stage gate for incoming strategies: statistical items first,
+          economic items second, both binary.</p>
+      </article>
+      <article class="card">
+        <h3>Allocators &amp; operational due diligence</h3>
+        <p>Twelve questions to ask before trusting a pitched Sharpe ratio.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 5. HONESTY BOX ===================================================== -->
+<section class="honesty" aria-labelledby="honesty-h">
+  <div class="wrap">
+    <div class="honesty-box">
+      <h2 id="honesty-h">We ran VALID on our own paper</h2>
+      <p class="honesty-score"><b>9 / 12</b>, three partials disclosed.</p>
+      <p>The corrections we made are public.</p>
+      <p><a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md">Read the changelog</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. CREDIBILITY ===================================================== -->
+<section class="credibility" aria-labelledby="cred-h">
+  <div class="wrap">
+    <h2 id="cred-h">Paper and code</h2>
+    <dl class="cred-list">
+      <div><dt>Workshop</dt><dd>KDD-MLF 2026 — 9th ACM SIGKDD Workshop on Machine Learning in Finance, Jeju. Paper 18, oral.</dd></div>
+      <div><dt>Extended version</dt><dd><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779">SSRN Working Paper 6508779</a></dd></div>
+      <div><dt>Code and data</dt><dd><a href="https://github.com/orcajae/valid-framework">github.com/orcajae/valid-framework</a> — the corpus, the audit coding sheet for all 80 papers, and scripts that recompute every published figure.</dd></div>
+      <div><dt>Licence</dt><dd>MIT for the code, open for the coding sheet.</dd></div>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<!-- 7. FOOTER ========================================================== -->
+<footer aria-labelledby="footer-h">
+  <div class="wrap">
+    <h2 id="footer-h">Request an audit</h2>
+    <p class="foot-lede">If you would rather have the gates run against your actual
+      artifacts than against your recollection of them.</p>
+    <p><a class="btn btn-primary" href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Request an audit</a></p>
+    <p class="foot-meta">
+      <a href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">jwim1101@gmail.com</a>
+      · <a href="https://x.com/jwquant">@jwquant</a>
+      · <a href="https://github.com/orcajae/valid-framework">GitHub</a>
+    </p>
+    <p class="foot-fine">No cookies, no trackers. VALID v1.0 — the checklist has had
+      no formal Delphi review; community revision is invited.</p>
+  </div>
+</footer>
+
+<script src="scorer.js"></script>
+</body>
+</html>

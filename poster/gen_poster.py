@@ -64,6 +64,7 @@ E1X, E2X, E3X, EW = 45.0, 320.0, 595.0, 260.0
 
 URL_REPO = "https://github.com/orcajae/valid-framework"
 URL_SSRN = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779"
+URL_LANDING = "https://orcajae.github.io/valid-framework/"
 
 fig = plt.figure(figsize=(W / 25.4, H / 25.4))
 ax = fig.add_axes([0, 0, 1, 1])
@@ -296,14 +297,14 @@ T(C3X, MY + 70, "One item (V4) does it — used by 0 of 75.", 23, "SB", GREEN_D)
 # big QR — chest/eye height (1,050–1,160 mm above floor)
 QY = 592
 box(C3X, QY, C3W, 106, "#F1F6F3", ec=GREEN, lw=2.4)
-qr(C3X + 9, QY + 9, 88, URL_REPO)
+qr(C3X + 9, QY + 9, 88, URL_LANDING)
 tx = C3X + 105
 T(tx, QY + 10, "Run the", 30, "B", GREEN_D, zorder=4)
-T(tx, QY + 29, "checklist", 30, "B", GREEN_D, zorder=4)
-T(tx, QY + 48, "on your", 30, "B", GREEN_D, zorder=4)
-T(tx, QY + 67, "own paper", 30, "B", GREEN_D, zorder=4)
+T(tx, QY + 29, "checklist on", 30, "B", GREEN_D, zorder=4)
+T(tx, QY + 48, "your own", 30, "B", GREEN_D, zorder=4)
+T(tx, QY + 67, "strategy", 30, "B", GREEN_D, zorder=4)
 T(tx, QY + 88, "~5 minutes", 26, "BK", RED, zorder=4)
-T(C3X, QY + 110, "github.com/orcajae/valid-framework", 20, "M", INK_SOFT, zorder=4)
+T(C3X, QY + 110, "orcajae.github.io/valid-framework", 20, "M", INK_SOFT, zorder=4)
 
 # =================================================================
 # TIER 2 — EVIDENCE BAND  (662–1180 mm)
