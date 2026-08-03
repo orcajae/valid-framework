@@ -42,15 +42,15 @@ Finance (KDD-MLF 2026)**, Jeju, August 2026.
   ratios; only 4.4% (15/340) exceed a simple momentum benchmark
 - **Bull bias**: crypto ML models predict 58–97% long without class balancing;
   balancing removes the bias but not the weakness (AUC ≈ 0.50)
-- **Statistical-economic disconnect**: PBO = 0.000 and permutation p = 0.000,
-  yet net Sharpe = 0.135 — first empirical confirmation of Witzany's (2021)
-  PBO critique, via Monte Carlo (200 iterations per setting, seeds 0–199)
-- **Cost illusion**: ML fails to beat simple momentum even at 0bp costs
-  (SR 0.640 vs 0.954); costs consume 55–91% of gross alpha
-- **Literature audit**: of 80 papers surveyed (75 empirical, coded), 72%
-  ignore class balance, 53% omit transaction costs, 0% use CPCV
+- **Statistical-economic disconnect**: a run passing the permutation test
+  (p = 0.000, AUC 0.570 vs a shuffled 0.516) still fails CPCV (PBO = 0.267)
+  and earns net Sharpe 0.135 against a 0.917 benchmark
+- **Cost illusion**: 100% of 15-minute variants negative net of 18 bp; the
+  decay is monotone across four frequencies
+- **Literature audit**: of 80 papers surveyed (74 empirical, coded), 73%
+  ignore class balance, 54% omit transaction costs, 0% use CPCV
 - **Monte Carlo false positives**: AUC-based evaluation wrongly passes 27%
-  [21.3%, 33.5%] of signal-free pipelines; CPCV+PBO cuts this to 0% [0%, 1.9%]
+  [21%, 34%] of signal-free pipelines; CPCV+PBO cuts this to 0% [0%, 1.9%]
 
 ## The VALID Checklist (12 items)
 
@@ -69,9 +69,9 @@ Finance (KDD-MLF 2026)**, Jeju, August 2026.
 | V11 | Trade frequency and cost-per-alpha | Deployment | Hidden turnover |
 | V12 | Provide code for reproducibility | Reporting | Irreproducibility |
 
-The paper's own study self-assesses at **10/12 (2 partial: V6 permutation
-coverage, V10 two regimes)** — the checklist is meant to be applied honestly,
-including to its authors.
+The paper's own study self-assesses at **9/12 (3 partial: V5 flatness criteria
+disagree, V8 a single cost level, V10 two regimes)** — the checklist is meant
+to be applied honestly, including to its authors.
 
 ```python
 from valid import VALIDChecker
@@ -125,7 +125,7 @@ valid-framework/
 ├── experiments/            # reproduction pipeline (see REPRODUCE.md)
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
-├── audit/                  # literature audit (80 papers surveyed, 75 coded)
+├── audit/                  # literature audit (80 papers surveyed, 74 coded)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
 ├── releases/               # downloadable 12-item checklist PDF
 └── docker/                 # containerized reproduction
