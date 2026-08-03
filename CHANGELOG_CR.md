@@ -333,6 +333,9 @@ Figure 1 and its caption, `results/reference/audit_summary_80.csv`,
 `poster/gen_poster.py` (both the audit bar chart and the two n captions),
 `docs/index.html`, `docs/scorer.js`.
 
+Three residual prose instances of the pre-correction percentages (72%, 53%,
+33%) were aligned with Table 3 in the hosted camera-ready on Aug 4.
+
 ## Unchanged
 
 The literature audit (Table 3), bull bias (Table 4), the ablation and Monte
