@@ -250,12 +250,12 @@ T(C2X + 16, SX + 29,
 T(C1X, 392, "2.5", 108, "BK", RED)
 T(C1X + tw("2.5", 108, "BK") + 10, 415, "of 12", 36, "B", INK)
 T(C1X + tw("2.5", 108, "BK") + 10, 439, "items met", 28, "M", INK_SOFT)
-T(C1X, 466, "median audited paper (n = 75 empirical, 2018–2026)", 22, "M", INK_SOFT)
+T(C1X, 466, "median audited paper (n = 74 empirical, 2018–2026)", 22, "M", INK_SOFT)
 T(C1X, 490, "Share of papers failing each dimension", 23, "SB", INK_SOFT)
 
 BAR0, BARW = 148.0, 74.0
-rows = [("No code", 85), ("No class balance", 72), ("Costs omitted", 53),
-        ("No net performance", 53), ("BnH-only baseline", 33),
+rows = [("No code", 85), ("No class balance", 73), ("Costs omitted", 54),
+        ("No net performance", 54), ("BnH-only baseline", 35),
         ("Random split", 7), ("CPCV used", 0)]
 for i, (lab, val) in enumerate(rows):
     yy = 506 + i * 18
@@ -292,7 +292,7 @@ for i, (lab, val, ci, col) in enumerate([
     T(C3X, yy, lab, 26, "M", INK)
     T(C3X + C3W - 46, yy - 5, val, 34, "EB", col, ha="right")
     T(C3X + C3W, yy + 1, ci, 20, "M", INK_SOFT, ha="right")
-T(C3X, MY + 70, "One item (V4) does it — used by 0 of 75.", 23, "SB", GREEN_D)
+T(C3X, MY + 70, "One item (V4) does it — used by 0 of 74.", 23, "SB", GREEN_D)
 
 # big QR — chest/eye height (1,050–1,160 mm above floor)
 QY = 592

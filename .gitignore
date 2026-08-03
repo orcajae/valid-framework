@@ -29,3 +29,7 @@ paper/latex/figures/fig6_*
 poster/GATE0.md
 poster/RUN_ATTRIBUTION_AUDIT.md
 poster/ERRATUM_DRAFT.md
+poster/ARIAN_D4_VERIFICATION.md
+
+# Session scratch space, in case a draft is ever written inside the tree
+scratchpad/

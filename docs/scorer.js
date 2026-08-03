@@ -1,7 +1,7 @@
 /* VALID self-scorer.
    No network calls, no storage, no analytics: the answers stay in this tab.
    Numbers quoted below come from the paper (KDD-MLF 2026 / SSRN 6508779):
-   median 2.5 of 12 across 75 empirical papers; AUC-alone false-positive rate
+   median 2.5 of 12 across 74 empirical papers; AUC-alone false-positive rate
    27% [21, 34] falling to 0% [0, 1.9] once CPCV with PBO is added. */
 (function () {
   "use strict";
@@ -37,7 +37,7 @@
     if (c.total === 0) return "Check the items your study satisfies.";
 
     if (c.total < 4) {
-      return "At or below the median of the 75 empirical papers audited " +
+      return "At or below the median of the 74 empirical papers audited " +
              "(2.5 of 12). The items left unchecked are the ones the audit " +
              "found missing most often.";
     }
@@ -71,7 +71,7 @@
     elBarImg.setAttribute(
       "aria-label",
       "Your score of " + c.total + " out of 12, against a median of 2.5 out " +
-      "of 12 in an audit of 75 empirical papers."
+      "of 12 in an audit of 74 empirical papers."
     );
 
     elVerdict.textContent = verdict(c);
@@ -84,7 +84,7 @@
     return "VALID self-score: " + c.total + "/12 " +
            "(Stage 1 statistical " + c.s1 + "/6, " +
            "Stage 2 economic " + c.s2 + "/6). " +
-           "Median in an audit of 75 empirical papers: " + MEDIAN + "/12. " +
+           "Median in an audit of 74 empirical papers: " + MEDIAN + "/12. " +
            URL;
   }
 

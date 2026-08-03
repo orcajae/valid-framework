@@ -1,5 +1,12 @@
 # Literature Audit Coding Guide
 
+## Inclusion Criterion
+
+A paper is 'empirical' iff it applies an ML method to real cryptocurrency
+market data for a trading or prediction task. Excluded: surveys,
+synthetic-only methodological studies, non-crypto asset studies,
+non-ML studies. Excluded ids: 1, 9, 11, 12, 71, 79.
+
 ## Dimensions
 
 | Code | Question | Values |
