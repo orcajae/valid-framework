@@ -171,6 +171,168 @@ re-estimated, and the caption states this. Generator:
 Both new figures embed TrueType fonts (`pdf.fonttype = 42`). The four withdrawn
 images are moved out of the repository to `~/jwquant/_v31_figures_backup/`.
 
+## E9 — Figure 1 (VALID compliance heatmap) rebuilt
+
+The heatmap shipped as a raster image dated 2026-04-10 with no generator in the
+repository. Two defects were found.
+
+**Layout.** The Pass/Partial/Fail/N/A legend was drawn inside the heatmap axes
+and landed on top of the column labels, which were themselves clipped at the
+figure edge — the reader saw "V1: Class Dist." and "V2: Balance..." with the
+legend text crossing them. The legend now occupies a row of its own below the
+figure, the column labels sit above the heatmap where nothing competes for the
+space, and the median is keyed beside the failure-rate panel.
+
+**Item V9.** Its failure-rate bar read 0%, next to V10 and V11 at 0%. V10 and
+V11 are 0% because every paper is coded N/A; V9 is coded for all 75 papers and
+24 of them fail it. The corrected bar reads 32%.
+
+The figure is now generated from `results/reference/literature_audit_80.csv` by
+`scripts/gen_fig7_valid_heatmap.py`, which maps the seven coding dimensions onto
+the twelve items using the correspondence already printed in Table 3. The
+reported median of 2.5 of 12 reproduces exactly. Item failure rates use
+applicable-only denominators and the caption now says so, which is why V1 and V2
+read 95% and 98% here against the 72% of Table 3: that table divides by all 75
+papers, the figure by the 59 where a directional class balance applies. V5 and
+V6 were never coded per paper — the coding sheet has no column for either — and
+the caption now records them as asserted universal non-compliance rather than
+letting the all-red columns imply per-paper evidence. The output is vector PDF
+with TrueType fonts embedded, replacing the raster PNG.
+
+## E10 — The figure set rebuilt as one system
+
+All six figures now come from a generator in `scripts/`, share `figstyle.py`,
+and ship as vector PDFs. Two of them had no generator at all before this pass,
+and three were rasters. The manuscript PDF drops from 1.88 MB to 0.85 MB with
+zero Type 3 fonts and nothing unembedded.
+
+**Type size.** Each figure is now authored at the width it occupies on the page,
+so LaTeX scales it by 1.0. The old set was drawn at arbitrary sizes and scaled:
+Figure 5 was drawn 3.4 in wide and enlarged by 1.25, Figure 1's row labels were
+shrunk to about 3.8 pt, and the same nominal 8 pt label came out anywhere from
+4 pt to 11 pt depending on the figure.
+
+**Figure 2 (framework overview)** is rebuilt. Its gate boxes had been laid out
+with a gap smaller than their own rounded-corner padding, so every internal
+border doubled; the "Key Insight" band overlapped both the Stage 1 container
+and the Bull Bias box; connectors curved from the gates across the containers
+to the failure-mode boxes; and the title was clipped off the canvas. The
+connectors are dropped rather than redrawn — each failure-mode box already
+names its detecting items. Generator: `scripts/gen_fig0_valid_overview.py`.
+
+**Figure 4 (PBO paradox)** is rebuilt from `results/reference/variants_340.csv`
+and `monte_carlo_fpr_200.csv`. Panel (a) had been a scatter of AUC against PBO
+whose y axis carries no variance: all 209 variants with a PBO value have PBO of
+exactly 1.000. The caption's "nearly all configurations receive PBO close to
+1.0" is corrected to state the result, and the panel now draws the 0.20
+threshold that V4 accepts below, so the gap to it is the visible quantity. Panel
+(b) gains the absolute flatness threshold of 0.01, the second of the two
+criteria the text reports as disagreeing; the null 95th percentile recomputes to
+0.3278 against the printed 0.328. Generator: `scripts/gen_fig2_pbo_paradox.py`.
+
+**Collisions removed.** Figure 1: the legend band sat against the V1–V12 labels
+above it, and "V12: Code available" ran into the score panel's axis label, which
+moved to the foot of that panel. Figure 3: the panel (a) legend sat on the first
+bar and the "50%" and "0.50 (chance)" captions ran into the reference lines and
+the bars — both values are already axis ticks, so the two panels share one
+legend beneath the figure and the reference line is keyed there. Figure 4: the
+panel (b) legend sat on the tallest bin and the rotated AUC label crossed the
+V4 line. Figure 6: the filled callout badges, the only boxed annotations in the
+set, are flattened.
+
+**Equations.** All six numbered equations render, and three symbols that were
+used before being introduced are now defined: $\tau$ (elapsed time since the
+event, Equations 1–3), $\hat{\sigma}$ (the local volatility estimate the
+barriers scale to), and $M$ (the number of candidate configurations, used in
+Equations 4 and 5). The mean $\overline{\mathrm{SR}}_{\mathrm{IS}}$ in Equation 5
+is now named as well.
+
+## E11 — The empirical set corrected from 75 papers to 74
+
+**How it surfaced.** Rebuilding the compliance heatmap from the coding sheet
+(E10) put the per-paper V4 column on the page for the first time. One cell came
+back green: id 9, Arian, Mobarekeh and Seco (2024), coded
+`D4_validation = CPCV/Bagged CPCV`. The audit table on the facing page prints
+`CPCV used 0/75`, and the body prints "no empirical paper in our sample uses
+it". The figure and the table it was drawn beside disagreed.
+
+**The cause.** The exclusion rule lived in code rather than in the coding guide,
+and it tested one column:
+
+```python
+empirical = df[~df["method"].str.contains("Survey|Synthetic|PBO|Anomaly|microstructure|DL survey", case=False, na=False)]
+```
+
+Id 9's `method` reads `CPCV variants`, which matches nothing in that pattern, so
+the row stayed in the empirical set. The same row carries the pattern's own
+keywords in three other columns: `assets = Synthetic`, `best_metric = PBO
+comparison`, `D1_cost = N/A synthetic`. The paper is a synthetic-controlled
+methodological study — its title is "Backtest overfitting in the machine
+learning era: A comparison of out-of-sample testing methods in a synthetic
+controlled environment", and our own camera-ready introduces it that way in
+Section 2. It was never a crypto ML trading study. The other synthetic paper in
+the sheet, Witzany (2021), was excluded only because its `method` string
+happened to read `PBO analysis`; the difference in treatment was an artifact of
+which column the regular expression could see, not a difference in kind.
+
+**The fix.** The inclusion criterion is now stated in `audit/coding_guide.md`
+rather than implied by a regular expression:
+
+> A paper is 'empirical' iff it applies an ML method to real cryptocurrency
+> market data for a trading or prediction task. Excluded: surveys,
+> synthetic-only methodological studies, non-crypto asset studies, non-ML
+> studies. Excluded ids: 1, 9, 11, 12, 71, 79.
+
+`audit/audit_analysis.py` selects on that id list; the superseded regular
+expression is retained as a comment. Both manuscripts now print the criterion,
+which neither did before. **The coding sheet itself is unchanged — all 80 rows
+stand as coded.** Only the classification rule moved.
+
+**Every affected figure, in full.** All values are transcribed from
+`audit/audit_analysis.py` and `scripts/gen_fig7_valid_heatmap.py` stdout; none
+was recomputed by hand.
+
+| Quantity | Was (n = 75) | Now (n = 74) |
+|---|---|---|
+| Empirical papers | 75 | 74 |
+| D1: Costs omitted | 40/75, 53% [42%, 64%] | 40/74, 54% [43%, 65%] |
+| D2: No class balance | 54/75, 72% [61%, 81%] | 54/74, 73% [62%, 82%] |
+| D3: Random split | 5/75, 7% [3%, 15%] | 5/74, 7% [3%, 15%] |
+| D4: Weak validation | 15/75, 20% [13%, 30%] | 15/74, 20% [13%, 31%] |
+| D4: CPCV used | 0/75, 0%, no CI printed | 0/74, 0% [0%, 5%] |
+| D5: BnH-only baseline | 25/75, 33% [24%, 44%] | 26/74, 35% [25%, 46%] |
+| D6: No net performance | 40/75, 53% [42%, 64%] | 40/74, 54% [43%, 65%] |
+| D7: No code available | 64/75, 85% [76%, 92%] | 63/74, 85% [75%, 91%] |
+| Median VALID score | 2.5 / 12 | 2.5 / 12 |
+| Figure 1: V1, V2 denominator | 59 applicable papers | 58 applicable papers |
+| Figure 1: V1, V2 fail rate | 95%, 98% of 59 | 95%, 98% of 58 |
+
+**The headline results do not move.** CPCV adoption is **0 of 74** — the claim
+the figure appeared to contradict survives the correction that the figure
+prompted. The median audited paper still satisfies **2.5 of 12** VALID items
+(`scripts/gen_fig7_valid_heatmap.py`: `papers=74, median score=2.50/12`). Class
+imbalance remains the most neglected dimension and reproducibility the second.
+The excluded paper failed none of the seven dimensions, so the correction moves
+the denominators, not the numerators.
+
+**D5 corrected.** The previously printed 25/75 (33%) understated the script's
+count by one; the rebuilt pipeline now prints the script value directly: 26/74
+(35%). D7 moves for the same reason in the opposite direction — its count is now
+63 where 64 was printed — and its rate, which the script had computed as 84%
+against a printed 85%, now agrees at 85%.
+
+**A misdescription corrected.** The camera-ready said "Of the 80 papers, 75 are
+empirical and 5 are surveys". Only two of the six excluded entries are surveys;
+the composition is two surveys, two synthetic-only methodological studies, one
+equities-only anomaly replication and one non-ML microstructure study. Both
+manuscripts now itemize the exclusions by kind instead of calling them all
+surveys.
+
+**Surfaces updated**: SSRN §3.1 and Table 3, camera-ready §4.1 and Table 3,
+Figure 1 and its caption, `results/reference/audit_summary_80.csv`,
+`poster/gen_poster.py` (both the audit bar chart and the two n captions),
+`docs/index.html`, `docs/scorer.js`.
+
 ## Unchanged
 
 The literature audit (Table 3), bull bias (Table 4), the ablation and Monte
