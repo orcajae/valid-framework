@@ -22,6 +22,7 @@
   var elV4 = document.getElementById("v4-flag");
   var elCopy = document.getElementById("copy");
   var elStatus = document.getElementById("copy-status");
+  var elNext = document.getElementById("next-step");
   var v4 = document.getElementById("v4");
 
   function counts() {
@@ -31,6 +32,28 @@
       if (b.getAttribute("data-stage") === "1") s1++; else s2++;
     });
     return { s1: s1, s2: s2, total: s1 + s2 };
+  }
+
+  /* Which stage holds more unchecked items. V1-V6 are Stage 1 (statistical),
+     V7-V12 Stage 2 (economic), six items each, per Table 1 of the paper.
+     Ties resolve to Stage 1: it is verifiable from the manuscript alone. */
+  function weakStage(c) {
+    var miss1 = 6 - c.s1, miss2 = 6 - c.s2;
+    return miss2 > miss1 ? "2" : "1";
+  }
+
+  function nextStep(c) {
+    if (c.total === 0) return "";
+    if (c.total < 4) {
+      return "Most gaps concentrate in Stage " + weakStage(c) +
+             " — the discovery review starts there.";
+    }
+    if (c.total <= 8) {
+      return "You're above the published median. The remaining items are " +
+             "exactly what an audit pins down against your artifacts.";
+    }
+    return "Strong. The difference between self-scoring and an audit is " +
+           "evidence — have it verified.";
   }
 
   function verdict(c) {
@@ -76,6 +99,11 @@
 
     elVerdict.textContent = verdict(c);
     elV4.hidden = v4.checked;
+
+    var step = nextStep(c);
+    elNext.textContent = step;
+    elNext.hidden = step === "";
+
     elStatus.textContent = "";
   }
 

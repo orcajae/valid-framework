@@ -13,6 +13,7 @@
 
 <link rel="preload" href="assets/fonts/inter-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,6 +34,23 @@
 </header>
 
 <main>
+
+<!-- 1b. STORY =========================================================== -->
+<section class="story" aria-labelledby="story-h">
+  <div class="wrap">
+    <div class="story-box">
+      <h2 id="story-h">Why this exists</h2>
+      <p class="story-text">We built 340 strategy variants expecting to find
+        tradable ML alpha. What we found instead: 52% lose money after costs, and
+        every variant that survives classical significance testing is fully
+        overfit. Then we turned the checklist on our own camera-ready — and it
+        caught errors there too, which we published. VALID exists because
+        validation has to be something you can run on yourself.</p>
+      <p class="story-self">We scored our own paper <b>9 / 12</b>, three partials
+        disclosed. <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md">Read the changelog</a></p>
+    </div>
+  </div>
+</section>
 
 <!-- 2. SCORER =========================================================== -->
 <section id="scorer" class="scorer" aria-labelledby="scorer-h">
@@ -155,11 +173,15 @@
           <p><b>Self-scoring is not a certification.</b> The audit runs these gates
             against your actual artifacts.</p>
           <p class="muted">Your answers never leave this browser.</p>
+          <p class="next-step" id="next-step" hidden></p>
           <p><a class="btn btn-ghost btn-sm" href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Request an audit</a></p>
         </div>
       </aside>
 
     </div>
+
+    <p class="scorer-foot"><a href="assets/valid_checklist_onepage.pdf">Download
+      the checklist (PDF)</a> — the 12 items and the scoring rule on one page.</p>
   </div>
 </section>
 
@@ -169,7 +191,7 @@
     <h2 id="evidence-h">What the checklist is built on</h2>
     <ul class="tiles">
       <li><span class="tile-n">340</span><span class="tile-l">strategy variants across three assets and four timeframes</span></li>
-      <li><span class="tile-n">52% <span class="tile-n-sub">/ 4.4%</span></span><span class="tile-l">produce negative net returns after costs; 15 variants (4.4%) exceed the benchmark of 0.917, of which 10 are model variants</span></li>
+      <li><span class="tile-n">52% <span class="tile-n-sub">/ 4.4%</span></span><span class="tile-l">are net-negative after costs; 15 variants (4.4%) exceed the benchmark of 0.917, of which 10 are model variants</span></li>
       <li><span class="tile-n">t up to 21.7</span><span class="tile-l">among the nine variants surviving Bonferroni correction — every one exhibits PBO&nbsp;=&nbsp;1.0</span></li>
       <li><span class="tile-n">0 of 340</span><span class="tile-l">survive the Deflated Sharpe Ratio</span></li>
       <li><span class="tile-n">27% → 0%</span><span class="tile-l">false positives on signal-free data: AUC-based validation alone, then CPCV with PBO</span></li>
@@ -178,41 +200,64 @@
   </div>
 </section>
 
+<!-- 3b. WHAT AN AUDIT INCLUDES ========================================== -->
+<section id="audit" class="audit" aria-labelledby="audit-h">
+  <div class="wrap">
+    <h2 id="audit-h">What an audit includes</h2>
+    <ul class="audit-list">
+      <li>The 12 gates run against your actual artifacts — code, data, backtest outputs</li>
+      <li>A reproduction attempt of your headline result</li>
+      <li>A per-item evidence table: pass, fail, or unverifiable, with file-level references</li>
+      <li>A written report with remediation priorities</li>
+      <li>A re-score after fixes</li>
+    </ul>
+    <p class="audit-note">Audits are performed personally by the author; capacity
+      is limited.</p>
+    <p class="audit-tiers"><b>Discovery review → Full audit.</b> Scope and terms
+      by email.</p>
+    <p><a class="btn btn-primary" href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Request an audit</a></p>
+
+    <ol class="ladder" aria-label="From self-scoring to a full audit">
+      <li><span class="ladder-n">1</span><a href="#scorer">Score yourself</a>
+        <span class="ladder-sub">5 min, free</span></li>
+      <li><span class="ladder-n">2</span><a href="https://github.com/orcajae/valid-framework">Reproduce our results</a>
+        <span class="ladder-sub">repo, free</span></li>
+      <li><span class="ladder-n">3</span><a href="mailto:jwim1101@gmail.com?subject=VALID%20discovery%20review">Discovery review</a>
+        <span class="ladder-sub">by email</span></li>
+      <li><span class="ladder-n">4</span><a href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Full audit</a>
+        <span class="ladder-sub">by email</span></li>
+    </ol>
+  </div>
+</section>
+
 <!-- 4. WHO IS THIS FOR ================================================== -->
 <section class="audience" aria-labelledby="audience-h">
   <div class="wrap">
     <h2 id="audience-h">Who is this for</h2>
     <div class="cards">
-      <!-- wording mirrors the KDD-MLF poster (poster/gen_poster.py) -->
+      <!-- wording mirrors the KDD-MLF poster (poster/gen_poster_900x1050.py) -->
       <article class="card">
         <h3>Reviewers &amp; PCs</h3>
+        <p class="card-out">Reject fewer false positives with one table.</p>
         <p>Require the 12 items as a minimum reporting standard for financial ML
           submissions — the role TRIPOD plays in clinical prediction.</p>
       </article>
       <article class="card">
         <h3>Validation &amp; model-risk teams</h3>
+        <p class="card-out">Stop overfit strategies before capital does.</p>
         <p>A two-stage gate for incoming strategies: statistical items first,
           economic items second, both binary.</p>
       </article>
       <article class="card">
         <h3>Allocators &amp; operational due diligence</h3>
+        <p class="card-out">Twelve questions before you trust a pitched Sharpe.</p>
         <p>Twelve questions to ask before trusting a pitched Sharpe ratio.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- 5. HONESTY BOX ===================================================== -->
-<section class="honesty" aria-labelledby="honesty-h">
-  <div class="wrap">
-    <div class="honesty-box">
-      <h2 id="honesty-h">We ran VALID on our own paper</h2>
-      <p class="honesty-score"><b>9 / 12</b>, three partials disclosed.</p>
-      <p>The corrections we made are public.</p>
-      <p><a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md">Read the changelog</a></p>
-    </div>
-  </div>
-</section>
+<!-- 5. HONESTY — merged into the Story block above (see .story-self) ==== -->
 
 <!-- 6. CREDIBILITY ===================================================== -->
 <section class="credibility" aria-labelledby="cred-h">
@@ -230,6 +275,10 @@
 
 </main>
 
+<!-- 6b. KDD BANNER ===================================================== -->
+<p class="kdd-banner">Presenting at KDD-MLF 2026, Jeju — Aug 9, Paper 18 (oral).
+  Come find the poster.</p>
+
 <!-- 7. FOOTER ========================================================== -->
 <footer aria-labelledby="footer-h">
   <div class="wrap">
@@ -238,9 +287,9 @@
       artifacts than against your recollection of them.</p>
     <p><a class="btn btn-primary" href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">Request an audit</a></p>
     <p class="foot-meta">
+      Jaewook Kim ·
       <a href="mailto:jwim1101@gmail.com?subject=VALID%20audit%20inquiry">jwim1101@gmail.com</a>
-      · <a href="https://x.com/jwquant">@jwquant</a>
-      · <a href="https://github.com/orcajae/valid-framework">GitHub</a>
+      · <a href="https://orcajae.github.io/valid-framework/">orcajae.github.io/valid-framework</a>
     </p>
     <p class="foot-fine">No cookies, no trackers. VALID v1.0 — the checklist has had
       no formal Delphi review; community revision is invited.</p>

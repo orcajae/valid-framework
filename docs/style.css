@@ -1,4 +1,5 @@
-/* VALID landing page — palette mirrors the KDD-MLF poster (poster/gen_poster.py) */
+/* VALID landing page. Every colour here also appears in the KDD-MLF poster
+   (poster/gen_poster_900x1050.py); the poster is the source of truth. */
 
 @font-face {
   font-family: "InterLocal";
@@ -14,6 +15,12 @@
   font-family: "InterLocal";
   src: url("assets/fonts/inter-bold.woff2") format("woff2");
   font-weight: 700; font-style: normal; font-display: swap;
+}
+/* Black (900) carries the hook headline, matching the poster's "BK" face. */
+@font-face {
+  font-family: "InterLocal";
+  src: url("assets/fonts/inter-black.woff2") format("woff2");
+  font-weight: 900; font-style: normal; font-display: swap;
 }
 
 :root {
@@ -98,13 +105,15 @@ a:hover { color: var(--green-d); }
 }
 .hero .eyebrow {
   font-size: .82rem; font-weight: 600; letter-spacing: .09em;
-  text-transform: uppercase; color: #A9DCC5; margin-bottom: 1.1rem;
+  text-transform: uppercase; color: #BFE3D2; margin-bottom: 1.1rem;
 }
-.hero h1 { color: #8FCFB4; margin-bottom: .5em; }
+/* Weight 900 and the two greens mirror the poster hook banner exactly
+   (poster/gen_poster_900x1050.py: face "BK", #8FCFB4 / #FFFFFF). */
+.hero h1 { color: #8FCFB4; font-weight: 900; margin-bottom: .5em; }
 .hero h1 .hl { color: #fff; }
 .hero .lede {
   font-size: clamp(1.02rem, 2.1vw, 1.2rem);
-  max-width: 44rem; color: #DCEFE6; margin-bottom: 0;
+  max-width: 44rem; color: #D6EFE3; margin-bottom: 0;
 }
 .hero .btn-ghost { color: #fff; border-color: #8FCFB4; }
 .hero .btn-ghost:hover { background: rgba(255,255,255,.12); color: #fff; }
@@ -138,7 +147,7 @@ legend {
   margin-bottom: .5rem; cursor: pointer;
   background: #fff;
 }
-.item:hover { border-color: var(--green); background: #FBFDFC; }
+.item:hover { border-color: var(--green); background: #F4F7F8; }
 .item input {
   width: 1.35rem; height: 1.35rem; margin: .15rem 0 0;
   accent-color: var(--green); flex: 0 0 auto; cursor: pointer;
@@ -178,6 +187,11 @@ legend {
   border: 1px solid var(--rule); border-radius: 8px; font-size: .9rem;
 }
 .disclaimer p:last-child { margin-bottom: 0; }
+.next-step {
+  border-left: 3px solid var(--green); background: var(--green-l);
+  padding: .55rem .7rem; color: var(--green-d); font-weight: 600;
+}
+.scorer-foot { margin: 1.8rem 0 0; font-size: .95rem; }
 
 @media (min-width: 62rem) {
   .scorer-grid { grid-template-columns: 1fr 20rem; gap: 2.6rem; }
@@ -188,27 +202,68 @@ legend {
 .evidence { background: var(--slate); color: #fff; }
 .evidence h2 { color: #fff; }
 .tiles { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1.4rem; }
-.tiles li { border-top: 2px solid #3C4A54; padding-top: .8rem; }
-.tile-n { display: block; font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 700; color: #8FCFB4; line-height: 1.1; }
-.tile-n-sub { color: #C4D2DA; font-weight: 600; }
-.tile-l { display: block; font-size: .92rem; color: #C4D2DA; margin-top: .35rem; }
+.tiles li { border-top: 2px solid var(--soft); padding-top: .8rem; }
+/* White primary over green secondary: the poster's dark evidence strip
+   (gen_poster_900x1050.py, #FFFFFF over #9FD8BF on SLATE). */
+.tile-n { display: block; font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 700; color: #FFFFFF; line-height: 1.1; }
+.tile-n-sub { color: #9FD8BF; font-weight: 600; }
+.tile-l { display: block; font-size: .92rem; color: #9FD8BF; margin-top: .35rem; }
 @media (min-width: 40rem) { .tiles { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 62rem) { .tiles { grid-template-columns: repeat(3, 1fr); gap: 1.6rem 2rem; } }
 
 /* ---------- 4. audience ---------- */
 .cards { display: grid; gap: 1.1rem; margin-top: 1.6rem; }
-.card { border: 1px solid var(--rule); border-left: 5px solid var(--green); border-radius: 6px; padding: 1.1rem 1.2rem; background: #F8FAFB; }
+.card { border: 1px solid var(--rule); border-left: 5px solid var(--green); border-radius: 6px; padding: 1.1rem 1.2rem; background: #F4F7F8; }
 .card h3 { color: var(--green-d); margin-bottom: .4em; }
 .card p { margin: 0; font-size: .95rem; }
+.card-out { font-weight: 700; color: var(--ink); margin-bottom: .45rem !important; }
 @media (min-width: 56rem) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
-/* ---------- 5. honesty ---------- */
-.honesty { padding-top: 0; }
-.honesty-box { border: 2px solid var(--red); border-radius: 8px; padding: 1.5rem; }
-.honesty-box h2 { margin-bottom: .35em; }
-.honesty-score { font-size: 1.35rem; margin-bottom: .4rem; }
-.honesty-score b { color: var(--red); font-size: 1.7rem; }
-.honesty-box p:last-child { margin-bottom: 0; }
+/* ---------- 1b. story (absorbs the former honesty box) ---------- */
+.story { padding-bottom: 0; }
+.story-box { border: 2px solid var(--red); border-radius: 8px; padding: 1.5rem; }
+.story-box h2 { margin-bottom: .45em; }
+.story-text { font-size: clamp(1rem, 1.9vw, 1.1rem); max-width: 46rem; }
+.story-self {
+  margin: 0; padding-top: 1rem; border-top: 1px solid var(--rule);
+  font-size: .97rem;
+}
+.story-self b { color: var(--red); font-size: 1.25rem; }
+
+/* ---------- 3b. audit offer + value ladder ---------- */
+.audit { border-top: 1px solid var(--rule); }
+.audit-list { margin: 1.4rem 0 1.2rem; padding-left: 1.15rem; max-width: 46rem; }
+.audit-list li { margin-bottom: .5rem; font-size: .97rem; }
+.audit-note { color: var(--soft); font-size: .92rem; max-width: 46rem; }
+.audit-tiers { max-width: 46rem; }
+
+.ladder {
+  list-style: none; margin: 2rem 0 0; padding: 0;
+  display: grid; gap: .8rem; counter-reset: none;
+}
+.ladder li {
+  display: grid; grid-template-columns: 1.9rem 1fr; gap: .1rem .7rem;
+  align-items: baseline;
+  border: 1px solid var(--rule); border-radius: 6px;
+  padding: .8rem .9rem; background: #F4F7F8;
+}
+.ladder-n {
+  grid-row: span 2;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.7rem; height: 1.7rem; border-radius: 50%;
+  background: var(--green); color: #fff;
+  font-size: .85rem; font-weight: 700; align-self: center;
+}
+.ladder a { font-weight: 600; }
+.ladder-sub { font-size: .85rem; color: var(--soft); }
+@media (min-width: 56rem) { .ladder { grid-template-columns: repeat(4, 1fr); } }
+
+/* ---------- 6b. KDD banner ---------- */
+.kdd-banner {
+  margin: 0; padding: .9rem 1.25rem; text-align: center;
+  background: var(--slate); color: #9FD8BF;
+  font-size: .92rem; font-weight: 600;
+}
 
 /* ---------- 6. credibility ---------- */
 .credibility { border-top: 1px solid var(--rule); }
