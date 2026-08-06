@@ -82,6 +82,10 @@ label mismatch for two of the settings was already recorded in the repository's
 Table 7. The false-positive results are unaffected — every setting yields 0%
 under CPCV with PBO.
 
+> E7 was allocated to a suspected Figure 2 corpus contamination and withdrawn
+> when the check came back clean; see "Figures" below. No E7 correction exists.
+> [numbering annotated 2026-08-07; content unchanged]
+
 ## Self-assessment revised downward
 
 V8 (cost sensitivity) moves from satisfied to partial: all corpus variants are
