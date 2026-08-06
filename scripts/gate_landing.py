@@ -101,13 +101,38 @@ def pdf_text(path):
         return "\n".join(p.get_text() for p in d)
 
 
-def collect():
+def fetch(base):
+    """Pull the three user-facing files off a deployed site into a temp dir."""
+    import tempfile
+    import urllib.request
+    d = tempfile.mkdtemp(prefix="gate-live-")
+    got = {}
+    for name, rel in (("index", ""), ("scorer", "scorer.js"),
+                      ("onepage", "assets/valid_checklist_onepage.pdf")):
+        url = base.rstrip("/") + "/" + rel
+        req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+        with urllib.request.urlopen(req, timeout=45) as r:
+            if r.status != 200:
+                sys.exit("live fetch %s -> HTTP %s" % (url, r.status))
+            body = r.read()
+        path = os.path.join(d, rel.split("/")[-1] or "index.html")
+        with open(path, "wb") as fh:
+            fh.write(body)
+        got[name] = path
+        print("  fetched %-46s %d bytes" % (url, len(body)))
+    return got
+
+
+def collect(src=None):
     """(label, text) pairs making up the user-visible surface."""
+    index = src["index"] if src else INDEX
+    scorer = src["scorer"] if src else SCORER
+    onepage = src["onepage"] if src else ONEPAGE
     p = Visible()
-    p.feed(open(INDEX, encoding="utf-8").read())
+    p.feed(open(index, encoding="utf-8").read())
     items = [("index.html", t) for t in p.out]
-    items += [("scorer.js", t) for t in js_strings(SCORER)]
-    t = pdf_text(ONEPAGE)
+    items += [("scorer.js", t) for t in js_strings(scorer)]
+    t = pdf_text(onepage)
     if t is None:
         print("  ! PyMuPDF missing: the one-page PDF was NOT scanned")
     else:
@@ -186,21 +211,51 @@ def raw_sources():
     return out
 
 
-def main():
-    items = collect()
+def live_match():
+    """The deployed page must be the working tree's page, byte for byte."""
+    print("\n[gate 6] deployed bytes == working tree")
+    ok = True
+    for label, local, remote in (
+        ("index.html", INDEX, LIVE_SRC["index"]),
+        ("scorer.js", SCORER, LIVE_SRC["scorer"]),
+        ("valid_checklist_onepage.pdf", ONEPAGE, LIVE_SRC["onepage"]),
+    ):
+        a = open(local, "rb").read()
+        b = open(remote, "rb").read()
+        good = a == b
+        ok = ok and good
+        print("  %s %-30s local %d B / live %d B"
+              % ("PASS" if good else "FAIL", label, len(a), len(b)))
+    return ok
+
+
+def main(argv):
+    global LIVE_SRC
+    LIVE_SRC = None
+    if len(argv) > 1 and argv[1] == "--live":
+        base = argv[2] if len(argv) > 2 else "https://orcajae.github.io/valid-framework"
+        print("live mode: %s" % base)
+        LIVE_SRC = fetch(base)
+
+    items = collect(LIVE_SRC)
     results = [
         scan(items, BANNED, "gate 1 banned marketing terms"),
         scan(items, RETIRED, "gate 2 retired values", flags=0),
-        scan(raw_sources(), RETIRED, "gate 2b retired values, raw source",
-             flags=0),
         canon(items),
-        links(),
-        anchors(),
     ]
+    if LIVE_SRC:
+        results.append(live_match())
+    else:
+        results += [
+            scan(raw_sources(), RETIRED, "gate 2b retired values, raw source",
+                 flags=0),
+            links(),
+            anchors(),
+        ]
     print("\n%s  (%d/%d gates)" % ("ALL PASS" if all(results) else "FAILED",
                                    sum(results), len(results)))
     return 0 if all(results) else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))
