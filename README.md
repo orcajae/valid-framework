@@ -148,8 +148,10 @@ valid-framework/
 
 Free, self-contained resources from the same research:
 
-- **[Backtesting checklist (PDF)](releases/backtesting_checklist.pdf)** —
-  the 12 items in plain language
+- **[Backtesting checklist (PDF)](docs/assets/valid_checklist_onepage.pdf)** —
+  the 12 items on one page, each with the question it asks and the scoring rule.
+  Built by `scripts/gen_checklist_onepage.py`; the same file is served at
+  `releases/backtesting_checklist.pdf` so older links keep working.
 - **[Crypto backtesting starter kit (notebook)](notebooks/crypto_backtesting_starter_kit.ipynb)** —
   fetch public data, build an SMA strategy, run the cost-sensitivity analysis
 - **[Worked example (notebook)](notebooks/worked_example.ipynb)** — watch the
