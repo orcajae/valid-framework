@@ -4,8 +4,13 @@
 The item strings are not typed here. They are parsed at build time from the
 two places that already carry them, so the three artifacts cannot drift:
 
-  * the camera-ready Table 1  ->  paper/kdd-mlf/main.tex, label tab:valid
+  * the camera-ready Table 1  ->  docs/paper/Paper18_VALID_camera_ready_corrected.pdf
   * the landing self-scorer   ->  docs/index.html, .item-q spans
+
+The camera-ready PDF is the published record and is tracked in this repository;
+the LaTeX source under paper/ is gitignored, so parsing the PDF is what lets a
+fresh clone rebuild this file. When the source happens to be present it is used
+as a second opinion and any disagreement aborts the build.
 
 A mismatch in item count, ordering or numbering aborts the build. The only
 hand-written strings are the header, the scoring rule and the footer; each is
@@ -25,7 +30,9 @@ from matplotlib.font_manager import FontProperties, fontManager
 from matplotlib.patches import Rectangle
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEX = os.path.join(ROOT, "paper", "kdd-mlf", "main.tex")
+CR = os.path.join(ROOT, "docs", "paper",
+                  "Paper18_VALID_camera_ready_corrected.pdf")
+TEX = os.path.join(ROOT, "paper", "kdd-mlf", "main.tex")  # gitignored, optional
 HTML = os.path.join(ROOT, "docs", "index.html")
 OUT = os.path.join(ROOT, "docs", "assets", "valid_checklist_onepage.pdf")
 
@@ -52,7 +59,61 @@ GREEN_D = "#083A2A"
 GREEN_L = "#E4F0EA"
 PAPER = "#FFFFFF"
 
-# ------------------------------------------------------- source: the tex
+# ------------------------------------------- source: the camera-ready PDF
+# Table 1 runs "# | Item | Rationale | Failure Mode". Text extraction emits it
+# cell by cell, one cell per line, so a row reads as
+#   V1 / "Report prediction class" / "distribution" / <rationale> / <mode>
+# We slice each row between its V-marker and the next, then cut where the
+# rationale column starts. Those rationale openings are listed verbatim below,
+# so a reworded rationale fails loudly instead of leaking into the item text.
+RATIONALE_HEAD = (
+    "Base-rate learning", "Structural class imbalance", "Information leakage",
+    "Holdout insufficient", "PBO = 0 from flat landscape",
+    "Confirm signal existence", "Cost omission inflates",
+    "Cost assumptions can flip", "Weak baselines inflate",
+    "Bull-market trend-following", "High-frequency cost headwinds",
+    "<10% of papers provide code",
+)
+# Extraction drops the subscript in Var(SR_IS); restore it for rendering.
+CR_GLYPH = {"Var(SRIS)": "Var(SR_IS)"}
+
+
+def cr_text():
+    import fitz
+    with fitz.open(CR) as d:
+        t = "\n".join(p.get_text() for p in d)
+    return t.replace("\u00a0", " ").replace("\u2010", "-")
+
+
+def cr_items():
+    """The 12 item cells of Table 1, read out of the published PDF."""
+    t = cr_text()
+    try:
+        body = t.split("Failure Mode", 1)[1].split("ML Trading", 1)[0]
+    except IndexError:
+        sys.exit("Table 1 not located in %s" % os.path.basename(CR))
+    marks = {}
+    for m in re.finditer(r"(?m)^V(\d{1,2})\s*$", body):
+        marks.setdefault(int(m.group(1)), (m.start(), m.end()))
+    out = []
+    for n in range(1, 13):
+        if n not in marks:
+            sys.exit("V%d not found in Table 1 of %s"
+                     % (n, os.path.basename(CR)))
+        start = marks[n][1]
+        end = marks[n + 1][0] if n + 1 in marks else len(body)
+        cell = re.sub(r"\s+", " ", body[start:end]).strip()
+        cuts = [cell.find(h) for h in RATIONALE_HEAD if cell.find(h) > 0]
+        if not cuts:
+            sys.exit("no rationale boundary found in row V%d: %r" % (n, cell))
+        cell = cell[:min(cuts)].strip()
+        for k, v in CR_GLYPH.items():
+            cell = cell.replace(k, v)
+        out.append((n, cell))
+    return out
+
+
+# --------------------------------------- optional cross-check: the LaTeX
 # LaTeX math in the item column, spelled out. Any token not listed here
 # survives into the PDF with its braces, which the self-check rejects.
 TEX_MATH = {
@@ -93,18 +154,29 @@ def html_questions():
     return out
 
 
-ITEMS_TEX = tex_items()
+ITEMS_CR = cr_items()
 ITEMS_Q = html_questions()
 
-if len(ITEMS_TEX) != 12 or len(ITEMS_Q) != 12:
-    sys.exit("expected 12 items, got tex=%d html=%d"
-             % (len(ITEMS_TEX), len(ITEMS_Q)))
-if [n for n, _ in ITEMS_TEX] != list(range(1, 13)):
-    sys.exit("tab:valid rows are not V1..V12 in order")
+if len(ITEMS_CR) != 12 or len(ITEMS_Q) != 12:
+    sys.exit("expected 12 items, got camera-ready=%d html=%d"
+             % (len(ITEMS_CR), len(ITEMS_Q)))
+if [n for n, _ in ITEMS_CR] != list(range(1, 13)):
+    sys.exit("camera-ready Table 1 rows are not V1..V12 in order")
 if [n for n, _ in ITEMS_Q] != list(range(1, 13)):
     sys.exit("landing items are not V1..V12 in order")
 
-ITEMS = [(n, ITEMS_TEX[i][1], ITEMS_Q[i][1]) for i, (n, _) in enumerate(ITEMS_Q)]
+# Second opinion, when the gitignored LaTeX source is available locally.
+if os.path.exists(TEX):
+    for (n, a), (_, b) in zip(ITEMS_CR, tex_items()):
+        norm = lambda s: re.sub(r"[\s‐-―-]+", " ", s).strip()
+        if norm(a) != norm(b):
+            sys.exit("V%d disagrees: camera-ready %r vs tab:valid %r"
+                     % (n, a, b))
+    print("cross-check: tab:valid agrees with the camera-ready on all 12 items")
+else:
+    print("cross-check: paper/kdd-mlf/main.tex absent (gitignored) — skipped")
+
+ITEMS = [(n, ITEMS_CR[i][1], ITEMS_Q[i][1]) for i, (n, _) in enumerate(ITEMS_Q)]
 
 # ------------------------------------------------------------ hand-written
 TITLE = "VALID \u2014 a 12-item validation checklist for financial machine learning"
@@ -244,7 +316,10 @@ if inner > FY - 4:
              % (inner, FY))
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
-fig.savefig(OUT, format="pdf", facecolor=PAPER)
+# CreationDate omitted so two builds of the same inputs are byte-identical,
+# which is what lets releases/backtesting_checklist.pdf be checked by md5.
+fig.savefig(OUT, format="pdf", facecolor=PAPER,
+            metadata={"CreationDate": None})
 print("wrote", OUT)
 print("  A4 %.0f x %.0f mm, content bottom %.1f mm (footer rule at %.1f)"
       % (W, H, inner, FY))
