@@ -1,0 +1,120 @@
+{
+  "benchmark_sr": 0.917,
+  "total_variants": 340,
+  "E_max_sr_null": 2.9346,
+  "best_observed_sr": 1.9787,
+  "methods": {
+    "before_correction": {
+      "n": 15,
+      "pct": 4.4
+    },
+    "bonferroni": {
+      "n": 9,
+      "pct": 2.6
+    },
+    "holm": {
+      "n": 9,
+      "pct": 2.6
+    },
+    "bh_fdr": {
+      "n": 10,
+      "pct": 2.9
+    },
+    "harvey_t3": {
+      "n": 10,
+      "pct": 2.9
+    },
+    "dsr_normal": {
+      "n": 0,
+      "pct": 0.0
+    },
+    "dsr_crypto": {
+      "n": 0,
+      "pct": 0.0
+    }
+  },
+  "key_finding": "All 9 Bonferroni survivors have PBO=1.0 (100% overfit). DSR rejects all 340.",
+  "bonferroni_survivors": [
+    {
+      "strategy_id": "DL_Transformer_ETH_1d",
+      "sr": 1.9787,
+      "t_stat": 21.7,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.643,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "EXT_SOL_1d_RF",
+      "sr": 1.9414,
+      "t_stat": 20.46,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.588,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "EXT_ETH_1d_LightGBM",
+      "sr": 1.6402,
+      "t_stat": 16.45,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.645,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "EXT_dxy_ret_7d_CatBoost",
+      "sr": 1.5681,
+      "t_stat": 17.38,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.469,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "DL_LSTM_bidir_ETH_1d",
+      "sr": 1.4642,
+      "t_stat": 13.04,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.583,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "EXT_ETH_1d_RF",
+      "sr": 1.3981,
+      "t_stat": 11.64,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.631,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "EXT_gold_ret_7d_CatBoost",
+      "sr": 1.3664,
+      "t_stat": 12.59,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.476,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "DL_MLP_2layer_SOL_1d",
+      "sr": 1.2118,
+      "t_stat": 7.12,
+      "pval_bonf": 0.0,
+      "pbo": 1.0,
+      "auc": 0.515,
+      "timeframe": "1d"
+    },
+    {
+      "strategy_id": "DL_TCN_ETH_1d",
+      "sr": 1.0772,
+      "t_stat": 4.07,
+      "pval_bonf": 0.008071,
+      "pbo": 1.0,
+      "auc": 0.567,
+      "timeframe": "1d"
+    }
+  ]
+}

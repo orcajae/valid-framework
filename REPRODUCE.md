@@ -35,6 +35,13 @@ all other stages take seconds. Tier definitions live in
 
 Everything is seeded: same tier + same machine class ⇒ same numbers.
 
+The paths above are what a run *writes*; `results/` itself is gitignored. The
+reference copies to compare against are tracked under `results/reference/` —
+`variant_grid.csv`, `multiple_testing.csv`, `multiple_testing.json` and
+`REPRODUCE_SUMMARY.md`, alongside the corpus and audit files. Before this was
+recorded, `scripts/derive_bonferroni.py` read its input from outside the
+repository, so a clone could not reproduce the Bonferroni or DSR counts at all.
+
 ## How tiers relate to the published numbers
 
 The paper's headline numbers (340 variants; MC FPR 27% [21.3%, 33.5%] →

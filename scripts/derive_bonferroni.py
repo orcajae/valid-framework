@@ -3,17 +3,19 @@
 Print the multiple-testing figures of camera-ready Table 8 / Section 4.5
 from the stored experiment output.
 
-Source : ~/jwquant/paper/kdd-mlf/results/multiple_testing.json
+Source : results/reference/multiple_testing.json
          (override with MT_JSON=<path>)
 
 The JSON is the output of run_multiple_testing_v2.py, which reads the
-340-variant corpus; this script only reads and formats it.
+340-variant corpus; this script only reads and formats it. It used to be read
+from ~/jwquant/paper/, outside the repository, which left the Bonferroni and
+DSR figures unreproducible from a clone.
 """
 import json
 import os
 
-DEFAULT = os.path.expanduser(
-    "~/jwquant/paper/kdd-mlf/results/multiple_testing.json")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT = os.path.join(ROOT, "results", "reference", "multiple_testing.json")
 SRC = os.environ.get("MT_JSON", DEFAULT)
 
 
