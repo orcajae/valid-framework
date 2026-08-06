@@ -47,8 +47,8 @@ print(f"\nWrote {SUMMARY}")
 
 print(
     "\nNote: live recomputation from the coding sheet under the inclusion "
-    "criterion of coding_guide.md (n=74). D7 now computes 85%, matching the "
-    "printed rate; its count is 63 against the printed 64. D5 computes 26/74 "
-    "(35%) against the printed 25/75 (33%) -- a one-paper coding-sheet "
-    "deviation that predates this change and is unresolved."
+    "criterion of coding_guide.md (n=74). Every rate above matches the "
+    "camera-ready as corrected under E11: D5 is 26/74 (35%) and D7 is 63/74 "
+    "(85%). The earlier deviation against a printed 25/75 (33%) and a printed "
+    "count of 64 is resolved -- those were the pre-E11 figures."
 )
