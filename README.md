@@ -54,22 +54,30 @@ Finance (KDD-MLF 2026)**, Jeju, August 2026.
 
 ## The VALID Checklist (12 items)
 
+Stage 1 (Statistical) is V1–V6: verifiable from the manuscript alone.
+Stage 2 (Economic) is V7–V12: required before anything is traded.
+
 | # | Item | Stage | Failure mode caught |
 |---|------|-------|---------------------|
-| V1 | Report prediction class distribution | Reporting | Bull bias |
-| V2 | Test with/without class balancing | Reporting | Bull bias |
-| V3 | Use temporal splitting only | Reporting | Temporal leakage |
-| V4 | Apply CPCV with PBO | Reporting | Backtest overfitting |
-| V5 | Report parameter-space variance Var(SR_IS) | Reporting | PBO misinterpretation |
-| V6 | Permutation tests (≥100 shuffles) | Reporting | Spurious patterns |
-| V7 | Net performance with explicit costs | Deployment | Cost illusion |
-| V8 | Cost sensitivity analysis | Deployment | Cost illusion |
-| V9 | Compare against simple baselines | Reporting | Weak baselines |
-| V10 | Evaluate across bear market periods | Deployment | Regime overfitting |
-| V11 | Trade frequency and cost-per-alpha | Deployment | Hidden turnover |
-| V12 | Provide code for reproducibility | Reporting | Irreproducibility |
+| V1 | Report prediction class distribution | 1 · Statistical | Bull bias |
+| V2 | Test with/without class balancing | 1 · Statistical | Bull bias |
+| V3 | Use temporal splitting only | 1 · Statistical | Temporal leakage |
+| V4 | Apply CPCV with PBO | 1 · Statistical | Backtest overfitting |
+| V5 | Report parameter-space variance Var(SR_IS) | 1 · Statistical | PBO misinterpretation |
+| V6 | Permutation tests (≥100 shuffles) | 1 · Statistical | Spurious patterns |
+| V7 | Net performance with explicit costs | 2 · Economic | Cost illusion |
+| V8 | Cost sensitivity analysis | 2 · Economic | Cost illusion |
+| V9 | Compare against simple baselines | 2 · Economic | Weak baselines |
+| V10 | Evaluate across bear market periods | 2 · Economic | Regime overfitting |
+| V11 | Trade frequency and cost-per-alpha | 2 · Economic | Hidden turnover |
+| V12 | Provide code for reproducibility | 2 · Economic | Irreproducibility |
 
-The paper's own study self-assesses at **9/12 (3 partial: V5 flatness criteria
+The split follows Table 1 and Figure 1 of the camera-ready. The extended SSRN
+version groups V9 and V12 under Stage 1 instead; that difference is on the
+revision list and is not reflected here.
+
+The median paper in the audit of 74 empirical studies scores **2.5 / 12**. The
+paper's own study self-assesses at **9/12 (3 partial: V5 flatness criteria
 disagree, V8 a single cost level, V10 two regimes)** — the checklist is meant
 to be applied honestly, including to its authors.
 
