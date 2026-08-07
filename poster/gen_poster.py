@@ -491,7 +491,7 @@ for i, r_ in enumerate(REFS):
 rule(L, 1490, CW, lw=1.2, color=RULE)
 T(L, 1504, "Non-archival workshop paper · Full version: SSRN Working Paper 6508779",
   24, "SB", INK_SOFT)
-T(L, 1526, "jwim1101@gmail.com   ·   @jwquant   ·   github.com/orcajae/valid-framework",
+T(L, 1526, "jwim1101@gmail.com   ·   orcajae.github.io/valid-framework",
   24, "M", INK_SOFT)
 T(R, 1504, "KDD-MLF 2026 · 9th ACM SIGKDD Workshop", 24, "SB", INK_SOFT, ha="right")
 T(R, 1526, "on Machine Learning in Finance · Jeju, Korea", 24, "M", INK_SOFT, ha="right")

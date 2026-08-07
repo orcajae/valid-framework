@@ -1,5 +1,8 @@
 # Literature Audit Coding Guide
 
+The sheet these rules are applied to: [`literature_audit_80.csv`](literature_audit_80.csv)
+— 80 surveyed papers, one row each, 74 of them empirical.
+
 ## Inclusion Criterion
 
 A paper is 'empirical' iff it applies an ML method to real cryptocurrency

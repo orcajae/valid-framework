@@ -1,6 +1,12 @@
 # Reproducing the Results
 
-One command, three tiers:
+Install first — every tier below imports the `valid` package:
+
+```bash
+make install          # or: pip install -e ".[dev]"
+```
+
+Then one command, three tiers:
 
 | Tier | Command | Data | Measured runtime* | What it validates |
 |------|---------|------|-------------------|-------------------|

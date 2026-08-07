@@ -13,6 +13,10 @@ financial ML, analogous to [TRIPOD+AI](https://doi.org/10.1136/bmj-2023-078378)
 for clinical prediction and [REFORMS](https://doi.org/10.1126/sciadv.adk3452)
 for ML-based science.
 
+**Score your own study in five minutes:**
+[orcajae.github.io/valid-framework](https://orcajae.github.io/valid-framework/)
+— the 12 items as an interactive scorer, plus the one-page checklist as a PDF.
+
 **See it catch an overfit strategy (30 seconds):**
 
 ```bash
@@ -133,7 +137,8 @@ valid-framework/
 ├── experiments/            # reproduction pipeline (see REPRODUCE.md)
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
-├── audit/                  # literature audit (80 papers surveyed, 74 coded)
+├── audit/                  # literature audit: literature_audit_80.csv (80 rows)
+│                           # coded per coding_guide.md (inclusion criterion, dimensions)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
 ├── releases/               # downloadable 12-item checklist PDF
 └── docker/                 # containerized reproduction

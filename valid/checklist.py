@@ -45,14 +45,17 @@ class VALIDReport:
             print(f"  {r.item}: {r.name:<40} [{status}]")
             if not r.passed and r.recommendation:
                 print(f"         -> {r.recommendation}")
+        # Table 1 and Figure 1 of the camera-ready: V1-V6 are Stage 1, V7-V12
+        # Stage 2. The extended SSRN version groups V9 and V12 under Stage 1;
+        # the camera-ready split is the one the checklist ships with.
         stage1 = [r for r in self.results
-                  if r.item in ["V1","V2","V3","V4","V5","V6","V9","V12"]]
+                  if r.item in ["V1","V2","V3","V4","V5","V6"]]
         stage2 = [r for r in self.results
-                  if r.item in ["V7","V8","V10","V11"]]
+                  if r.item in ["V7","V8","V9","V10","V11","V12"]]
         s1 = sum(1 for r in stage1 if r.passed)
         s2 = sum(1 for r in stage2 if r.passed)
-        print(f"\n  Stage 1 (Reporting):  {s1}/{len(stage1)}")
-        print(f"  Stage 2 (Deployment): {s2}/{len(stage2)}")
+        print(f"\n  Stage 1 (Statistical): {s1}/{len(stage1)}")
+        print(f"  Stage 2 (Economic):    {s2}/{len(stage2)}")
 
     def to_markdown(self, filepath):
         lines = [
