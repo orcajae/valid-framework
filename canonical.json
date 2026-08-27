@@ -1,0 +1,381 @@
+{
+  "generated_at": "2026-08-27T16:16:26Z",
+  "generator_commit": "925188e853412f23a7e8c797929bb62dca5229e5",
+  "figures": {
+    "n_variants": {
+      "value": 340,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "340"
+    },
+    "n_cost_entries": {
+      "value": 18,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "18"
+    },
+    "n_variants_ex_cost": {
+      "value": 322,
+      "derived_from": [
+        "n_variants",
+        "n_cost_entries"
+      ],
+      "op": "subtract",
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "322"
+    },
+    "n_negative_full": {
+      "value": 178,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "178"
+    },
+    "pct_negative_full": {
+      "value": 52.4,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "52%"
+    },
+    "n_above_bench_full": {
+      "value": 15,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "15"
+    },
+    "pct_above_bench_full": {
+      "value": 4.4,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "4.4%"
+    },
+    "n_negative_ex_cost": {
+      "value": 177,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "177"
+    },
+    "pct_negative_ex_cost": {
+      "value": 55.0,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "55.0%"
+    },
+    "n_above_bench_ex_cost": {
+      "value": 11,
+      "source": "scripts/derive_corpus_stats.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "11"
+    },
+    "benchmark_sr_rounded": {
+      "value": 0.917,
+      "source": "results/reference/multiple_testing.json:benchmark_sr",
+      "derived": true,
+      "print_precision": "0.917"
+    },
+    "benchmark_sr_full": {
+      "value": 0.9173201080439872,
+      "source": "scripts/derive_corpus_stats.py:BENCH_FULL (results/reference/traditional_baselines.csv)",
+      "derived": true,
+      "print_precision": "0.917320"
+    },
+    "e_max_sr_null": {
+      "value": 2.9346,
+      "source": "results/reference/multiple_testing.json:E_max_sr_null",
+      "derived": true,
+      "print_precision": "2.93"
+    },
+    "best_observed_sr": {
+      "value": 1.9787,
+      "source": "results/reference/multiple_testing.json:best_observed_sr",
+      "derived": true,
+      "print_precision": "1.98"
+    },
+    "n_bonferroni_survivors": {
+      "value": 9,
+      "source": "results/reference/multiple_testing.json:methods.bonferroni.n",
+      "derived": true,
+      "print_precision": "9"
+    },
+    "n_dsr_survivors": {
+      "value": 0,
+      "source": "results/reference/multiple_testing.json:methods.dsr_normal.n",
+      "derived": true,
+      "print_precision": "0"
+    },
+    "n_uncorrected_survivors": {
+      "value": 15,
+      "source": "results/reference/multiple_testing.json:methods.before_correction.n",
+      "derived": true,
+      "print_precision": "15"
+    },
+    "pct_uncorrected_survivors": {
+      "value": 4.4,
+      "source": "results/reference/multiple_testing.json:methods.before_correction.pct",
+      "derived": true,
+      "print_precision": "4.4%"
+    },
+    "n_papers_surveyed": {
+      "value": 80,
+      "source": "audit/literature_audit_80.csv (row count)",
+      "derived": true,
+      "print_precision": "80"
+    },
+    "n_papers_empirical": {
+      "value": 74,
+      "source": "audit/audit_analysis.py:N (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "74"
+    },
+    "n_papers_non_empirical": {
+      "value": 6,
+      "source": "audit/audit_analysis.py:NON_EMPIRICAL_IDS",
+      "derived": true,
+      "print_precision": "6"
+    },
+    "n_d1_cost_omitted": {
+      "value": 40,
+      "denominator": 74,
+      "pct": 54.1,
+      "ci95_pct": [
+        42.8,
+        64.9
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "40/74 (54%) [43%, 65%]"
+    },
+    "n_d2_no_class_balance": {
+      "value": 54,
+      "denominator": 74,
+      "pct": 73.0,
+      "ci95_pct": [
+        61.9,
+        81.8
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "54/74 (73%) [62%, 82%]"
+    },
+    "n_d3_random_split": {
+      "value": 5,
+      "denominator": 74,
+      "pct": 6.8,
+      "ci95_pct": [
+        2.9,
+        14.9
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "5/74 (7%) [3%, 15%]"
+    },
+    "n_d4_weak_validation": {
+      "value": 15,
+      "denominator": 74,
+      "pct": 20.3,
+      "ci95_pct": [
+        12.7,
+        30.8
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "15/74 (20%) [13%, 31%]"
+    },
+    "n_d5_bnh_only": {
+      "value": 26,
+      "denominator": 74,
+      "pct": 35.1,
+      "ci95_pct": [
+        25.2,
+        46.5
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "26/74 (35%) [25%, 46%]"
+    },
+    "n_d6_no_net_perf": {
+      "value": 40,
+      "denominator": 74,
+      "pct": 54.1,
+      "ci95_pct": [
+        42.8,
+        64.9
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "40/74 (54%) [43%, 65%]"
+    },
+    "n_d7_no_code": {
+      "value": 63,
+      "denominator": 74,
+      "pct": 85.1,
+      "ci95_pct": [
+        75.3,
+        91.5
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "63/74 (85%) [75%, 91%]"
+    },
+    "n_cpcv_used": {
+      "value": 0,
+      "denominator": 74,
+      "pct": 0.0,
+      "ci95_pct": [
+        0.0,
+        4.9
+      ],
+      "source": "audit/audit_analysis.py:checks (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "0/74 (0%) [0%, 5%]"
+    },
+    "median_valid_score": {
+      "value": 2.5,
+      "source": "scripts/gen_fig7_valid_heatmap.py:code_paper+WEIGHT (audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "2.5"
+    },
+    "n_valid_items": {
+      "value": 12,
+      "source": "scripts/gen_fig7_valid_heatmap.py:ITEMS",
+      "derived": true,
+      "print_precision": "12"
+    },
+    "mc_fpr_auc_gate": {
+      "value": 27.0,
+      "denominator": 200,
+      "ci95_pct": [
+        21.3,
+        33.5
+      ],
+      "source": "experiments/make_summary.py:fpr_line (results/reference/monte_carlo_fpr_200.csv)",
+      "derived": true,
+      "print_precision": "27% [21, 34]"
+    },
+    "mc_fpr_pbo_gate": {
+      "value": 0.0,
+      "source": "experiments/make_summary.py:fpr_line (results/reference/monte_carlo_fpr_200.csv)",
+      "derived": true,
+      "print_precision": "0%"
+    },
+    "mc_iterations": {
+      "value": 200,
+      "source": "results/reference/monte_carlo_fpr_200.csv (row count)",
+      "derived": true,
+      "print_precision": "200"
+    },
+    "cost_retail_bp": {
+      "value": 18,
+      "source": "experiments/config.py:COST_RETAIL_BP",
+      "derived": true,
+      "print_precision": "18 bp"
+    },
+    "cost_levels_bp": {
+      "value": [
+        0,
+        5,
+        10,
+        18,
+        30,
+        50
+      ],
+      "source": "experiments/config.py:COST_LEVELS",
+      "derived": true,
+      "print_precision": "0, 5, 10, 18, 30, 50"
+    },
+    "tf_ladder": {
+      "value": {
+        "15m": {
+          "n": 9,
+          "median_net_sr": -1.8,
+          "best_net_sr": -1.33,
+          "pct_negative": 100
+        },
+        "1h": {
+          "n": 133,
+          "median_net_sr": -1.32,
+          "best_net_sr": 0.32,
+          "pct_negative": 96
+        },
+        "4h": {
+          "n": 9,
+          "median_net_sr": 0.28,
+          "best_net_sr": 0.57,
+          "pct_negative": 44
+        },
+        "1d": {
+          "n": 77,
+          "median_net_sr": 0.54,
+          "best_net_sr": 1.98,
+          "pct_negative": 22
+        }
+      },
+      "source": "scripts/derive_tf_ladder.py:main (results/reference/variants_340.csv)",
+      "derived": true,
+      "print_precision": "15m n=9 median=-1.80; 1h n=133 median=-1.32; 4h n=9 median=+0.28; 1d n=77 median=+0.54"
+    },
+    "camera_ready_md5": {
+      "value": "f2a901b81576f59dc114e7322734ddcc",
+      "source": "md5(docs/paper/Paper18_VALID_camera_ready_corrected.pdf)",
+      "derived": true,
+      "print_precision": "f2a901b81576f59dc114e7322734ddcc"
+    },
+    "audit_csv_md5": {
+      "value": "f30d28f3a0e6d36b31b88feb47c4ea09",
+      "source": "md5(audit/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "f30d28f3a0e6d36b31b88feb47c4ea09"
+    },
+    "audit_csv_mirror_md5": {
+      "value": "f30d28f3a0e6d36b31b88feb47c4ea09",
+      "source": "md5(results/reference/literature_audit_80.csv)",
+      "derived": true,
+      "print_precision": "f30d28f3a0e6d36b31b88feb47c4ea09"
+    }
+  },
+  "manual": {
+    "paper_number": {
+      "value": 18,
+      "source": "KDD-MLF 2026 acceptance notice; echoed in the tracked filename docs/paper/Paper18_VALID_camera_ready_corrected.pdf",
+      "derived": false,
+      "print_precision": "Paper 18",
+      "verify": "[VERIFY]"
+    },
+    "ssrn_id": {
+      "value": "6508779",
+      "source": "SSRN submission record; echoed in CITATION.cff and pyproject.toml but with no generating artifact",
+      "derived": false,
+      "print_precision": "SSRN 6508779",
+      "verify": "[VERIFY]"
+    },
+    "self_audit_score": {
+      "value": "9/12",
+      "source": "CHANGELOG_CR.md — manual application of the VALID checklist to this paper; no scorer covers own-paper input",
+      "derived": false,
+      "print_precision": "9 / 12",
+      "verify": "[VERIFY]"
+    },
+    "n_trades_total": {
+      "value": null,
+      "claimed": 26215,
+      "source": "CLC 지시 토큰 목록. GATE 1/1.5 실측 결과 추적 텍스트 88개 및 PDF 6개 전부에서 0회 — repo 내 근거 문서 없음",
+      "derived": false,
+      "print_precision": "26,215",
+      "verify": "[VERIFY] unresolved: 근거 산출물 미발견"
+    },
+    "n_trades_oos": {
+      "value": null,
+      "claimed": 6518,
+      "source": "CLC 지시 토큰 목록. GATE 1/1.5 실측 결과 추적 텍스트 88개 및 PDF 6개 전부에서 0회 — repo 내 근거 문서 없음",
+      "derived": false,
+      "print_precision": "6,518",
+      "verify": "[VERIFY] unresolved: 근거 산출물 미발견"
+    }
+  },
+  "unavailable_sources": {
+    "regime_conditional.json": "repo 밖 (~/jwquant/paper/kdd-mlf/results/) — clone/CI에서 읽을 수 없어 제외",
+    "round_a_orderflow/": "이 저장소에 없음",
+    "var_sr_is.csv": "이 저장소에 없음 (monte_carlo_fpr_200.csv의 컬럼명으로만 존재)",
+    "seed_optimal_grid.csv": "이 저장소에 없음"
+  }
+}
