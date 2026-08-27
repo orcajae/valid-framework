@@ -1,0 +1,154 @@
+{
+  "_design": [
+    "Every medium that prints a canonical figure, and how it is checked.",
+    "",
+    "kind=repo     : a file CI can read. CHECK C asserts the current",
+    "                print_precision of each declared key appears in it.",
+    "kind=external : CI cannot reach it. It carries a human attestation that",
+    "                EXPIRES: any attestation older than canonical.json's",
+    "                generated_at fails CHECK C. Stamp one with",
+    "                  scripts/gate_canon.sh attest \"<medium>\" \"<name>\"",
+    "                after actually comparing the medium against canonical.json.",
+    "kind=absent   : named in the cascade but not present here. Reported as a",
+    "                notice so its absence is visible rather than inferred.",
+    "",
+    "A medium's `keys` list is a claim about what it carries. Adding a figure to",
+    "a medium without adding the key here leaves that figure unpoliced, so the",
+    "list is the thing to update when a medium starts printing a new number."
+  ],
+  "media": [
+    {
+      "medium": "README.md",
+      "kind": "repo",
+      "path": "README.md",
+      "keys": [
+        "n_variants",
+        "pct_negative_full",
+        "pct_above_bench_full",
+        "n_papers_surveyed",
+        "n_papers_empirical",
+        "median_valid_score",
+        "self_audit_score",
+        "cost_retail_bp"
+      ]
+    },
+    {
+      "medium": "landing page (docs/index.html)",
+      "kind": "repo",
+      "path": "docs/index.html",
+      "keys": [
+        "n_variants",
+        "pct_negative_full",
+        "pct_above_bench_full",
+        "n_papers_surveyed",
+        "n_papers_empirical",
+        "median_valid_score",
+        "self_audit_score",
+        "paper_number"
+      ]
+    },
+    {
+      "medium": "landing scorer (docs/scorer.js)",
+      "kind": "repo",
+      "path": "docs/scorer.js",
+      "keys": [
+        "n_papers_empirical",
+        "median_valid_score",
+        "mc_fpr_auc_gate",
+        "ssrn_id"
+      ]
+    },
+    {
+      "medium": "CHANGELOG_CR.md",
+      "kind": "repo",
+      "path": "CHANGELOG_CR.md",
+      "keys": [
+        "n_variants",
+        "n_variants_ex_cost",
+        "pct_negative_ex_cost",
+        "pct_negative_full",
+        "pct_above_bench_full",
+        "n_papers_surveyed",
+        "n_papers_empirical",
+        "median_valid_score",
+        "e_max_sr_null",
+        "cost_retail_bp"
+      ]
+    },
+    {
+      "medium": "coding sheet guide (audit/coding_guide.md)",
+      "kind": "repo",
+      "path": "audit/coding_guide.md",
+      "keys": [
+        "n_papers_surveyed",
+        "n_papers_empirical"
+      ]
+    },
+    {
+      "medium": "scripts/README.md",
+      "kind": "repo",
+      "path": "scripts/README.md",
+      "keys": [
+        "n_variants",
+        "pct_negative_full",
+        "pct_above_bench_full",
+        "cost_retail_bp"
+      ]
+    },
+    {
+      "medium": "REPRODUCE.md",
+      "kind": "repo",
+      "path": "REPRODUCE.md",
+      "keys": [
+        "n_variants",
+        "pct_above_bench_full",
+        "benchmark_sr_rounded",
+        "cost_retail_bp"
+      ]
+    },
+    {
+      "medium": "ERRATUM",
+      "kind": "absent",
+      "note": "no ERRATUM document in this repository; CHANGELOG_CR.md carries the correction history"
+    },
+    {
+      "medium": "SSRN preprint 6508779",
+      "kind": "external",
+      "last_verified_at": null,
+      "verified_by": null,
+      "canonical_generated_at": null,
+      "note": "full-precision figures; differs from CR print precision by design"
+    },
+    {
+      "medium": "printed poster 900x1050 v5",
+      "kind": "external",
+      "last_verified_at": "2026-08-27T16:35:52Z",
+      "verified_by": "GATE 1.5 pdftotext sweep (Claude, executor)",
+      "canonical_generated_at": "2026-08-27T16:28:40Z",
+      "note": "frozen presentation asset; drift is recorded, not corrected"
+    },
+    {
+      "medium": "LinkedIn posts",
+      "kind": "external",
+      "last_verified_at": null,
+      "verified_by": null,
+      "canonical_generated_at": null
+    },
+    {
+      "medium": "talk script and deck",
+      "kind": "external",
+      "last_verified_at": null,
+      "verified_by": null,
+      "canonical_generated_at": null,
+      "note": "10+2 slot version"
+    },
+    {
+      "medium": "Claude Code project memory",
+      "kind": "external",
+      "last_verified_at": null,
+      "verified_by": null,
+      "canonical_generated_at": null,
+      "note": "~/.claude/projects/.../memory/ — carries canonical figures in MEMORY.md pointers"
+    }
+  ]
+}

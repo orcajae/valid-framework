@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-27T16:16:26Z",
-  "generator_commit": "925188e853412f23a7e8c797929bb62dca5229e5",
+  "generated_at": "2026-08-27T16:28:40Z",
+  "generator_commit": "d864ae1dfbe1eeb6ff44cff8a46d52af3cf8ab9a",
   "figures": {
     "n_variants": {
       "value": 340,
@@ -361,7 +361,8 @@
       "source": "CLC 지시 토큰 목록. GATE 1/1.5 실측 결과 추적 텍스트 88개 및 PDF 6개 전부에서 0회 — repo 내 근거 문서 없음",
       "derived": false,
       "print_precision": "26,215",
-      "verify": "[VERIFY] unresolved: 근거 산출물 미발견"
+      "verify": "[VERIFY] unresolved: 근거 산출물 미발견",
+      "scope": "track_a_external"
     },
     "n_trades_oos": {
       "value": null,
@@ -369,7 +370,8 @@
       "source": "CLC 지시 토큰 목록. GATE 1/1.5 실측 결과 추적 텍스트 88개 및 PDF 6개 전부에서 0회 — repo 내 근거 문서 없음",
       "derived": false,
       "print_precision": "6,518",
-      "verify": "[VERIFY] unresolved: 근거 산출물 미발견"
+      "verify": "[VERIFY] unresolved: 근거 산출물 미발견",
+      "scope": "track_a_external"
     }
   },
   "unavailable_sources": {

@@ -364,6 +364,9 @@ def collect() -> dict:
         f"md5({AUDIT_CSV_MIRROR.relative_to(ROOT)})", "{}")
 
     # --- values with no in-repo origin ----------------------------------------
+    # `scope: track_a_external` marks an entry the gates must not police: its
+    # generating artifact belongs to another track, so a zero count in this repo
+    # is the correct state, not drift. CHECK A/B/C all skip these.
     manual = {
         "paper_number": {
             "value": 18,
@@ -397,6 +400,7 @@ def collect() -> dict:
             "derived": False,
             "print_precision": "26,215",
             "verify": "[VERIFY] unresolved: 근거 산출물 미발견",
+            "scope": "track_a_external",
         },
         "n_trades_oos": {
             "value": None,
@@ -406,6 +410,7 @@ def collect() -> dict:
             "derived": False,
             "print_precision": "6,518",
             "verify": "[VERIFY] unresolved: 근거 산출물 미발견",
+            "scope": "track_a_external",
         },
     }
 

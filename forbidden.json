@@ -1,0 +1,252 @@
+{
+  "_design": [
+    "The banned-term, retired-value and canon lists used to live as regex literals",
+    "inside scripts/gate_landing.py. A scanner that carries its own patterns matches",
+    "itself, which forced a file whitelist to suppress the self-hit. Holding the",
+    "patterns as data instead means no scanner source contains a pattern, so the",
+    "whitelist collapses to this one file.",
+    "",
+    "hard_fail  : unique tokens, no false positives observed. A hit is a FAIL.",
+    "hard_fail_landing : hard only on the visitor-facing surface. Several of these",
+    "             appear legitimately elsewhere -- CHANGELOG_CR.md documents the",
+    "             75 -> 74 correction and must be able to say '75 papers'.",
+    "warn       : context-dependent. These collide with live canonical values",
+    "             (55.0% ex-cost negative share, 73%/85% audit rates, the '94-107'",
+    "             page range in the camera-ready bibliography, the 0.640/0.530",
+    "             example costs in valid/checklist.py). Never promote to FAIL --",
+    "             a human reads gate_warn.log and judges.",
+    "",
+    "except_files is a LOUD exemption: CHECK B prints every one it applies.",
+    "CHANGELOG_CR.md is a retraction log -- it has to be able to quote the claim",
+    "it is retracting, so the two entries it quotes are exempt there and nowhere",
+    "else. A quiet exemption would be indistinguishable from a missed hit.",
+    "",
+    "except_prefixes is the same idea one level up, and the same risk: nothing",
+    "under docs/evidence/ is scanned for B-1. A retired value that only ever",
+    "appears in an evidence log is not caught. That is the price of being able",
+    "to write down what the gate found."
+  ],
+  "version": 1,
+  "whitelist": [
+    "forbidden.json"
+  ],
+  "hard_fail": [
+    {
+      "id": "trades_16352",
+      "regex": "(?<![\\d.])16[,_ ]?352(?!\\.?\\d)",
+      "reason": "retired trade count"
+    },
+    {
+      "id": "trades_16367",
+      "regex": "(?<![\\d.])16[,_ ]?367(?!\\.?\\d)",
+      "reason": "retired trade count"
+    },
+    {
+      "id": "trades_16382",
+      "regex": "(?<![\\d.])16[,_ ]?382(?!\\.?\\d)",
+      "reason": "retired trade count"
+    },
+    {
+      "id": "n_9482",
+      "regex": "(?<![\\d.])9[,_ ]?482(?!\\.?\\d)",
+      "reason": "retired count"
+    },
+    {
+      "id": "n_5765498",
+      "regex": "(?<![\\d.])5[,_ ]?765[,_ ]?498(?!\\.?\\d)",
+      "reason": "retired count"
+    },
+    {
+      "id": "handle_jwquant",
+      "regex": "@jwquant|x\\.com/jwquant",
+      "reason": "retired social handle"
+    },
+    {
+      "id": "six_level_cost_sweep",
+      "regex": "six[- ]level cost sweep",
+      "reason": "retired claim: the corpus carries one cost level, not six"
+    },
+    {
+      "id": "trades_500_plus",
+      "regex": "500\\+\\s*trades",
+      "reason": "retired claim"
+    },
+    {
+      "id": "pbo_zero",
+      "regex": "PBO\\s*[=:]?\\s*0\\.000(?!\\d)",
+      "reason": "retired figure",
+      "except_files": [
+        "CHANGELOG_CR.md"
+      ],
+      "except_reason": "CHANGELOG_CR.md records the retraction of this very claim and quotes it to do so"
+    },
+    {
+      "id": "uijeongbu",
+      "regex": "Uijeongbu|의정부",
+      "reason": "personal address must not ship"
+    },
+    {
+      "id": "first_empirical_confirmation",
+      "regex": "first empirical confirmation",
+      "unless_near": "to our knowledge|to the best of|arguably|among the|one of the|we believe|may be|possibly|appears to be",
+      "unless_window": 60,
+      "reason": "unqualified priority claim; allowed only behind a hedge",
+      "except_files": [
+        "CHANGELOG_CR.md"
+      ],
+      "except_reason": "CHANGELOG_CR.md records the retraction of this very claim and quotes it to do so"
+    }
+  ],
+  "hard_fail_landing": [
+    {
+      "id": "marketing_terms",
+      "regex": "guarantee|refund|ROI|returns|discount|% off|limited time|only \\d+ left",
+      "reason": "no performance or sales promise on the landing page",
+      "scope": "landing_visible"
+    },
+    {
+      "id": "retired_n75",
+      "regex": "of 75|75 papers|0/75|25/75|64/75|72%",
+      "reason": "pre-E11 n=75 figures; superseded by the n=74 canon",
+      "scope": "landing_raw"
+    }
+  ],
+  "warn": [
+    {
+      "id": "n75_zero",
+      "regex": "(?<![\\d.])0\\s*(?:/|of)\\s*75(?!\\.?\\d)"
+    },
+    {
+      "id": "n75_of",
+      "regex": "(?<![\\d.])(?:of|n\\s*=\\s*)\\s*75(?!\\.?\\d)"
+    },
+    {
+      "id": "n75_word",
+      "regex": "seventy[- ]five"
+    },
+    {
+      "id": "n75_64",
+      "regex": "(?<![\\d.])64\\s*/\\s*75(?!\\.?\\d)"
+    },
+    {
+      "id": "n75_25",
+      "regex": "(?<![\\d.])25\\s*/\\s*75(?!\\.?\\d)"
+    },
+    {
+      "id": "pct_72",
+      "regex": "(?<![\\d.])72(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "id": "pct_53",
+      "regex": "(?<![\\d.])53(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "id": "pct_33",
+      "regex": "(?<![\\d.])33(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "id": "n_107",
+      "regex": "(?<![\\d.])107(?!\\.?\\d)",
+      "known_false_positive": "camera-ready bibliography page range '94-107'. This entry is why the B-1/B-2 split exists: as a hard FAIL it would red the gate on a reference list."
+    },
+    {
+      "id": "score_12_12",
+      "regex": "(?<![\\d.])12\\s*(?:/|of)\\s*12(?!\\.?\\d)"
+    },
+    {
+      "id": "score_10_12",
+      "regex": "(?<![\\d.])10\\s*(?:/|of)\\s*12(?!\\.?\\d)"
+    },
+    {
+      "id": "pct_band_55_91",
+      "regex": "(?<![\\d.])(?:5[5-9]|[6-8]\\d|9[01])(?:\\.\\d+)?\\s*%",
+      "known_false_positive": "collides with live canonical values: 55.0% ex-cost negative share, 73% D2 rate, 85% D7 rate."
+    },
+    {
+      "id": "sr_0640",
+      "regex": "(?<![\\d.])0\\.640(?!\\d)",
+      "known_false_positive": "valid/checklist.py and tests/test_checklist.py use it as an API example."
+    },
+    {
+      "id": "sr_0530",
+      "regex": "(?<![\\d.])0\\.530(?!\\d)",
+      "known_false_positive": "same API example."
+    },
+    {
+      "id": "sr_0416",
+      "regex": "(?<![\\d.])0\\.416(?!\\d)"
+    },
+    {
+      "id": "sr_0186",
+      "regex": "(?<![\\d.])0\\.186(?!\\d)"
+    },
+    {
+      "id": "sr_neg0222",
+      "regex": "-\\s*0\\.222(?!\\d)"
+    },
+    {
+      "id": "sr_095",
+      "regex": "(?<![\\d.])0\\.95(?!\\d)"
+    }
+  ],
+  "canon_required": [
+    {
+      "key": "n_papers_empirical",
+      "regex": "\\b74\\b",
+      "label": "74 empirical papers"
+    },
+    {
+      "key": "n_papers_surveyed",
+      "regex": "\\b80\\b",
+      "label": "80 surveyed"
+    },
+    {
+      "key": "median_valid_score",
+      "regex": "2\\.5\\s*/\\s*12|2\\.5 of 12",
+      "label": "median 2.5 / 12"
+    },
+    {
+      "key": "n_variants",
+      "regex": "\\b340\\b",
+      "label": "340 variants"
+    },
+    {
+      "key": "pct_negative_full",
+      "regex": "52%",
+      "label": "52% net-negative"
+    },
+    {
+      "key": "pct_above_bench_full",
+      "regex": "4\\.4%",
+      "label": "4.4% exceed the benchmark"
+    },
+    {
+      "key": "benchmark_sr_rounded",
+      "regex": "0\\.917",
+      "label": "benchmark 0.917"
+    },
+    {
+      "key": "self_audit_score",
+      "regex": "9\\s*/\\s*12|9 of 12",
+      "label": "self-audit 9 / 12"
+    }
+  ],
+  "file_groups": {
+    "landing_visible": [
+      "docs/index.html",
+      "docs/scorer.js"
+    ],
+    "landing_raw": [
+      "docs/index.html",
+      "docs/scorer.js",
+      "README.md"
+    ]
+  },
+  "except_prefixes": [
+    {
+      "prefix": "docs/evidence/",
+      "applies_to": "hard_fail",
+      "reason": "evidence logs exist to quote what a check found; a gate that cannot be reported on without failing produces no evidence. This is the one directory-wide hole in B-1 and CHECK B prints it on every run."
+    }
+  ]
+}

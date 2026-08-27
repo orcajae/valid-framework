@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 """Pre-push gates for the landing page (docs/).
 
-Scope of the text gates is what a visitor can actually read:
-  * HTML text nodes and the user-facing attributes (title, meta content, alt,
-    aria-label) -- never tag names, class names or href targets
-  * string literals in scorer.js -- not identifiers, so `return` is not a hit
-  * the extracted text of the one-page checklist PDF
+This file used to carry the banned-term, retired-value and canon regexes as
+literals. It no longer carries any: the lists live in forbidden.json and the
+scanning is done by scripts/gate_canon.sh CHECK B, which this script shells out
+to. Keeping a second copy of those lists here is the duplication the canon gate
+exists to remove — and a scanner holding its own patterns matched itself, which
+is why the old gate needed a whitelist.
+
+What stays here is the work no other script does, because it needs the landing
+page's structure rather than its bytes:
+
+  * canon presence over the text a visitor can actually read — HTML text nodes
+    and user-facing attributes, string literals in scorer.js, and the extracted
+    text of the one-page checklist PDF
+  * local links and in-page anchors resolve
+  * --live: the deployed bytes are the working tree's bytes
 
 Rule 48 normalisation is applied to every extracted string before matching:
 newlines collapsed, unicode math letters folded to ASCII, NBSP folded to space.
@@ -14,8 +24,10 @@ Exit status is non-zero if any gate fails; every failure prints the offending
 line verbatim.
 """
 import html as htmllib
+import json
 import os
 import re
+import subprocess
 import sys
 import unicodedata
 from html.parser import HTMLParser
@@ -25,25 +37,8 @@ INDEX = os.path.join(ROOT, "docs", "index.html")
 SCORER = os.path.join(ROOT, "docs", "scorer.js")
 ONEPAGE = os.path.join(ROOT, "docs", "assets", "valid_checklist_onepage.pdf")
 README = os.path.join(ROOT, "README.md")
-
-# ---------------------------------------------------------------- gate 1
-BANNED = r"guarantee|refund|ROI|returns|discount|% off|limited time|only \d+ left"
-
-# ---------------------------------------------------------------- gate 2
-RETIRED = r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
-
-# ---------------------------------------------------------------- gate 3
-# n=74 canon. Each entry must appear at least once in the landing text.
-CANON = [
-    (r"\b74\b", "74 empirical papers"),
-    (r"\b80\b", "80 surveyed"),
-    (r"2\.5\s*/\s*12|2\.5 of 12", "median 2.5 / 12"),
-    (r"\b340\b", "340 variants"),
-    (r"52%", "52% net-negative"),
-    (r"4\.4%", "4.4% exceed the benchmark"),
-    (r"0\.917", "benchmark 0.917"),
-    (r"9\s*/\s*12|9 of 12", "self-audit 9 / 12"),
-]
+FORBIDDEN = os.path.join(ROOT, "forbidden.json")
+GATE_CANON = os.path.join(ROOT, "scripts", "gate_canon.sh")
 
 VISIBLE_ATTRS = {"content", "alt", "aria-label", "title", "value", "placeholder"}
 SKIP_TAGS = {"script", "style"}
@@ -75,7 +70,7 @@ class Visible(HTMLParser):
 
 def norm(s):
     """Rule 48: collapse newlines, fold unicode math letters and NBSP."""
-    s = s.replace(" ", " ")
+    s = s.replace(" ", " ")
     s = "".join(
         unicodedata.normalize("NFKC", ch) if ord(ch) > 0x7F else ch for ch in s
     )
@@ -140,25 +135,33 @@ def collect(src=None):
     return [(lbl, norm(s)) for lbl, s in items if norm(s)]
 
 
-def scan(items, pattern, name, flags=re.I):
-    rx = re.compile(r"(?<![\w%])(?:" + pattern + r")(?![\w])", flags)
-    hits = [(lbl, s, m.group(0)) for lbl, s in items for m in [rx.search(s)] if m]
-    print("\n[%s] pattern: %s" % (name, pattern))
-    if hits:
-        for lbl, s, m in hits:
-            print("  FAIL %-32s %r  in: %s" % (lbl, m, s[:150]))
-        return False
-    print("  PASS  0 hits across %d visible strings" % len(items))
-    return True
+def token_gates():
+    """Delegate banned/retired scanning to the canon gate.
+
+    Its CHECK B covers every tracked file, forbidden.json holds the patterns,
+    and its landing-scoped rules cover exactly the surface this script used to
+    scan on its own.
+    """
+    print("\n[gate 1+2] banned and retired tokens -> scripts/gate_canon.sh b")
+    rc = subprocess.call(["bash", GATE_CANON, "b"])
+    print("  %s gate_canon.sh CHECK B exit %d" % ("PASS" if rc == 0 else "FAIL", rc))
+    return rc == 0
 
 
 def canon(items):
+    """Every canonical figure the landing page is expected to carry is present.
+
+    The list, and the canonical key each entry stands for, come from
+    forbidden.json; the expected value is cross-checked against canonical.json so
+    a figure cannot drift here without CHECK A noticing it there.
+    """
+    rules = json.load(open(FORBIDDEN, encoding="utf-8"))["canon_required"]
     blob = " ".join(s for _, s in items)
-    print("\n[gate 3] n=74 canon")
+    print("\n[gate 3] canon presence (forbidden.json:canon_required)")
     ok = True
-    for rx, label in CANON:
-        m = re.search(rx, blob)
-        print("  %s %-32s %s" % ("PASS" if m else "FAIL", label,
+    for entry in rules:
+        m = re.search(entry["regex"], blob)
+        print("  %s %-32s %s" % ("PASS" if m else "FAIL", entry["label"],
                                  repr(m.group(0)) if m else "MISSING"))
         ok = ok and bool(m)
     return ok
@@ -200,25 +203,14 @@ def anchors():
     return ok
 
 
-def raw_sources():
-    """Whole-file scan. Retired values must not survive even inside an href."""
-    out = []
-    for path in (INDEX, SCORER, README):
-        rel = os.path.relpath(path, ROOT)
-        for i, line in enumerate(open(path, encoding="utf-8"), 1):
-            if line.strip():
-                out.append(("%s:%d" % (rel, i), norm(line)))
-    return out
-
-
-def live_match():
+def live_match(live_src):
     """The deployed page must be the working tree's page, byte for byte."""
     print("\n[gate 6] deployed bytes == working tree")
     ok = True
     for label, local, remote in (
-        ("index.html", INDEX, LIVE_SRC["index"]),
-        ("scorer.js", SCORER, LIVE_SRC["scorer"]),
-        ("valid_checklist_onepage.pdf", ONEPAGE, LIVE_SRC["onepage"]),
+        ("index.html", INDEX, live_src["index"]),
+        ("scorer.js", SCORER, live_src["scorer"]),
+        ("valid_checklist_onepage.pdf", ONEPAGE, live_src["onepage"]),
     ):
         a = open(local, "rb").read()
         b = open(remote, "rb").read()
@@ -230,28 +222,21 @@ def live_match():
 
 
 def main(argv):
-    global LIVE_SRC
-    LIVE_SRC = None
+    live_src = None
     if len(argv) > 1 and argv[1] == "--live":
         base = argv[2] if len(argv) > 2 else "https://orcajae.github.io/valid-framework"
         print("live mode: %s" % base)
-        LIVE_SRC = fetch(base)
+        live_src = fetch(base)
 
-    items = collect(LIVE_SRC)
-    results = [
-        scan(items, BANNED, "gate 1 banned marketing terms"),
-        scan(items, RETIRED, "gate 2 retired values", flags=0),
-        canon(items),
-    ]
-    if LIVE_SRC:
-        results.append(live_match())
+    items = collect(live_src)
+    results = [canon(items)]
+    if live_src:
+        results.append(live_match(live_src))
     else:
-        results += [
-            scan(raw_sources(), RETIRED, "gate 2b retired values, raw source",
-                 flags=0),
-            links(),
-            anchors(),
-        ]
+        # Token scanning reads the working tree, so it is meaningless against a
+        # fetched copy; in live mode the byte comparison covers it instead.
+        results += [token_gates(), links(), anchors()]
+
     print("\n%s  (%d/%d gates)" % ("ALL PASS" if all(results) else "FAILED",
                                    sum(results), len(results)))
     return 0 if all(results) else 1

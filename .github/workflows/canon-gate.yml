@@ -1,0 +1,81 @@
+# Canon gate — the figures this project prints must still derive from its data.
+#
+# Scope note: this installs numpy/pandas/scipy rather than the package, because
+# derive_canonical.py AST-extracts the parts of the figure generators it needs
+# instead of importing them. Skipping matplotlib and scikit-learn is what keeps
+# this job inside its two-minute budget; the checks themselves run in ~1.5s.
+#
+# Which failures stop the job:
+#   CHECK A  yes — canonical.json no longer matches a fresh derivation
+#   CHECK B  yes for B-1 only. The B-2 warn list is context-dependent and
+#            collides with live canonical values, so it is uploaded for a human
+#            to read and never fails the job.
+#   CHECK C  yes — a medium carrying a canonical figure is stale or unattested.
+#            Off-repo media (SSRN, LinkedIn, the printed poster, the talk deck,
+#            the assistant memory) cannot be verified here at all; an expired
+#            attestation failing the job is the point, not a defect.
+#
+# Every check runs even when an earlier one fails, so one red check never hides
+# another. The verdict step reads all three outcomes.
+
+name: Canon Gate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  canon-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install (derivation deps only)
+        run: pip install "numpy>=1.24" "pandas>=2.0" "scipy>=1.11"
+
+      - name: Re-derive canonical.json
+        run: python3 scripts/derive_canonical.py --stdout > /tmp/canonical.fresh.json
+
+      - name: Diff against the committed file
+        run: diff -u canonical.json /tmp/canonical.fresh.json
+
+      - name: CHECK A — canonical figures
+        id: check_a
+        continue-on-error: true
+        run: bash scripts/gate_canon.sh a
+
+      - name: CHECK B — retired tokens
+        id: check_b
+        continue-on-error: true
+        run: bash scripts/gate_canon.sh b
+
+      - name: CHECK C — cascade coverage
+        id: check_c
+        continue-on-error: true
+        run: bash scripts/gate_canon.sh c
+
+      - name: Upload B-2 warn log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-warn-log
+          path: gate_warn.log
+          if-no-files-found: warn
+
+      - name: Verdict
+        run: |
+          A='${{ steps.check_a.outcome }}'
+          B='${{ steps.check_b.outcome }}'
+          C='${{ steps.check_c.outcome }}'
+          printf 'CHECK A %s\nCHECK B %s\nCHECK C %s\n' "$A" "$B" "$C"
+          fail=0
+          [ "$A" = success ] || { echo '::error::CHECK A failed — canonical.json no longer derives'; fail=1; }
+          [ "$B" = success ] || { echo '::error::CHECK B-1 failed — a retired token survives in tracked content'; fail=1; }
+          [ "$C" = success ] || { echo '::error::CHECK C failed — a medium is stale or unattested'; fail=1; }
+          exit $fail
