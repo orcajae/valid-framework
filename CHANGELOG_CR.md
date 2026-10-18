@@ -340,6 +340,43 @@ Figure 1 and its caption, `results/reference/audit_summary_80.csv`,
 Three residual prose instances of the pre-correction percentages (72%, 53%,
 33%) were aligned with Table 3 in the hosted camera-ready on Aug 4.
 
+## E12: Priority claims withdrawn after a concurrent standard
+
+**What changed.** The camera-ready (abstract, Section 1 and Section 6) and the
+SSRN version described VALID as, to our knowledge, the first checklist-style
+protocol for financial ML to pair binary statistical and economic gates in a
+fixed reporting order. This README went further and called VALID "the first
+domain-specific checklist for financial ML" without that qualifier, and the
+camera-ready abstract stated that no domain-specific validation standard exists
+for financial ML.
+
+**How it surfaced.** On 14 October 2026 we read Khushi (2026), "QFRS:
+Quantitative Finance Reporting Standards for Forecasting, Evaluation and
+Trading Claims" (Artificial Intelligence Review,
+doi:10.1007/s10462-026-11664-w). The journal received QFRS on 29 March 2026,
+before VALID first appeared on SSRN in April 2026. QFRS defines seven
+reviewer-enforceable standards for financial forecasting and trading claims,
+from dataset specification to cost-aware backtesting, and its audit of 41 forex
+forecasting papers published in 2025 found none compliant with all seven. The
+two frameworks were developed independently.
+
+**The correction.** A priority claim does not survive a concurrent framework
+with the same structure, so both statements are withdrawn: in this README and
+the extended manuscript now, and in the next SSRN revision. The camera-ready
+presented at KDD-MLF 2026 stays byte-identical
+(md5 f2a901b81576f59dc114e7322734ddcc) and is superseded on both points by this
+entry.
+
+**What we claim instead.** QFRS and VALID standardize different layers. QFRS
+specifies how an experiment is built and reported, including a cost-aware
+backtest, the number of trades and class prevalence. VALID adds gates that
+account for the number of configurations tried (CPCV with PBO), a permutation
+test and a comparison against simple rule-based baselines, and it measures how
+often its own gates pass strategies with no signal (27–30% for AUC-based
+validation alone, 0% with CPCV and PBO). We describe the two as complementary.
+
+**Unchanged.** No number, table or figure changes.
+
 ## Unchanged
 
 The literature audit (Table 3), bull bias (Table 4), the ablation and Monte

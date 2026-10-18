@@ -8,10 +8,12 @@
 **What it is.** A 12-item validation checklist for financial machine learning —
 the tests a trading-strategy backtest must survive before you believe it
 (CPCV+PBO, parameter-space variance, permutation tests, cost sensitivity,
-baselines, bear-market evaluation). The first domain-specific checklist for
-financial ML, analogous to [TRIPOD+AI](https://doi.org/10.1136/bmj-2023-078378)
-for clinical prediction and [REFORMS](https://doi.org/10.1126/sciadv.adk3452)
-for ML-based science.
+baselines, bear-market evaluation). A domain-specific checklist for financial
+ML in the spirit of [TRIPOD+AI](https://doi.org/10.1136/bmj-2023-078378) for
+clinical prediction and [REFORMS](https://doi.org/10.1126/sciadv.adk3452) for
+ML-based science. For the concurrent reporting standard
+[QFRS](https://doi.org/10.1007/s10462-026-11664-w) and how the two fit
+together, see [CHANGELOG_CR.md, E12](CHANGELOG_CR.md#e12-priority-claims-withdrawn-after-a-concurrent-standard).
 
 **Score your own study in five minutes:**
 [orcajae.github.io/valid-framework](https://orcajae.github.io/valid-framework/)
