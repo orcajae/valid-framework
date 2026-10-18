@@ -1,4 +1,4 @@
-.PHONY: install install-ml test reproduce reproduce-smoke reproduce-real example audit clean
+.PHONY: install install-ml test reproduce reproduce-smoke reproduce-real example clean
 
 install:
 	pip install -e ".[dev]"
@@ -20,9 +20,6 @@ reproduce-real:
 
 example:
 	python examples/worked_example.py
-
-audit:
-	python audit/audit_analysis.py
 
 clean:  # never touches tracked results/reference/
 	find results -maxdepth 1 -type f ! -name .gitkeep -delete

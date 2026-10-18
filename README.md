@@ -1,5 +1,13 @@
 # VALID: Validation Architecture for Learning-based Investment Decisions
 
+> **Correction, October 2026.** Most empirical results of the accompanying paper have been withdrawn after a full re-verification:
+> - the literature audit,
+> - the CPCV/PBO false-positive result,
+> - the multiple-testing survivors,
+> - the parameter-space variance comparison.
+>
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <!-- CI badge activates once .github/workflows/ci.yml is live on GitHub:
@@ -37,26 +45,30 @@ computed live on deterministic synthetic data; see
 
 **Who made it.** Jaewook Kim (2026), *"Beyond Accuracy: A Validation Framework
 for Machine Learning in Cryptocurrency Trading"* —
-[SSRN preprint 6508779](https://ssrn.com/abstract=6508779). Accepted for
-**oral presentation at the 9th ACM SIGKDD Workshop on Machine Learning in
-Finance (KDD-MLF 2026)**, Jeju, August 2026.
+[SSRN preprint 6508779](https://ssrn.com/abstract=6508779), presented orally at
+the 9th ACM SIGKDD Workshop on Machine Learning in Finance (KDD-MLF 2026),
+Jeju, August 2026. Most of its empirical results are withdrawn (E13).
 
-## Key Findings
+## What still stands (October 2026)
 
-- **340 strategy variants** tested across 3 assets (BTC, ETH, SOL), 4
-  timeframes, and 5 model families — 52% (178/340) produce negative net Sharpe
-  ratios; only 4.4% (15/340) exceed a simple momentum benchmark
-- **Bull bias**: crypto ML models predict 58–97% long without class balancing;
-  balancing removes the bias but not the weakness (AUC ≈ 0.50)
-- **Statistical-economic disconnect**: a run passing the permutation test
-  (p = 0.000, AUC 0.570 vs a shuffled 0.516) still fails CPCV (PBO = 0.267)
-  and earns net Sharpe 0.135 against a 0.917 benchmark
-- **Cost illusion**: 100% of 15-minute variants negative net of 18 bp; the
-  decay is monotone across four frequencies
-- **Literature audit**: of 80 papers surveyed (74 empirical, coded), 73%
-  ignore class balance, 54% omit transaction costs, 0% use CPCV
-- **Monte Carlo false positives**: AUC-based evaluation wrongly passes 27%
-  [21%, 34%] of signal-free pipelines; CPCV+PBO cuts this to 0% [0%, 1.9%]
+Each item below was re-verified: the definition in the paper, the computation
+in the code and the stored value agree.
+
+- **Net of costs:** 178 of 340 strategy variants (52%) have a negative net
+  Sharpe ratio at 18 bp. The share falls with bar frequency: 15-minute 9 of 9,
+  1-hour 96%, 4-hour 44%, daily 22%.
+- **Bull bias:** without class weighting, tree models predict "long" for 90–97%
+  of test observations. Weighting removes the bias but not the weakness: AUC
+  stays near 0.50.
+- **AUC screening on noise:** on signal-free bootstrap series, AUC > 0.55 flags
+  27–30% as positive.
+- **Costs in one run:** in the order-flow 1h run, costs consume 82% of the gross
+  Sharpe ratio (0.750 → 0.135).
+- **Deflated Sharpe Ratio:** no variant passes once the benchmark is scaled as
+  Bailey and López de Prado (2014) define it.
+
+The full list, with what was withdrawn, is in
+[E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification).
 
 ## The VALID Checklist (12 items)
 
@@ -82,10 +94,9 @@ The split follows Table 1 and Figure 1 of the camera-ready. The extended SSRN
 version groups V9 and V12 under Stage 1 instead; that difference is on the
 revision list and is not reflected here.
 
-The median paper in the audit of 74 empirical studies scores **2.5 / 12**. The
-paper's own study self-assesses at **9/12 (3 partial: V5 flatness criteria
-disagree, V8 a single cost level, V10 two regimes)** — the checklist is meant
-to be applied honestly, including to its authors.
+The checklist is meant to be applied honestly, including to its authors. The
+paper's own self-assessment was withdrawn in October 2026, because it rested on
+results that did not hold up (E13).
 
 ```python
 from valid import VALIDChecker
@@ -109,7 +120,8 @@ report.print_summary()
 `valid/` implements the underlying statistics as plain, tested functions:
 
 - `cpcv` — combinatorially purged cross-validation (purge + embargo)
-- `metrics` — PBO (Bailey & López de Prado), Deflated Sharpe Ratio,
+- `metrics` — PBO (Bailey & López de Prado), Deflated Sharpe Ratio (pass
+  `sr_std`, the dispersion of the trial Sharpe ratios, since 0.2.1),
   Var(SR_IS), Wilson and bootstrap CIs
 - `multiple_testing` — Bonferroni, Holm, Benjamini-Hochberg, and
   **Romano-Wolf stepdown** with a circular block bootstrap
@@ -126,6 +138,9 @@ make reproduce-real    # public Binance OHLCV via ccxt (pip install -e ".[data]"
 
 Outputs land in `results/` with a run summary (`REPRODUCE_SUMMARY.md`)
 comparing against the tracked reference outputs in `results/reference/`.
+The pipeline reproduces the stored outputs. Their `pbo` column is not PBO, and
+their Sharpe ratios are scaled by √252 at every bar frequency. See
+[KNOWN_ISSUES.md](KNOWN_ISSUES.md) before reading any number from them.
 Tier definitions, measured runtimes, and deviations from the v0.1 reference
 run are documented in [REPRODUCE.md](REPRODUCE.md).
 
@@ -139,11 +154,12 @@ valid-framework/
 ├── experiments/            # reproduction pipeline (see REPRODUCE.md)
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
-├── audit/                  # literature audit: literature_audit_80.csv (80 rows)
-│                           # coded per coding_guide.md (inclusion criterion, dimensions)
+├── audit/                  # literature audit: withdrawn (see audit/README.md)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
 ├── releases/               # downloadable 12-item checklist PDF
-└── docker/                 # containerized reproduction
+├── docker/                 # containerized reproduction
+├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
+└── CHANGELOG_CR.md         # every correction, E1–E13
 ```
 
 ## Citation
@@ -155,7 +171,8 @@ valid-framework/
   author={Kim, Jaewook},
   journal={SSRN Electronic Journal},
   year={2026},
-  url={https://ssrn.com/abstract=6508779}
+  url={https://ssrn.com/abstract=6508779},
+  note={Most empirical results withdrawn in October 2026; see CHANGELOG_CR.md, E13}
 }
 ```
 
@@ -172,8 +189,7 @@ Free, self-contained resources from the same research:
 - **[Worked example (notebook)](notebooks/worked_example.ipynb)** — watch the
   checklist catch a data-mined strategy
 
-**VALID Audit** — independent validation of trading-strategy backtests, built
-on this framework: contact [@orcajae](https://github.com/orcajae).
+**VALID Audit** is on hold while the re-verification is completed.
 
 *Trading involves risk. Past performance does not guarantee future results.*
 

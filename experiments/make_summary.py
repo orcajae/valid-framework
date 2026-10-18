@@ -67,10 +67,11 @@ def main():
                 lines.append(f"| {gen.replace('mc_fpr_', '').replace('.csv', '')} | "
                              f"{fpr_line(g, len(g))} | {fpr_line(r, len(r))} |")
         lines += ["",
-                  "Synthetic/smoke tiers verify the *mechanism* (a signal-free "
-                  "pipeline passes naive gates at high rates and CPCV+PBO gates "
-                  "at low rates); the reference numbers come from full real-data "
-                  "runs. See REPRODUCE.md for tier definitions and deviations.", ""]
+                  "Synthetic/smoke tiers check that the pipeline runs end to end; "
+                  "the reference numbers come from full real-data runs. The "
+                  "'PBO' gate column is not PBO and passes nothing by "
+                  "construction (KNOWN_ISSUES.md #1; CHANGELOG_CR.md E13). See "
+                  "REPRODUCE.md for tier definitions and deviations.", ""]
 
     mt_path = config.RESULTS_DIR / "multiple_testing.csv"
     if mt_path.exists():

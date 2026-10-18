@@ -30,19 +30,20 @@ README = os.path.join(ROOT, "README.md")
 BANNED = r"guarantee|refund|ROI|returns|discount|% off|limited time|only \d+ left"
 
 # ---------------------------------------------------------------- gate 2
-RETIRED = r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
+RETIRED = (r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
+           # withdrawn in CHANGELOG_CR.md E13 (October 2026)
+           r"|2\.5 ?/ ?12|2\.5 of 12|0/74|74 empirical|9 ?/ ?12|9 of 12|21\.7"
+           r"|27% → 0%|PBO ?= ?1\.0|4\.4%|Request an audit")
 
 # ---------------------------------------------------------------- gate 3
-# n=74 canon. Each entry must appear at least once in the landing text.
+# October 2026 correction state (CHANGELOG_CR.md, E13). Each entry must
+# appear at least once in the landing text.
 CANON = [
-    (r"\b74\b", "74 empirical papers"),
-    (r"\b80\b", "80 surveyed"),
-    (r"2\.5\s*/\s*12|2\.5 of 12", "median 2.5 / 12"),
+    (r"Correction, October 2026", "correction notice on the page"),
+    (r"\bE13\b", "link to CHANGELOG E13"),
     (r"\b340\b", "340 variants"),
-    (r"52%", "52% net-negative"),
-    (r"4\.4%", "4.4% exceed the benchmark"),
-    (r"0\.917", "benchmark 0.917"),
-    (r"9\s*/\s*12|9 of 12", "self-audit 9 / 12"),
+    (r"52%", "52% net-negative (stands)"),
+    (r"27[–-]30%", "AUC alone 27–30% (stands)"),
 ]
 
 VISIBLE_ATTRS = {"content", "alt", "aria-label", "title", "value", "placeholder"}
@@ -154,7 +155,7 @@ def scan(items, pattern, name, flags=re.I):
 
 def canon(items):
     blob = " ".join(s for _, s in items)
-    print("\n[gate 3] n=74 canon")
+    print("\n[gate 3] October 2026 correction state")
     ok = True
     for rx, label in CANON:
         m = re.search(rx, blob)

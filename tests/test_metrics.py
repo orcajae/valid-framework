@@ -36,17 +36,29 @@ def test_pbo_perfect():
 
 
 def test_dsr_decreases_with_more_strategies():
-    dsr_few, _, _ = deflated_sharpe_ratio(1.0, 2, 1000, 0.0, 3.0)
-    dsr_many, _, _ = deflated_sharpe_ratio(1.0, 100, 1000, 0.0, 3.0)
+    dsr_few, _, _ = deflated_sharpe_ratio(1.0, 2, 1000, 0.0, 3.0, sr_std=1.0)
+    dsr_many, _, _ = deflated_sharpe_ratio(1.0, 100, 1000, 0.0, 3.0, sr_std=1.0)
     assert dsr_many < dsr_few
 
 
 def test_dsr_half_when_sr_equals_expected_max():
-    _, e_max, _ = deflated_sharpe_ratio(1.0, 50, 1000, 0.0, 3.0)
-    dsr, _, _ = deflated_sharpe_ratio(e_max, 50, 1000, 0.0, 3.0)
+    _, e_max, _ = deflated_sharpe_ratio(1.0, 50, 1000, 0.0, 3.0, sr_std=1.0)
+    dsr, _, _ = deflated_sharpe_ratio(e_max, 50, 1000, 0.0, 3.0, sr_std=1.0)
     assert dsr == pytest.approx(0.5, abs=1e-9)
 
 
 def test_dsr_se_positive():
     _, _, se = deflated_sharpe_ratio(0.8, 20, 500, -0.5, 4.0)
     assert se > 0
+
+
+def test_dsr_benchmark_scales_with_trial_dispersion():
+    # Bailey & Lopez de Prado (2014): SR0 = std(trial SRs) * E[max of N std normals]
+    _, sr0_unit, _ = deflated_sharpe_ratio(0.1, 50, 1000, 0.0, 3.0, sr_std=1.0)
+    _, sr0_scaled, _ = deflated_sharpe_ratio(0.1, 50, 1000, 0.0, 3.0, sr_std=0.05)
+    assert sr0_scaled == pytest.approx(0.05 * sr0_unit)
+
+
+def test_dsr_warns_without_sr_std():
+    with pytest.warns(UserWarning):
+        deflated_sharpe_ratio(0.1, 50, 1000, 0.0, 3.0)

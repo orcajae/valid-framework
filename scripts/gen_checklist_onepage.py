@@ -154,7 +154,31 @@ def html_questions():
     return out
 
 
-ITEMS_CR = cr_items()
+# The camera-ready PDF was removed from the repository in October 2026
+# (CHANGELOG_CR.md, E13: its Appendix B assigns codes to named papers). The
+# item wording below was read out of its Table 1 with cr_items() before removal
+# (md5 f2a901b81576f59dc114e7322734ddcc); cr_items() still runs when a copy of
+# that PDF is placed at CR.
+ITEMS_FROZEN = [
+    (1, "Report prediction class distribution"),
+    (2, "Test with/without class balancing"),
+    (3, "Use temporal splitting only"),
+    (4, "Apply CPCV with PBO"),
+    (5, "Report Var(SR_IS)"),
+    (6, "Include permutation tests (\u2265100)"),
+    (7, "Report net performance with costs"),
+    (8, "Cost sensitivity analysis"),
+    (9, "Compare against simple baselines"),
+    (10, "Evaluate in bear markets and regime transitions"),
+    (11, "Report trade frequency"),
+    (12, "Provide code for reproducibility"),
+]
+if os.path.exists(CR):
+    ITEMS_CR = cr_items()
+    if ITEMS_CR != ITEMS_FROZEN:
+        sys.exit("camera-ready Table 1 differs from ITEMS_FROZEN")
+else:
+    ITEMS_CR = ITEMS_FROZEN
 ITEMS_Q = html_questions()
 
 if len(ITEMS_CR) != 12 or len(ITEMS_Q) != 12:
@@ -189,18 +213,18 @@ SCORING = [
      "One point per item, satisfied or not \u2014 no partial credit. "
      "Score Stage 1 and Stage 2 separately, then total out of 12."),
     ("What the total means",
-     "The median paper in an audit of 74 empirical crypto ML studies scores "
-     "2.5 of 12; none of the 74 applied CPCV. A study that clears Stage 1 but "
-     "fails Stage 2 is the statistical\u2013economic disconnect: a significant "
-     "signal with no exploitable alpha."),
+     "Each unchecked item is a way a backtest can look better than the "
+     "strategy is. A study that clears Stage 1 but fails Stage 2 has a "
+     "statistical signal with no exploitable alpha."),
     ("What it is not",
      "Self-scoring is not a certification. It records your own reading of your "
-     "own artifacts. We scored our own camera-ready 9 of 12 and disclosed "
-     "three partials."),
+     "own artifacts; check each item against the code and data themselves. "
+     "Most empirical results of the accompanying paper were withdrawn in "
+     "October 2026 (CHANGELOG E13)."),
 ]
 FOOT_L = ("Jaewook Kim  \u00b7  jwim1101@gmail.com  \u00b7  "
           "orcajae.github.io/valid-framework")
-FOOT_R = "KDD-MLF 2026 \u00b7 Paper 18 \u00b7 SSRN 6508779 \u00b7 MIT licensed"
+FOOT_R = "VALID checklist \u00b7 MIT licensed \u00b7 correction: CHANGELOG E13"
 
 # ----------------------------------------------------------------- canvas
 W, H = 210.0, 297.0                      # A4 portrait, mm

@@ -271,9 +271,11 @@ def main(data="synthetic", smoke=False, out_dir=None):
     }
     r_best = panel_a[:, sel_a]
     from scipy import stats as sps
+    trial_srs = panel_a.mean(axis=0) / (panel_a.std(axis=0, ddof=1) + 1e-12)
     dsr_best, _, _ = deflated_sharpe_ratio(
         r_best.mean() / (r_best.std(ddof=1) + 1e-12), len(grid_a), T,
-        sps.skew(r_best), sps.kurtosis(r_best, fisher=False))
+        sps.skew(r_best), sps.kurtosis(r_best, fisher=False),
+        sr_std=float(np.std(trial_srs, ddof=1)))
     surv["DSR>0.95 (best)"] = int(dsr_best > 0.95)
     print(f"\nMultiple-testing epilogue over the {len(grid_a)}-config mined grid "
           f"(benchmark: buy-and-hold): {surv} | DSR(best)={dsr_best:.3f}")

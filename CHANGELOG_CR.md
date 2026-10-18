@@ -1,5 +1,7 @@
 # Changelog — camera-ready revision (2026-08-01)
 
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification).** Entries below are in the order they were made.
+
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
 No experiment was re-run for this revision; every changed figure is read from a
@@ -377,7 +379,158 @@ validation alone, 0% with CPCV and PBO). We describe the two as complementary.
 
 **Unchanged.** No number, table or figure changes.
 
+## E13: Most empirical results withdrawn after a full re-verification
+
+**How it surfaced.** On 18 and 19 October 2026, while preparing a journal
+version, we re-derived every printed number from the stored outputs, compared
+every method description with the code that produced the number, and tried to
+locate every paper listed in the literature-audit sheet. Earlier corrections
+(E1–E12) had only compared printed numbers with stored outputs. This pass found
+three new kinds of failure: the audit sheet does not describe the papers it
+lists; several statistics were computed under a different definition from the
+one printed; and some statistics were attributed to the wrong run.
+
+**Withdrawn.**
+
+1. *Literature audit* (Section 3, the audit table, the compliance heatmap, the
+   Appendix B coding subset, and every statement about what "the literature"
+   does). We searched Crossref, OpenAlex and the web for each of the 74 rows
+   coded as empirical:
+   - 15 rows matched a paper as cited (first author, year and venue). Four of
+     those 15 are rule-based momentum studies, not machine learning.
+   - 41 rows matched a real paper only with a different author, venue, year or
+     method.
+   - For 18 rows we found no matching paper.
+   - Two pairs of rows describe the same paper under different author names.
+   - None of the ten rows printed in Appendix B "to enable independent
+     verification" matches the paper it names.
+
+   Withdrawn: 80 surveyed / 74 empirical papers, the median of 2.5 of 12, the
+   D1–D7 rates, "no empirical paper uses CPCV", and every code attributed to an
+   individual paper. The sheet was produced in March 2026 by AI-assisted web
+   search, with the codes entered directly into the file. No record of the
+   sources consulted was kept, and the rows were never checked against the
+   papers. Publishing it unverified was the author's error. We apologise to the
+   authors whose work was misdescribed.
+
+2. *PBO-based results.* The paper defines PBO as the out-of-sample rank of the
+   in-sample-best configuration among several (Bailey et al. 2017). The
+   experiments instead computed the share of CPCV paths in which one model's
+   in-sample accuracy exceeded its out-of-sample accuracy (KNOWN_ISSUES.md #1).
+   That share is 1.0 in all 1,027 stored values, real and synthetic. A
+   diagnostic with a planted signal (holdout AUC up to 0.69) also gives 1.0, so
+   the gate rejects everything.
+
+   Withdrawn: "CPCV with PBO reduces false positives from 27% to 0%", the
+   ablation table and "V4 is the single most important item", "every Bonferroni
+   survivor carries PBO = 1.0", and Figure 2(a). The only rank-based PBO values
+   (0.267 for the order-flow run, 0.000 for a second 1h run) rank three or fewer
+   configurations. They are withdrawn as evidence.
+
+3. *Multiple-testing survivors.* The t-statistics multiplied an annualised
+   Sharpe ratio by the square root of the number of events in the whole series
+   (KNOWN_ISSUES.md #5). Recomputed in consistent units:
+   - Bonferroni, Holm, Benjamini–Hochberg and t > 3 each leave 0 survivors.
+   - The largest t is 0.76, not 21.70.
+
+   Withdrawn: "nine of 340 variants survive Bonferroni correction with t up to
+   21.70", and the "significance without validity" argument built on it.
+
+4. *Parameter-space variance (V5).* The real value of 0.012 is a variance
+   across three configurations. The Monte Carlo null distribution is a variance
+   across the folds of a single model (KNOWN_ISSUES.md #2). These are different
+   quantities, so the comparison is withdrawn: the null percentiles 0.328 and
+   0.430, and "the two criteria disagree".
+
+5. *Cost-ladder magnitudes.* Per-event returns were annualised with √252 at
+   every bar frequency (KNOWN_ISSUES.md #4).
+
+   Withdrawn: the median net Sharpe ratios by frequency (−1.80, −1.32, +0.28,
+   +0.54), "only daily variants beat the benchmark", and "15 of 340 (4.4%)
+   exceed the benchmark". These depend on the scale.
+
+6. *Monte Carlo permutation gate.* The gate used 20 shuffles per series, below
+   the checklist's own minimum of 100. Its permutation models were trained with
+   half the boosting iterations of the real model, and half of the BTC series
+   had no permutation test at all (KNOWN_ISSUES.md #3).
+
+   Withdrawn: the 18–22% permutation pass rates, and every combined-gate rate
+   that includes them.
+
+7. *Section 4.4 correlations.*
+   - ρ = −0.83 came from a different run (daily features, nine configurations)
+     from the order-flow 1h run it was attached to.
+   - The walk-forward ρ = −0.73 compares one fixed momentum benchmark across
+     rolling windows. It involves no configurations and no machine learning, and
+     it is −0.08 without a |SR| < 10 filter.
+
+   Both are withdrawn.
+
+8. *Self-assessment.* The score of 9 of 12 rested partly on items 2–6 above
+   and is withdrawn.
+
+**What still stands.** In each item below, the definition in the paper, the
+computation in the code and the stored value agree.
+
+- 178 of the 340 variants (52%) have a negative net Sharpe ratio at 18 bp. The
+  sign does not depend on the annualisation error.
+- The share of negative variants falls with bar frequency: 15-minute 9 of 9,
+  1-hour 96%, 4-hour 44%, daily 22% (model variants).
+- Bull bias: without class weighting, tree models predict "long" for 90–97% of
+  test observations (BTC 97.2%, ETH 90.5%, SOL 97.0%). Class weighting brings
+  this to 32–45%, with AUC near 0.50. The deep-learning models range from 58% to
+  93%; for the two MLP rows the "balanced" column repeats the unbalanced value.
+- On 200 signal-free series per asset (i.i.d. bootstrap of daily returns, which
+  removes autocorrelation and volatility clustering), AUC > 0.55 flags 27.0%
+  (BTC), 30.0% (ETH) and 26.5% (SOL) as positive.
+- In the order-flow 1h run:
+  - transaction costs consume 82% of the gross Sharpe ratio (0.750 → 0.135) at
+    101 trades per year;
+  - the run passes a 200-permutation test (AUC 0.570 against a shuffled 95th
+    percentile of 0.516, p < 0.005; previously printed as p = 0.000).
+- No variant passes the Deflated Sharpe Ratio once the benchmark is computed as
+  Bailey and López de Prado (2014) define it. The benchmark is 2.73 in the units
+  of the stored Sharpe ratios, against a best observed value of 1.98, and the
+  highest DSR is 0.33. The printed comparison used an unscaled 2.93.
+
+**Other errors found in the same pass.**
+- The Monte Carlo has three daily-bar assets, not four settings: the "BTC daily"
+  setting repeats the BTC inputs.
+- Events per series are 820–942 (BTC), 595–725 (ETH) and 498–666 (SOL).
+- The deep-learning long bias spans 58–93%, not 58–86%.
+- In the SSRN version only:
+  - 5 of 24 cross-section momentum configurations are positive, not 4.
+  - The multi-asset balanced long shares for BTC and SOL are 51% and 46%.
+
+**What changes in this repository.**
+- Removed from the current version (they remain in the git history):
+  - the audit coding sheet, its summary and analysis script;
+  - the camera-ready PDF, whose Appendix B assigns codes to named papers;
+  - the audit heatmap, the PBO figure and their generators.
+- Kept as records: the stored outputs in `results/reference/`, which still
+  reproduce from their inputs and whose meaning is corrected here, and the
+  poster files.
+- Updated: the README, the landing page, the scorer and the one-page
+  checklist.
+- `KNOWN_ISSUES.md` lists the code-level causes.
+- `valid.metrics.deflated_sharpe_ratio` now scales its benchmark (0.2.1).
+- The twelve checklist items are unchanged as a proposal. What is withdrawn is
+  the empirical support the paper claimed for them.
+
+**What happens next.** PBO and the parameter-space variance will be recomputed
+as the paper defines them, under a pre-registered design that also measures the
+power of each gate on series with a planted signal. A literature audit will
+appear again only if it is rebuilt from a logged search, with every code tied to
+a quoted passage. Results will be reported in a new entry whatever they show.
+
+**Supersedes.**
+- E12's sentence quoting "0% with CPCV and PBO".
+- The "Unchanged" section below.
+- The KDD-MLF 2026 camera-ready and SSRN v3.2, on every point above.
+
 ## Unchanged
+
+*Superseded by E13 (October 2026): most of the results listed below are withdrawn.*
 
 The literature audit (Table 3), bull bias (Table 4), the ablation and Monte
 Carlo false-positive results (Tables 6–7), the multiple-testing analysis and

@@ -1,12 +1,11 @@
 /* VALID self-scorer.
    No network calls, no storage, no analytics: the answers stay in this tab.
-   Numbers quoted below come from the paper (KDD-MLF 2026 / SSRN 6508779):
-   median 2.5 of 12 across 74 empirical papers; AUC-alone false-positive rate
-   27% [21, 34] falling to 0% [0, 1.9] once CPCV with PBO is added. */
+   October 2026: the paper's literature-audit median and its CPCV/PBO
+   false-positive result were withdrawn (CHANGELOG_CR.md, E13), so the scorer
+   no longer compares a score with a published median. */
 (function () {
   "use strict";
 
-  var MEDIAN = 2.5;
   var TOTAL = 12;
   var URL = "https://orcajae.github.io/valid-framework/";
 
@@ -44,25 +43,20 @@
 
   function nextStep(c) {
     if (c.total === 0) return "";
-    if (c.total < 4) {
-      return "Most gaps concentrate in Stage " + weakStage(c) +
-             " — the discovery review starts there.";
+    if (c.total < TOTAL) {
+      return "Most of the unchecked items are in Stage " + weakStage(c) +
+             ". Start there.";
     }
-    if (c.total <= 8) {
-      return "You're above the published median. The remaining items are " +
-             "exactly what an audit pins down against your artifacts.";
-    }
-    return "Strong. The difference between self-scoring and an audit is " +
-           "evidence — have it verified.";
+    return "Check each item against the artifact itself — the code, the " +
+           "data and the stored outputs — not against your memory of them.";
   }
 
   function verdict(c) {
     if (c.total === 0) return "Check the items your study satisfies.";
 
     if (c.total < 4) {
-      return "At or below the median of the 74 empirical papers audited " +
-             "(2.5 of 12). The items left unchecked are the ones the audit " +
-             "found missing most often.";
+      return "Most items are unchecked. Each one is a way a backtest can " +
+             "look better than the strategy is.";
     }
     if (c.total <= 8) {
       var gap;
@@ -76,11 +70,12 @@
       } else {
         gap = "The gaps are spread evenly across both gates.";
       }
-      return "Above the audit median. " + gap;
+      return gap;
     }
     return "Every item you scored is satisfied. Note what this is: a " +
            "self-assessment of your own reading of your own artifacts. " +
-           "We scored our own paper 9 of 12 and disclosed three partials.";
+           "Our own paper's self-assessment did not survive a check of the " +
+           "code behind it.";
   }
 
   function render() {
@@ -93,8 +88,7 @@
     elFill.style.width = pct + "%";
     elBarImg.setAttribute(
       "aria-label",
-      "Your score of " + c.total + " out of 12, against a median of 2.5 out " +
-      "of 12 in an audit of 74 empirical papers."
+      "Your score of " + c.total + " out of 12."
     );
 
     elVerdict.textContent = verdict(c);
@@ -112,7 +106,6 @@
     return "VALID self-score: " + c.total + "/12 " +
            "(Stage 1 statistical " + c.s1 + "/6, " +
            "Stage 2 economic " + c.s2 + "/6). " +
-           "Median in an audit of 74 empirical papers: " + MEDIAN + "/12. " +
            URL;
   }
 

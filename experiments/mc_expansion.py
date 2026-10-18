@@ -205,6 +205,11 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, model="auto",
         except Exception:
             pass
 
+    # KNOWN ISSUE (CHANGELOG_CR.md E13, KNOWN_ISSUES.md #1): the 'pbo' below is the
+    # share of CPCV paths where ONE model's in-sample accuracy exceeds its
+    # out-of-sample accuracy. It is not PBO (valid.metrics.compute_pbo) and is ~1.0
+    # for any flexible model; kept unchanged so the stored outputs reproduce.
+    # 'var_sr_is' is likewise a variance across folds of one model (#2).
     pbo = np.nan
     var_sr_is = np.nan
     if len(is_accs) > 3:
@@ -224,6 +229,8 @@ def run_mc_iteration(rng_seed, ret_actual, n_days, ref_index, model="auto",
 
     # Permutation test
     perm_aucs = []
+    # KNOWN ISSUE (#3): permutation models use 50 boosting iterations against 100
+    # for the real model, and n_perm defaults to 20 shuffles.
     make_perm, _ = get_model_fn(model, balanced, iterations=50)
     for pi in range(n_perm):
         prng = np.random.RandomState(rng_seed * 1000 + pi)

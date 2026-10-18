@@ -32,7 +32,7 @@
 | eth_daily | AUC-gate 32.5% / PBO-gate 0.0% (n=200) | AUC-gate 30.0% / PBO-gate 0.0% (n=200) |
 | sol_daily | AUC-gate 30.0% / PBO-gate 0.0% (n=200) | AUC-gate 26.5% / PBO-gate 0.0% (n=200) |
 
-Synthetic/smoke tiers verify the *mechanism* (a signal-free pipeline passes naive gates at high rates and CPCV+PBO gates at low rates); the reference numbers come from full real-data runs. See REPRODUCE.md for tier definitions and deviations.
+Synthetic/smoke tiers check that the pipeline runs end to end; the reference numbers come from full real-data runs. The 'PBO' gate column is not PBO and passes nothing by construction (KNOWN_ISSUES.md #1; CHANGELOG_CR.md E13). See REPRODUCE.md for tier definitions and deviations.
 
 ## Multiple-testing survivors
 

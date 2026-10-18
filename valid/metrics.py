@@ -1,4 +1,6 @@
 """Statistical metrics for financial ML validation."""
+import warnings
+
 import numpy as np
 from scipy.stats import norm, rankdata
 
@@ -43,16 +45,38 @@ def compute_pbo(is_matrix, oos_matrix):
     return pbo, pbo_count, pbo_total
 
 
-def deflated_sharpe_ratio(observed_sr, n_strategies, T, skew, kurtosis):
-    """Bailey & Lopez de Prado (2014) DSR."""
+def deflated_sharpe_ratio(observed_sr, n_strategies, T, skew, kurtosis,
+                          sr_std=None):
+    """Bailey & Lopez de Prado (2014) DSR.
+
+    All Sharpe ratios must be per-period (not annualised), and T is the number
+    of return observations behind ``observed_sr``.
+
+    The benchmark is SR0 = sr_std * E[max of n_strategies standard normals],
+    where ``sr_std`` is the cross-sectional standard deviation of the Sharpe
+    ratios of all trials, in the same per-period units. Before 0.2.1 the
+    expected maximum was used unscaled (``sr_std`` = 1), which is only correct
+    if the trial Sharpe ratios have unit dispersion; see KNOWN_ISSUES.md.
+
+    Returns (dsr, sr0, se). ``sr0`` equals the unscaled expected maximum when
+    ``sr_std`` is not given.
+    """
     euler = 0.5772156649
     ln_n = np.log(max(n_strategies, 2))
     e_max = (np.sqrt(2 * ln_n) * (1 - euler / (2 * ln_n))
              + euler / np.sqrt(2 * ln_n))
+    if sr_std is None:
+        warnings.warn(
+            "deflated_sharpe_ratio: sr_std not given; the benchmark assumes the "
+            "trial Sharpe ratios have unit dispersion. Pass the cross-sectional "
+            "std of the trial Sharpe ratios (per-period units).",
+            stacklevel=2)
+        sr_std = 1.0
+    sr0 = sr_std * e_max
     se = np.sqrt((1 - skew * observed_sr +
                   (kurtosis - 1) / 4 * observed_sr**2) / T)
-    dsr = norm.cdf((observed_sr - e_max) / se) if se > 0 else 0.0
-    return dsr, e_max, se
+    dsr = norm.cdf((observed_sr - sr0) / se) if se > 0 else 0.0
+    return dsr, sr0, se
 
 
 def wilson_ci(p, n, z=1.96):
