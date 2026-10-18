@@ -543,6 +543,8 @@ the printed values. Scripts: `scripts/derive_corpus_stats.py`,
 
 ---
 
-These corrections were identified by applying the VALID audit process to our
-own camera-ready before the workshop. Conclusions are unchanged; the corrected
-version is the one presented at KDD-MLF 2026.
+Entries E1–E11 were identified by applying the VALID audit process to our own
+camera-ready before the workshop, and the version presented at KDD-MLF 2026
+includes them. This footer previously said that the conclusions were unchanged.
+E13 (October 2026) supersedes that statement: it withdraws most of the paper's
+empirical results.

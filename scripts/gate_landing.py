@@ -33,7 +33,7 @@ BANNED = r"guarantee|refund|ROI|returns|discount|% off|limited time|only \d+ lef
 RETIRED = (r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
            # withdrawn in CHANGELOG_CR.md E13 (October 2026)
            r"|2\.5 ?/ ?12|2\.5 of 12|0/74|74 empirical|9 ?/ ?12|9 of 12|21\.7"
-           r"|27% → 0%|PBO ?= ?1\.0|4\.4%|Request an audit")
+           r"|27% → 0%|PBO ?= ?1\.0|4\.4%|Request an audit|27[–-]30%")
 
 # ---------------------------------------------------------------- gate 3
 # October 2026 correction state (CHANGELOG_CR.md, E13). Each entry must
@@ -43,7 +43,7 @@ CANON = [
     (r"\bE13\b", "link to CHANGELOG E13"),
     (r"\b340\b", "340 variants"),
     (r"52%", "52% net-negative (stands)"),
-    (r"27[–-]30%", "AUC alone 27–30% (stands)"),
+    (r"26\.5%", "AUC alone 27.0/30.0/26.5% (stands, E13)"),
 ]
 
 VISIBLE_ATTRS = {"content", "alt", "aria-label", "title", "value", "placeholder"}

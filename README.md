@@ -61,7 +61,7 @@ in the code and the stored value agree.
   of test observations. Weighting removes the bias but not the weakness: AUC
   stays near 0.50.
 - **AUC screening on noise:** on signal-free bootstrap series, AUC > 0.55 flags
-  27–30% as positive.
+  27.0% (BTC), 30.0% (ETH) and 26.5% (SOL) as positive.
 - **Costs in one run:** in the order-flow 1h run, costs consume 82% of the gross
   Sharpe ratio (0.750 → 0.135).
 - **Deflated Sharpe Ratio:** no variant passes once the benchmark is scaled as
