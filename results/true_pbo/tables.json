@@ -1,0 +1,145 @@
+{
+ "null_n": {
+  "BTC": 200,
+  "ETH": 200,
+  "SOL": 200
+ },
+ "null_auc_gt_055_pct": {
+  "BTC": 27.0,
+  "ETH": 30.0,
+  "SOL": 26.5
+ },
+ "null_pbo_disagree_P": 0,
+ "null_pbo_disagree_R": 598,
+ "null_var_sr_is_R": {
+  "BTC": {
+   "count": 200.0,
+   "mean": 0.001633,
+   "std": 0.000511,
+   "min": 0.000696,
+   "50%": 0.001609,
+   "95%": 0.002594,
+   "99%": 0.002865,
+   "max": 0.003561
+  },
+  "ETH": {
+   "count": 200.0,
+   "mean": 0.002389,
+   "std": 0.000709,
+   "min": 0.000959,
+   "50%": 0.002306,
+   "95%": 0.003776,
+   "99%": 0.004334,
+   "max": 0.004745
+  },
+  "SOL": {
+   "count": 200.0,
+   "mean": 0.002818,
+   "std": 0.00096,
+   "min": 0.001208,
+   "50%": 0.002648,
+   "95%": 0.004666,
+   "99%": 0.005512,
+   "max": 0.006869
+  }
+ },
+ "null_pbo_R_lt_020_pct": {
+  "BTC": 0.0,
+  "ETH": 0.0,
+  "SOL": 0.0
+ },
+ "power_mean_auc": {
+  "0.117": 0.5596,
+  "0.163": 0.6056
+ },
+ "power_pbo_disagree_P": 0,
+ "real": [
+  {
+   "events": 864,
+   "auc": 0.4831292517,
+   "net_sr_pe": 0.0435410776,
+   "gross_sr_pe": 0.0623806055,
+   "long_pct": 0.4624277457,
+   "perm_p95": 0.5773045047,
+   "perm_pass": false,
+   "t_base": 4.4094479084,
+   "pbo_P": 0.8,
+   "pbo_P_cmp": 0.8,
+   "pbo_P_disagree": 0.0,
+   "paths_P": 15.0,
+   "var_sr_is_P": 0.0036862973,
+   "t_P": 5.7429182529,
+   "pbo_R": 0.6,
+   "pbo_R_cmp": 0.2,
+   "pbo_R_disagree": 1.0,
+   "paths_R": 15.0,
+   "var_sr_is_R": 0.0018522164,
+   "t_R": 2.9740169048,
+   "arm": "real",
+   "asset": "BTC",
+   "setting": "btc_daily_actual",
+   "var_sr_is_R_x252_check": null,
+   "var_sr_is_P_x252_check": null
+  },
+  {
+   "events": 15271,
+   "auc": null,
+   "net_sr_pe": null,
+   "gross_sr_pe": null,
+   "long_pct": null,
+   "perm_p95": null,
+   "perm_pass": null,
+   "t_base": null,
+   "pbo_P": null,
+   "pbo_P_cmp": null,
+   "pbo_P_disagree": null,
+   "paths_P": null,
+   "var_sr_is_P": null,
+   "t_P": null,
+   "pbo_R": 0.5333333333,
+   "pbo_R_cmp": 0.2666666667,
+   "pbo_R_disagree": null,
+   "paths_R": 15.0,
+   "var_sr_is_R": 4.87739e-05,
+   "t_R": 13.7107870579,
+   "arm": "real",
+   "asset": "BTC",
+   "setting": "round_1h_gridR",
+   "var_sr_is_R_x252_check": 0.0122910234,
+   "var_sr_is_P_x252_check": null
+  },
+  {
+   "events": 15271,
+   "auc": null,
+   "net_sr_pe": null,
+   "gross_sr_pe": null,
+   "long_pct": null,
+   "perm_p95": null,
+   "perm_pass": null,
+   "t_base": null,
+   "pbo_P": 0.8,
+   "pbo_P_cmp": 0.8,
+   "pbo_P_disagree": null,
+   "paths_P": 15.0,
+   "var_sr_is_P": 0.0010738711,
+   "t_P": 8.8917551041,
+   "pbo_R": null,
+   "pbo_R_cmp": null,
+   "pbo_R_disagree": null,
+   "paths_R": null,
+   "var_sr_is_R": null,
+   "t_R": null,
+   "arm": "real",
+   "asset": "BTC",
+   "setting": "round_1h_gridP",
+   "var_sr_is_R_x252_check": null,
+   "var_sr_is_P_x252_check": 0.270615527
+  }
+ ],
+ "R1_var_sr_is_R": 4.877390247454094e-05,
+ "R1_share_of_null_le_real": {
+  "BTC": 0.0,
+  "ETH": 0.0,
+  "SOL": 0.0
+ }
+}

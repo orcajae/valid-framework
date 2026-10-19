@@ -96,7 +96,9 @@ Documented, deliberate, and verified before adoption:
    separate pipeline — is a variance across three configurations, while
    both nulls are variances across the folds of one model, so the comparison
    is withdrawn (E13). The `valid/` library functions were never affected,
-   except `deflated_sharpe_ratio`, whose benchmark scaling was fixed in 0.2.1.
+   except `deflated_sharpe_ratio`, whose benchmark scaling was fixed in 0.2.1,
+   and `compute_pbo`, which follows the paper's Eq. 1 for an odd number of
+   configurations since 0.2.2 (E14).
 2. **Honest setting labels.** `eth_1h` / `sol_1h` setting keys were renamed
    `eth_daily` / `sol_daily` to match what the pipeline actually consumes.
 3. **Model registry.** Reference runs used CatBoost; when it is not installed

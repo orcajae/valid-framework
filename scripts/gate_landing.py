@@ -41,6 +41,7 @@ RETIRED = (r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
 CANON = [
     (r"Correction, October 2026", "correction notice on the page"),
     (r"\bE13\b", "link to CHANGELOG E13"),
+    (r"\bE14\b", "link to CHANGELOG E14 (pre-registered re-measurement)"),
     (r"\b340\b", "340 variants"),
     (r"52%", "52% net-negative (stands)"),
     (r"26\.5%", "AUC alone 27.0/30.0/26.5% (stands, E13)"),

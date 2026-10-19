@@ -1,5 +1,5 @@
 """VALID: Validation Architecture for Learning-based Investment Decisions."""
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 from valid.checklist import VALIDChecker, VALIDReport, VALIDResult
 from valid.cpcv import make_groups, cpcv_split, cpcv_paths, run_cpcv

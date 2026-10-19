@@ -1,6 +1,6 @@
 # Changelog — camera-ready revision (2026-08-01)
 
-> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification).** Entries below are in the order they were made.
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design).** Entries below are in the order they were made.
 
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
@@ -527,6 +527,115 @@ a quoted passage. Results will be reported in a new entry whatever they show.
 - E12's sentence quoting "0% with CPCV and PBO".
 - The "Unchanged" section below.
 - The KDD-MLF 2026 camera-ready and SSRN v3.2, on every point above.
+
+## E14: PBO and the permutation test re-measured under a pre-registered design
+
+E13 said that PBO and the parameter-space variance would be recomputed as the
+paper defines them, under a pre-registered design that also measures the power
+of each gate. This entry reports that run, whatever it shows. The revised paper
+(SSRN v3.3) gives the full analysis.
+
+- Design: [`experiments/true_pbo/PREREGISTRATION.md`](experiments/true_pbo/PREREGISTRATION.md).
+  It was fixed before the new statistics were computed, with amendments A1–A4.
+  The AUC rates on the same signal-free series were already known from E13.
+- Code: [`experiments/true_pbo/`](experiments/true_pbo/). The run script is the
+  executed one with private paths replaced by an environment variable.
+- Outputs: [`results/true_pbo/`](results/true_pbo/). Per-series results,
+  every configuration's in-sample and out-of-sample Sharpe ratio on every
+  split, and every permuted AUC.
+
+**Design.**
+- Signal-free series: the E13 Monte Carlo inputs, an i.i.d. bootstrap of daily
+  BTC, ETH and SOL returns, 200 series each (same data sha256; AUC > 0.55
+  reproduced 27.0%, 30.0% and 26.5%). The bootstrap keeps each asset's mean
+  return, so the series carry drift.
+- Planted signal: 100 BTC series at each of two strengths. After the bootstrap,
+  r′(t+1) = r(t+1) + β·σ·z(t), where z(t) is the standardised five-day return up
+  to day t. β = 0.117 and 0.163 were fixed on separate calibration seeds before
+  the evaluation seeds were run. Mean holdout AUC: 0.560 and 0.606.
+- PBO: the paper's Eq. 1 (rank / (M + 1), logit ≤ 0) over the 15 CPCV splits
+  (N = 6, k = 2) of eight CatBoost configurations (depth 4 or 6 × learning rate
+  0.03 or 0.1 × with or without class weights). Each configuration is refitted
+  on every split, and in-sample performance is its per-event Sharpe ratio on
+  the training events it was fitted to. This applies Bailey et al.'s rank
+  statistic to refitted CPCV splits; it is not their CSCV procedure.
+- Permutation test: 100 shuffles of the whole label vector, each refitted with
+  the same model and settings as the real fit.
+
+**Results.** Pass rate, %, with 95% Wilson intervals in `results/true_pbo/gate_rates.csv`.
+
+| Gate | Signal-free BTC | ETH | SOL | Planted β = 0.117 | β = 0.163 |
+|---|---|---|---|---|---|
+| AUC > 0.55 | 27.0 | 30.0 | 26.5 | 53.0 | 79.0 |
+| Permutation | 17.5 | 14.0 | 16.0 | 44.0 | 71.0 |
+| PBO < 0.20 | 1.0 | 0.0 | 1.0 | 1.0 | 0.0 |
+| PBO < 0.50 | 31.5 | 31.5 | 32.5 | 21.0 | 8.0 |
+| Net Sharpe > 0 | 43.0 | 48.5 | 49.5 | 69.0 | 89.0 |
+| AUC, permutation and net Sharpe | 12.0 | 10.5 | 11.5 | 37.0 | 66.0 |
+
+Every permutation pass is also an AUC pass, so the last row equals permutation
+and net Sharpe combined.
+
+**What this means.**
+- **PBO, computed this way, is not a test for an edge.**
+  - At 0.20 it passes 0–1% of series with or without a signal. With 15 splits,
+    passing needs the in-sample best in the upper half out of sample on at least
+    13 splits.
+  - At 0.50 it passes 31.5% of signal-free BTC series, 21% at the weaker
+    planted signal (Fisher p = 0.058, not significant) and 8% at the stronger
+    one (p < 0.001).
+- **What drives it.**
+  - In-sample selection picks one of the two depth-6, learning-rate-0.1
+    configurations on 94–99% of splits, with or without a signal.
+  - Which configurations do best out of sample depends on the data:
+    - on signal-free series, the ones without class weights, which collect the
+      retained drift;
+    - with the stronger signal, the slower learners.
+  - In both cases the in-sample pick is not an out-of-sample leader. PBO
+    describes how well in-sample ranks carry over within the grid.
+  - These are observations on one grid and one in-sample measure. Canonical
+    CSCV and a validation-slice in-sample measure were not run.
+- **Guidance for V4:** report PBO with the grid and the in-sample measure, as
+  a description of the search, not as a pass-or-fail gate. The item's wording
+  is unchanged.
+- **The permutation test separates signal from noise** (44% and 71% against
+  14.0–17.5%) but runs at about three times its nominal 5%. Two untested
+  candidates:
+  - overlapping triple-barrier labels, whose serial dependence a full shuffle
+    removes;
+  - a holdout that is not purged from the training events.
+  V6 stands, with that qualification.
+- **Real data.** PBO is 0.80 on the actual BTC daily series; 11.2% of
+  signal-free series reach 0.80 or more. It is also 0.80 on the hourly pipeline
+  of the paper, which differs from the daily null (hourly bars, four-bar
+  payoff, embargo), so that comparison is not like for like.
+- **V5 remains unresolved.** The hourly Var(SR_IS), recomputed per event across
+  the same three configurations as before, is 4.88e-5; multiplied by 252 it
+  gives 0.0123, which is the stored 0.012. It lies below all 600 signal-free
+  values, but those are daily series, so the comparison is not like for like.
+- **Secondary three-configuration grid** (reported, not a gate, as
+  pre-registered): PBO < 0.20 passes none of the 800 series; PBO < 0.50 passes
+  9.5–14.5% of signal-free and 1–2% of planted-signal series.
+- **KNOWN_ISSUES 6** (two PBO thresholds) is settled in the sense that neither
+  threshold makes PBO a test for an edge in this pipeline.
+
+**Library change (0.2.2).** `valid.metrics.compute_pbo` used the relative rank
+rank / M; Eq. 1 uses rank / (M + 1). The two agree when M is even, as in the
+eight-configuration grid and in the worked example, whose output is unchanged.
+They differ when M is odd: on the three-configuration grid they disagreed for
+almost every series. The function now follows Eq. 1.
+
+**Limits.**
+- The null is an i.i.d. bootstrap that keeps drift and removes volatility
+  clustering.
+- The holdout is not purged. The payoff is one bar.
+- The net-Sharpe gate charges costs only on changes of predicted class.
+- There is one model family and one planted mechanism, which is close to one of
+  the features, with 100 series per strength.
+- The pre-registration timestamps are in a private repository.
+
+**Supersedes.** E13's "What happens next" for PBO and the parameter-space
+variance.
 
 ## Unchanged
 

@@ -35,6 +35,21 @@ def test_pbo_perfect():
     assert 0 <= pbo <= 1
 
 
+def test_pbo_definition_odd_m():
+    # M = 3, in-sample best has the middle out-of-sample rank: w = 2/4 = 0.5,
+    # logit(w) = 0 <= 0, so the path counts (Bailey et al. 2017, Eq. 1).
+    is_m = np.array([[3.0], [2.0], [1.0]])
+    oos_m = np.array([[2.0], [3.0], [1.0]])
+    pbo, count, total = compute_pbo(is_m, oos_m)
+    assert (pbo, count, total) == (1.0, 1, 1)
+
+
+def test_pbo_best_stays_best():
+    is_m = np.array([[3.0, 3.0], [2.0, 2.0], [1.0, 1.0], [0.0, 0.0]])
+    pbo, _, _ = compute_pbo(is_m, is_m.copy())
+    assert pbo == 0.0
+
+
 def test_dsr_decreases_with_more_strategies():
     dsr_few, _, _ = deflated_sharpe_ratio(1.0, 2, 1000, 0.0, 3.0, sr_std=1.0)
     dsr_many, _, _ = deflated_sharpe_ratio(1.0, 100, 1000, 0.0, 3.0, sr_std=1.0)

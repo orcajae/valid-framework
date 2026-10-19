@@ -1,0 +1,194 @@
+{
+ "what": "True-PBO Monte Carlo, pre-registered (experiments/true_pbo/PREREGISTRATION.md, amendments A1-A4). CHANGELOG E14.",
+ "valid_framework_commit": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861",
+ "valid_journal_commit_at_run": "b7d49efbfc7ffc23e0440c60b3e8c1052c05390e",
+ "worktree": "git worktree add --detach /tmp/vf-pbo 018f4ea (removed after the run)",
+ "python": "python3 -I (anaconda 3.11); catboost 1.2.10, lightgbm 4.6.0, scikit-learn 1.8.0",
+ "commands": {
+  "unit": "python3 -I experiments/true_pbo/run.py unit",
+  "time": "python3 -I experiments/true_pbo/run.py time",
+  "auccheck": "python3 -I experiments/true_pbo/run.py auccheck --asset {BTC,ETH,SOL} --seeds 0-199",
+  "null": "python3 -I experiments/true_pbo/run.py series --asset {BTC 0-199 | ETH 0-199 | SOL 0-99 | SOL 100-199} --arm null --out results/true_pbo/parts/null_*  (2 workers)",
+  "calib": "python3 -I experiments/true_pbo/run.py calib --betas 0,0.05,0.1,0.15,0.2,0.3,0.4,0.6 | 0.117,0.170 | 0.163 --seeds 2000-2019",
+  "power": "python3 -I experiments/true_pbo/run.py series --asset BTC --seeds 1000-1099 --arm power --beta {0.117,0.163}  (2 workers)",
+  "real": "python3 -I experiments/true_pbo/run.py real --out results/true_pbo/parts/real",
+  "summarize": "python3 -I experiments/true_pbo/summarize.py results/true_pbo"
+ },
+ "data_sha256": {
+  "binance_btcusdt_ohlcv_1d.csv": "19dd18c523032b82723e07f45410f38f9158136f7f8c48036761dade79c44d29",
+  "binance_ethusdt_ohlcv_1d.csv": "8d0851f3b7e21a250dbc8a88d13f6d5c96959e61a8bb5e0469f497027ac0d5fe",
+  "binance_solusdt_ohlcv_1d.csv": "33db1e362fd1ae6e51b03950e983dda1c240fe3f37b083f327c6284e21d6af95",
+  "features_with_targets_1h.parquet": "05f0003ac0741e1712dc70a98c2e67278be0cc85146777fc1767f95e40cbd0d1",
+  "1h_shap_ranking.csv": "f4476305ff90e1a6ca4ce5d53add398ef0b005ce0f12143bf5b0b276f56d8d3c",
+  "round_1h/optuna_catboost.json": "75372a7b1d05e494451c551355aea155037e75a0a3918afd02620fb3aefe6484",
+  "round_1h/optuna_lightgbm.json": "dd75e156a6f1b8e572911e5fd86d998733d325fcdaa7d53a243efbfae3e058b6",
+  "round_1h/optuna_rf.json": "aa8be8fe5763b3492e3e38e6ffe33c7dc4a9ab5f23ced021acfe5734d48098c9"
+ },
+ "data_note": "Daily CSVs written from the Binance daily OHLCV files read by experiments/data_sources.py; sha256 listed above. (Local path removed for publication.)",
+ "grids": {
+  "P": "CatBoost 100 it x depth {4,6} x lr {0.03,0.1} x class weights {none,Balanced}, seed 42 (M=8)",
+  "R": "round_1h optuna_{catboost,lightgbm,rf}.json as in src/paper_extras.py build_model (M=3; RF n_jobs=1)"
+ },
+ "beta": {
+  "0.55": 0.117,
+  "0.60": 0.163,
+  "calib_seeds": "2000-2019",
+  "calib_file": "results/true_pbo/calib.csv",
+  "fixed_in_commit": "b7d49ef (before seeds 1000-1099)"
+ },
+ "runtime_wall_s": {
+  "null_worker1": 6876,
+  "null_worker2": 6713,
+  "calib": 60,
+  "power_worker1": 2033,
+  "power_worker2": 2041,
+  "real": 37
+ },
+ "runtime_wall_h_total": 2.5,
+ "results": {
+  "null_n": {
+   "BTC": 200,
+   "ETH": 200,
+   "SOL": 200
+  },
+  "null_auc_gt_055_pct": {
+   "BTC": 27.0,
+   "ETH": 30.0,
+   "SOL": 26.5
+  },
+  "null_pbo_disagree_P": 0,
+  "null_pbo_disagree_R": 598,
+  "null_var_sr_is_R": {
+   "BTC": {
+    "count": 200.0,
+    "mean": 0.001633,
+    "std": 0.000511,
+    "min": 0.000696,
+    "50%": 0.001609,
+    "95%": 0.002594,
+    "99%": 0.002865,
+    "max": 0.003561
+   },
+   "ETH": {
+    "count": 200.0,
+    "mean": 0.002389,
+    "std": 0.000709,
+    "min": 0.000959,
+    "50%": 0.002306,
+    "95%": 0.003776,
+    "99%": 0.004334,
+    "max": 0.004745
+   },
+   "SOL": {
+    "count": 200.0,
+    "mean": 0.002818,
+    "std": 0.00096,
+    "min": 0.001208,
+    "50%": 0.002648,
+    "95%": 0.004666,
+    "99%": 0.005512,
+    "max": 0.006869
+   }
+  },
+  "null_pbo_R_lt_020_pct": {
+   "BTC": 0.0,
+   "ETH": 0.0,
+   "SOL": 0.0
+  },
+  "power_mean_auc": {
+   "0.117": 0.5596,
+   "0.163": 0.6056
+  },
+  "power_pbo_disagree_P": 0,
+  "real": [
+   {
+    "events": 864,
+    "auc": 0.4831292517,
+    "net_sr_pe": 0.0435410776,
+    "gross_sr_pe": 0.0623806055,
+    "long_pct": 0.4624277457,
+    "perm_p95": 0.5773045047,
+    "perm_pass": false,
+    "t_base": 4.4094479084,
+    "pbo_P": 0.8,
+    "pbo_P_cmp": 0.8,
+    "pbo_P_disagree": 0.0,
+    "paths_P": 15.0,
+    "var_sr_is_P": 0.0036862973,
+    "t_P": 5.7429182529,
+    "pbo_R": 0.6,
+    "pbo_R_cmp": 0.2,
+    "pbo_R_disagree": 1.0,
+    "paths_R": 15.0,
+    "var_sr_is_R": 0.0018522164,
+    "t_R": 2.9740169048,
+    "arm": "real",
+    "asset": "BTC",
+    "setting": "btc_daily_actual",
+    "var_sr_is_R_x252_check": null,
+    "var_sr_is_P_x252_check": null
+   },
+   {
+    "events": 15271,
+    "auc": null,
+    "net_sr_pe": null,
+    "gross_sr_pe": null,
+    "long_pct": null,
+    "perm_p95": null,
+    "perm_pass": null,
+    "t_base": null,
+    "pbo_P": null,
+    "pbo_P_cmp": null,
+    "pbo_P_disagree": null,
+    "paths_P": null,
+    "var_sr_is_P": null,
+    "t_P": null,
+    "pbo_R": 0.5333333333,
+    "pbo_R_cmp": 0.2666666667,
+    "pbo_R_disagree": null,
+    "paths_R": 15.0,
+    "var_sr_is_R": 4.87739e-05,
+    "t_R": 13.7107870579,
+    "arm": "real",
+    "asset": "BTC",
+    "setting": "round_1h_gridR",
+    "var_sr_is_R_x252_check": 0.0122910234,
+    "var_sr_is_P_x252_check": null
+   },
+   {
+    "events": 15271,
+    "auc": null,
+    "net_sr_pe": null,
+    "gross_sr_pe": null,
+    "long_pct": null,
+    "perm_p95": null,
+    "perm_pass": null,
+    "t_base": null,
+    "pbo_P": 0.8,
+    "pbo_P_cmp": 0.8,
+    "pbo_P_disagree": null,
+    "paths_P": 15.0,
+    "var_sr_is_P": 0.0010738711,
+    "t_P": 8.8917551041,
+    "pbo_R": null,
+    "pbo_R_cmp": null,
+    "pbo_R_disagree": null,
+    "paths_R": null,
+    "var_sr_is_R": null,
+    "t_R": null,
+    "arm": "real",
+    "asset": "BTC",
+    "setting": "round_1h_gridP",
+    "var_sr_is_R_x252_check": null,
+    "var_sr_is_P_x252_check": 0.270615527
+   }
+  ],
+  "R1_var_sr_is_R": 4.877390247454094e-05,
+  "R1_share_of_null_le_real": {
+   "BTC": 0.0,
+   "ETH": 0.0,
+   "SOL": 0.0
+  }
+ },
+ "paths_note": "Script and output paths renamed for publication (tools/true_pbo -> experiments/true_pbo, canon/true_pbo -> results/true_pbo). valid_journal_commit_at_run and beta.fixed_in_commit refer to the private working repository."
+}

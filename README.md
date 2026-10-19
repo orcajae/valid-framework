@@ -6,7 +6,7 @@
 > - the multiple-testing survivors,
 > - the parameter-space variance comparison.
 >
-> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -69,6 +69,25 @@ in the code and the stored value agree.
 
 The full list, with what was withdrawn, is in
 [E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification).
+
+## Re-measured under a pre-registered design (E14)
+
+On 600 signal-free series and 200 series with a planted signal:
+
+- **PBO, computed with the paper's rank statistic on refitted CPCV splits,**
+  almost never passes at 0.20, with or without a signal (0–1%). At 0.50 it
+  passes 31.5% of signal-free BTC series and 8% at the stronger planted signal.
+  In-sample selection picks the highest-capacity configurations on almost every
+  split, whatever the data. For item V4, report PBO as a description of the
+  search, not as a pass-or-fail gate.
+- **The permutation test** (100 shuffles) passes 14.0–17.5% of signal-free
+  series, about three times its nominal 5%, and 44% and 71% of planted-signal
+  series.
+- **Item V5** remains unresolved.
+
+Details, design and outputs:
+[E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design),
+[`experiments/true_pbo/`](experiments/true_pbo/), [`results/true_pbo/`](results/true_pbo/).
 
 ## The VALID Checklist (12 items)
 
@@ -151,15 +170,17 @@ valid-framework/
 ├── valid/                  # the library: checklist, cpcv, metrics,
 │                           #   multiple_testing, labeling, costs
 ├── examples/               # worked_example.py — the 30-second demo
-├── experiments/            # reproduction pipeline (see REPRODUCE.md)
+├── experiments/            # reproduction pipeline (see REPRODUCE.md);
+│                           #   true_pbo/ = the E14 re-measurement
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
 ├── audit/                  # literature audit: withdrawn (see audit/README.md)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
+├── results/true_pbo/       # E14 outputs (per series, per path, per shuffle)
 ├── releases/               # downloadable 12-item checklist PDF
 ├── docker/                 # containerized reproduction
 ├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
-└── CHANGELOG_CR.md         # every correction, E1–E13
+└── CHANGELOG_CR.md         # every correction, E1–E14
 ```
 
 ## Citation
@@ -172,7 +193,7 @@ valid-framework/
   journal={SSRN Electronic Journal},
   year={2026},
   url={https://ssrn.com/abstract=6508779},
-  note={Most empirical results withdrawn in October 2026; see CHANGELOG_CR.md, E13}
+  note={Most empirical results withdrawn in October 2026; see CHANGELOG_CR.md, E13 and E14}
 }
 ```
 

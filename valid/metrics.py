@@ -26,8 +26,15 @@ def var_sr_is(sr_matrix):
 
 
 def compute_pbo(is_matrix, oos_matrix):
-    """Probability of Backtest Overfitting (Bailey & Lopez de Prado).
-    Returns (pbo, count, total).
+    """Probability of Backtest Overfitting (Bailey, Borwein, Lopez de Prado & Zhu, 2017).
+
+    For each path (column), the configuration with the highest in-sample value
+    is located; its out-of-sample rank among the M configurations (1 = worst)
+    gives the relative rank w = rank / (M + 1). The path counts as overfit when
+    logit(w) <= 0, i.e. w <= 0.5. Returns (pbo, count, total).
+
+    Before 0.2.2 the relative rank was rank / M, which differs from the
+    definition when M is odd (for M = 3, a middle rank was not counted).
     """
     n_folds = is_matrix.shape[1]
     pbo_count, pbo_total = 0, 0
@@ -37,7 +44,7 @@ def compute_pbo(is_matrix, oos_matrix):
         if valid.sum() < 2:
             continue
         best_is = np.argmax(is_col[valid])
-        ranks = rankdata(oos_col[valid]) / valid.sum()
+        ranks = rankdata(oos_col[valid]) / (valid.sum() + 1)
         if ranks[best_is] <= 0.5:
             pbo_count += 1
         pbo_total += 1
