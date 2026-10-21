@@ -29,7 +29,7 @@ def merge(prefix, name):
     parts = sorted(glob.glob(os.path.join(P, prefix + "*.csv")))
     if not parts:
         return None
-    df = pd.concat([pd.read_csv(f) for f in parts], ignore_index=True)
+    df = pd.concat([pd.read_csv(f, keep_default_na=False, na_values=[""]) for f in parts], ignore_index=True)
     df = df.sort_values(["asset", "beta", "seed"] if "beta" in df else ["asset", "seed"], na_position="first")
     df.to_csv(os.path.join(D, name + ".csv"), index=False)
     arrs = {}
@@ -87,10 +87,11 @@ if null is not None:
     summary["null_n"] = null.groupby("asset")["valid"].sum().to_dict()
     summary["null_auc_gt_055_pct"] = (null.groupby("asset")["auc"].apply(lambda s: round(100 * (s > 0.55).mean(), 1))).to_dict()
     summary["null_pbo_disagree_P"] = int(null["pbo_P_disagree"].sum())
-    summary["null_pbo_disagree_R"] = int(null["pbo_R_disagree"].sum())
-    vr = null.groupby("asset")["var_sr_is_R"].describe(percentiles=[0.5, 0.95, 0.99])
-    summary["null_var_sr_is_R"] = vr.round(6).to_dict(orient="index")
-    summary["null_pbo_R_lt_020_pct"] = null.groupby("asset")["pbo_R"].apply(lambda s: round(100 * (s < 0.2).mean(), 1)).to_dict()
+    if "pbo_R" in null.columns:  # grid R needs private inputs
+        summary["null_pbo_disagree_R"] = int(null["pbo_R_disagree"].sum())
+        vr = null.groupby("asset")["var_sr_is_R"].describe(percentiles=[0.5, 0.95, 0.99])
+        summary["null_var_sr_is_R"] = vr.round(6).to_dict(orient="index")
+        summary["null_pbo_R_lt_020_pct"] = null.groupby("asset")["pbo_R"].apply(lambda s: round(100 * (s < 0.2).mean(), 1)).to_dict()
 if power is not None:
     t = gate_table(power, ["beta"]); t.insert(0, "arm", "power"); tabs.append(t)
     summary["power_mean_auc"] = power.groupby("beta")["auc"].mean().round(4).to_dict()

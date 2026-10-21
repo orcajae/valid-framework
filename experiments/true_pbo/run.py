@@ -385,6 +385,10 @@ def cmd_real(out):
     print(row, flush=True)
     # --- round_1h pipeline (private src/paper_extras.py L36-90): data, features, purge 24 + embargo 12, fwd_ret_4
     feat = os.path.join(PRIVATE_ROOT, "data", "features", "features_with_targets_1h.parquet")
+    if not os.path.exists(feat):  # public checkout: the hourly arm needs private inputs; keep the daily arm
+        pd.DataFrame(rows).to_csv(out + ".csv", index=False)
+        np.savez_compressed(out + ".npz", **npz)
+        return
     d1 = pd.read_parquet(feat)
     data = d1[d1["tb_label"].notna()]
     data = data[data["tb_label"].isin([-1, 1])].copy()

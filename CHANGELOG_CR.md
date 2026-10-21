@@ -637,6 +637,31 @@ almost every series. The function now follows Eq. 1.
 **Supersedes.** E13's "What happens next" for PBO and the parameter-space
 variance.
 
+**Addendum (2026-10-21).**
+- **Equation numbers.** "Eq. 1" in this entry is the numbering of the
+  camera-ready and SSRN v3.2. In SSRN v3.3 the PBO equation is Eq. 2.
+- **`results/true_pbo/null.csv`.** The `arm` column was empty in every row,
+  because the summary script read the label "null" as a missing value. It now
+  reads "null". No other value changed, and the script now reads labels as text.
+- **Public scripts.** `run.py` and `summarize.py` now run without the private
+  inputs. That covers every signal-free and planted-signal statistic on the
+  eight-configuration grid, and the BTC-daily real arm. The hourly arm and the
+  three-configuration grid still need the private inputs.
+- **E13 overstated one point.** Its "How it surfaced" says that earlier
+  corrections had only compared printed numbers with stored outputs. Most did,
+  but some traced a table or a figure to its code (for example E2 and E8). None
+  compared the definition of every statistic with its computation.
+- **Landing page.** It said PBO "almost never passes a strategy". That holds at
+  the 0.20 threshold, not at 0.50, and the page now says so.
+- **README.**
+  - It said the share of net-negative variants "falls with bar frequency"; it
+    falls as the bars lengthen.
+  - It described the stage split of SSRN v3.2. v3.3 follows the camera-ready
+    split, and the README checklist table now uses v3.3's item wording.
+- **Robustness study.** The study of these findings is pre-registered in
+  [`experiments/inbox7/PREREGISTRATION.md`](experiments/inbox7/PREREGISTRATION.md)
+  (committed before any run).
+
 ## Unchanged
 
 *Superseded by E13 (October 2026): most of the results listed below are withdrawn.*

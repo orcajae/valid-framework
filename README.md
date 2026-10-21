@@ -55,7 +55,7 @@ Each item below was re-verified: the definition in the paper, the computation
 in the code and the stored value agree.
 
 - **Net of costs:** 178 of 340 strategy variants (52%) have a negative net
-  Sharpe ratio at 18 bp. The share falls with bar frequency: 15-minute 9 of 9,
+  Sharpe ratio at 18 bp. The share falls as the bars lengthen: 15-minute 9 of 9,
   1-hour 96%, 4-hour 44%, daily 22%.
 - **Bull bias:** without class weighting, tree models predict "long" for 90–97%
   of test observations. Weighting removes the bias but not the weakness: AUC
@@ -97,21 +97,21 @@ Stage 2 (Economic) is V7–V12: required before anything is traded.
 | # | Item | Stage | Failure mode caught |
 |---|------|-------|---------------------|
 | V1 | Report prediction class distribution | 1 · Statistical | Bull bias |
-| V2 | Test with/without class balancing | 1 · Statistical | Bull bias |
+| V2 | Test with and without class balancing | 1 · Statistical | Bull bias |
 | V3 | Use temporal splitting only | 1 · Statistical | Temporal leakage |
 | V4 | Apply CPCV with PBO | 1 · Statistical | Backtest overfitting |
-| V5 | Report parameter-space variance Var(SR_IS) | 1 · Statistical | PBO misinterpretation |
-| V6 | Permutation tests (≥100 shuffles) | 1 · Statistical | Spurious patterns |
-| V7 | Net performance with explicit costs | 2 · Economic | Cost illusion |
+| V5 | Report parameter-space variance, Var(SR_IS) | 1 · Statistical | PBO misinterpretation |
+| V6 | Include permutation tests (≥100 shuffles) | 1 · Statistical | Spurious patterns |
+| V7 | Report net performance with costs | 2 · Economic | Cost illusion |
 | V8 | Cost sensitivity analysis | 2 · Economic | Cost illusion |
 | V9 | Compare against simple baselines | 2 · Economic | Weak baselines |
-| V10 | Evaluate across bear market periods | 2 · Economic | Regime overfitting |
-| V11 | Trade frequency and cost-per-alpha | 2 · Economic | Hidden turnover |
+| V10 | Evaluate in bear markets and regime transitions | 2 · Economic | Regime overfitting |
+| V11 | Report trade frequency | 2 · Economic | Hidden turnover |
 | V12 | Provide code for reproducibility | 2 · Economic | Irreproducibility |
 
-The split follows Table 1 and Figure 1 of the camera-ready. The extended SSRN
-version groups V9 and V12 under Stage 1 instead; that difference is on the
-revision list and is not reflected here.
+The split follows Table 1 of the camera-ready and of the revised SSRN version
+(v3.3). Version 3.2 of the SSRN paper grouped V9 and V12 under Stage 1; v3.3
+records that change in its Appendix A.
 
 The checklist is meant to be applied honestly, including to its authors. The
 paper's own self-assessment was withdrawn in October 2026, because it rested on
