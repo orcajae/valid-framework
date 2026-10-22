@@ -106,7 +106,9 @@ family and the permutation scheme:
 
 - **PBO on refitted CPCV splits**, with in-sample measured on the fitted
   training events, passes fewer series at 0.50 as the planted signal grows, in
-  CatBoost and in LightGBM.
+  CatBoost and in LightGBM. In LightGBM, several configurations tie for the
+  in-sample best on most splits and the run's tie rule (first listed) picks
+  among them; under two other tie rules the direction holds (E15 addendum).
 - **Canonical CSCV** (Bailey et al. 2017), applied to out-of-sample returns
   from purged six-fold cross-validation, moves with the planted signal: at 0.20
   it passes 46% of series at the stronger signal, but also 13.0–15.5% of

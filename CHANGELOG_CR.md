@@ -943,6 +943,50 @@ numbers. SSRN v3.3 predates this entry.
   two permutation candidates, a dependence-preserving permutation and a purged
   holdout, were not tested.
 
+**Addendum (2026-10-22): in-sample ties in the LightGBM grid.**
+- A review of the SSRN v3.4 draft found that in S4 several configurations often
+  share the highest in-sample per-event Sharpe ratio.
+  [`experiments/inbox7/ties.py`](experiments/inbox7/ties.py) counts them from
+  `results/inbox7/stage1_arrays.npz` and writes `results/inbox7/ties.csv`:
+
+  | Variant | Splits | Tie for the in-sample best | Four or more tied |
+  |---|---|---|---|
+  | S1, CatBoost | 12,000 | 49 (0.4%) | 0 |
+  | S2, CatBoost, validation slice | 12,000 | 150 (1.3%) | 2 |
+  | S4, LightGBM | 12,000 | 10,598 (88.3%) | 9,955 (83.0%) |
+
+  In S4 the share of splits with a tie is between 82.9% (B2) and 94.5% (C) in
+  every arm. S3 is not counted: its in-sample values are half-split Sharpe
+  ratios computed from block sums.
+- **The tie rule.** S1, S2 and S4 call E14's `pbo_eq1`
+  (`experiments/true_pbo/run.py`), which gives a tie to the first-listed
+  configuration (`np.argmax`). "Implementation choices" above states this rule
+  only for S3. In S4, on most splits, the in-sample best is therefore chosen
+  by that rule rather than by the in-sample measure.
+- **Two other tie rules, outside the pre-registration.** `ties.py` also
+  recomputes PBO with the tie given to the last-listed configuration, and with
+  the mean out-of-sample rank of the tied configurations
+  (`results/inbox7/tie_rules.csv`). The first-listed rule reproduces the
+  published PBO of every series.
+
+  | S4, LightGBM | PBO < 0.50: B0 / B1 / B2 | PBO < 0.20: B0 / B1 / B2 | Mean PBO, B0 → B2 |
+  |---|---|---|---|
+  | First-listed (as run) | 54 / 36 / 25 | 0 / 0 / 0 | 0.486 → 0.585 |
+  | Last-listed | 45 / 31 / 26 | 1 / 0 / 0 | 0.495 → 0.592 |
+  | Mean rank of the tied configurations | 40 / 19 / 6 | 0 / 0 / 0 | 0.529 → 0.695 |
+
+  - The pass rates change with the rule.
+  - Under each rule, PBO < 0.50 passes fewer B2 than B0 series and mean PBO
+    rises. The pre-registered verdict is "no power" at both thresholds.
+  - S1 is unchanged under the other rules. S2 changes by at most one point in a
+    pass rate and 0.002 in mean PBO.
+- **What changes.** "What this means for E14" says that the finding on
+  refitted CPCV splits "now holds in two model families". For LightGBM, the
+  in-sample best is chosen by the tie rule on most splits. The direction and
+  the verdict hold under all three rules above; the pass rates do not. No
+  number in E15 changes.
+- The README's summary of E15 now says this.
+
 ## E16: The 340-variant corpus re-counted; E13's corpus figures restated
 
 **How it surfaced.** On 21 October 2026, during proofreading of text that cites
