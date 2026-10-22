@@ -16,8 +16,9 @@ These need nothing beyond `results/reference/` in this repository:
 
 | Script | Reproduces |
 |---|---|
-| `derive_corpus_stats.py` | 52% negative (178/340), which stands; 4.4% above the benchmark (15/340), *withdrawn* because the count depends on the annualisation scale |
-| `derive_tf_ladder.py` | net Sharpe by trading frequency at 18 bp. The ordering and the share of negative variants stand; the medians are *withdrawn* (√252 applied to per-event returns at every frequency) |
+| `corpus_definitions.py` | the corpus definitions of CHANGELOG E16: rows, negative share, ladder and DSR per definition, and the membership of every row (`python3 -I scripts/corpus_definitions.py [CSV [OUT_DIR]]`, CSV defaults to `results/reference/variants_340.csv`; with OUT_DIR it writes `corpus_definitions.csv` and `corpus_rows.csv`) |
+| `derive_corpus_stats.py` | the corpus figures as printed (52% negative, 178/340), *restated in E16* (165 of 278 once every result is counted once); 4.4% above the benchmark (15/340), *withdrawn* because the count depends on the annualisation scale |
+| `derive_tf_ladder.py` | net Sharpe by trading frequency at 18 bp, as printed. Its rows include repeated results, the ablation refits and the eight rule-based `FORT_` rows; the shares are *restated in E16* (1-hour 98%, daily 26%). The ordering stands; the medians are *withdrawn* (√252 applied to per-event returns at every frequency) |
 | `gen_fig0_valid_overview.py` | framework overview diagram (no data; layout only) |
 | `gen_fig1_bullbias_340.py` | bull-bias figure (prediction share and post-balancing AUC) |
 | `gen_fig2_340.py` | net Sharpe distribution figure (workshop paper) |

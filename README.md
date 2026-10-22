@@ -6,7 +6,7 @@
 > - the multiple-testing survivors,
 > - the parameter-space variance comparison.
 >
-> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures re-counted: [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -51,21 +51,31 @@ Jeju, August 2026. Most of its empirical results are withdrawn (E13).
 
 ## What still stands (October 2026)
 
-Each item below was re-verified: the definition in the paper, the computation
-in the code and the stored value agree.
+E13 listed the items below as standing. [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated)
+re-counted the corpus behind the first two items and restates them, and
+qualifies the order-flow and DSR items; the definitions
+and the membership of every row are in `scripts/corpus_definitions.py` and
+`results/reference/corpus_*.csv`.
 
-- **Net of costs:** 178 of 340 strategy variants (52%) have a negative net
-  Sharpe ratio at 18 bp. The share falls as the bars lengthen: 15-minute 9 of 9,
-  1-hour 96%, 4-hour 44%, daily 22%.
-- **Bull bias:** without class weighting, tree models predict "long" for 90–97%
-  of test observations. Weighting removes the bias but not the weakness: AUC
-  stays near 0.50.
+- **Net of costs:** a majority of the strategy variants in the archive have a
+  negative net Sharpe ratio at 18 bp: 165 of 278, each result counted once
+  (E13 printed 178 of 340). That is 144 of 193 model variants and 21 of 85
+  rule-based rows. The share falls as the bars lengthen: 15-minute 9 of 9,
+  1-hour 98%, 4-hour 44%, daily 26%.
+- **Bull bias:** without class weighting, the nine 1h tree models predict
+  "long" for 79.5–98.4% of test observations (CatBoost 90.5–97.2%). Weighting
+  brings the long share to 32–53%, and AUC stays at 0.49–0.53.
 - **AUC screening on noise:** on signal-free bootstrap series, AUC > 0.55 flags
   27.0% (BTC), 30.0% (ETH) and 26.5% (SOL) as positive.
-- **Costs in one run:** in the order-flow 1h run, costs consume 82% of the gross
-  Sharpe ratio (0.750 → 0.135).
+- **Costs in one run:** in the order-flow 1h run, the net Sharpe ratio is 0.135
+  against a gross 0.750 at 101 trades a year
+  (`results/reference/order_flow_summary.csv`). Its permutation pass comes from
+  a full shuffle after a hyperparameter search that the permutations do not
+  repeat (E16).
 - **Deflated Sharpe Ratio:** no variant passes once the benchmark is scaled as
-  Bailey and López de Prado (2014) define it.
+  Bailey and López de Prado (2014) define it. With the 20% holdout, no stored
+  row could pass even against a benchmark of zero, so this carries no evidence about
+  multiple testing (E16).
 
 The full list, with what was withdrawn, is in
 [E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification).
@@ -210,7 +220,7 @@ valid-framework/
 ├── releases/               # downloadable 12-item checklist PDF
 ├── docker/                 # containerized reproduction
 ├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
-└── CHANGELOG_CR.md         # every correction, E1–E15
+└── CHANGELOG_CR.md         # every correction, E1–E16
 ```
 
 ## Citation
@@ -223,7 +233,7 @@ valid-framework/
   journal={SSRN Electronic Journal},
   year={2026},
   url={https://ssrn.com/abstract=6508779},
-  note={Most empirical results withdrawn in October 2026; see CHANGELOG_CR.md, E13 and E14}
+  note={Most empirical results withdrawn in October 2026; see CHANGELOG_CR.md, E13 to E16}
 }
 ```
 

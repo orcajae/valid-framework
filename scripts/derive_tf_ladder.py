@@ -3,10 +3,12 @@
 Derive the trading-frequency ladder (camera-ready Table 5) from the 340-variant corpus.
 
 Source : results/reference/variants_340.csv
-Filter : real model variants only — COST_* (cost-sweep series) and BASE_*
+Filter : COST_* (cost-sweep series) and BASE_*
          (rule-based baselines) rows carry no model prediction and are excluded,
          as are the cross-section (XS_*) and SHAP rule (SHAP_*) rows, which are
-         not per-timeframe model variants.
+         not per-timeframe model variants. The rows kept still include repeated
+         results, the ablation refits and the eight rule-based FORT_ rows; the
+         corrected counts are in scripts/corpus_definitions.py (CHANGELOG E16).
 Output : per-timeframe n / median / best / share of negative net SR at 18 bp.
 
 No model is trained and no backtest is run here: the script only aggregates
@@ -48,7 +50,7 @@ def main():
         neg = 100.0 * sum(1 for x in v if x < 0) / len(v)
         print(f"  {tf:<4} n={len(v):<4} median={st.median(v):+.2f}  "
               f"best={max(v):+.2f}  share<0={neg:.0f}%")
-    print(f"\nbenchmark net SR (DM 252/126+CB, 18 bp) = {BENCH}")
+    print(f"\nbenchmark net SR (rule benchmark, 18 bp) = {BENCH}")
 
 
 if __name__ == "__main__":

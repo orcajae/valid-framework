@@ -1,0 +1,341 @@
+strategy_id,family,net_sr_18bp,status,duplicate_of,group,in_as_printed,in_no_cost_rows,in_no_cost_rows_equal_rows_merged,in_corrected
+EXT_ETH_1h_CatBoost,EXT,-1.2828,counted,,model,True,True,True,True
+EXT_ETH_1h_LightGBM,EXT,-1.0966,counted,,model,True,True,True,True
+EXT_ETH_1h_RF,EXT,-1.3091,counted,,model,True,True,True,True
+EXT_ETH_1d_CatBoost,EXT,0.7879,counted,,model,True,True,True,True
+EXT_ETH_1d_LightGBM,EXT,1.6402,counted,,model,True,True,True,True
+EXT_ETH_1d_RF,EXT,1.3981,counted,,model,True,True,True,True
+EXT_SOL_1h_CatBoost,EXT,-0.2063,counted,,model,True,True,True,True
+EXT_SOL_1h_LightGBM,EXT,-0.2514,counted,,model,True,True,True,True
+EXT_SOL_1h_RF,EXT,-0.1538,counted,,model,True,True,True,True
+EXT_SOL_1d_CatBoost,EXT,0.4977,counted,,model,True,True,True,True
+EXT_SOL_1d_LightGBM,EXT,0.8168,counted,,model,True,True,True,True
+EXT_SOL_1d_RF,EXT,1.9414,counted,,model,True,True,True,True
+EXT_BTC_1h_CatBoost,EXT,-0.8767,counted,,model,True,True,True,True
+EXT_BTC_1h_LightGBM,EXT,-1.053,counted,,model,True,True,True,True
+EXT_BTC_1h_RF,EXT,-0.8546,counted,,model,True,True,True,True
+EXT_BTC_1d_CatBoost,EXT,0.6912,counted,,model,True,True,True,True
+EXT_BTC_1d_LightGBM,EXT,0.3842,counted,,model,True,True,True,True
+EXT_BTC_1d_RF,EXT,0.6641,counted,,model,True,True,True,True
+COST_benchmark_0bp,COST,0.954,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_1h_0bp,COST,0.6398,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_0bp,COST,0.4163,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_benchmark_5bp,COST,0.9438,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_1h_5bp,COST,0.6094,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_5bp,COST,0.3522,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_benchmark_10bp,COST,0.9336,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_1h_10bp,COST,0.579,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_10bp,COST,0.2882,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_benchmark_18bp,COST,0.9173,"same result, different label",BASE_momentum_benchmark,rule,True,False,False,False
+COST_ML_1h_18bp,COST,0.5303,synthetic signal at 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_18bp,COST,0.1858,synthetic signal at 18 bp,,not a variant,True,False,False,False
+COST_benchmark_30bp,COST,0.8928,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_1h_30bp,COST,0.4572,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_30bp,COST,0.0324,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_benchmark_50bp,COST,0.8517,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_1h_50bp,COST,0.3353,cost level other than 18 bp,,not a variant,True,False,False,False
+COST_ML_15m_50bp,COST,-0.222,cost level other than 18 bp,,not a variant,True,False,False,False
+BASE_Buy & Hold,BASE,0.6179,counted,,rule,True,True,True,True
+BASE_SMA 200,BASE,0.7229,counted,,rule,True,True,True,True
+BASE_RSI(14)>50,BASE,0.8045,counted,,rule,True,True,True,True
+BASE_MACD Cross,BASE,0.6127,counted,,rule,True,True,True,True
+BASE_momentum_benchmark,BASE,0.9173,counted,,rule,True,True,True,True
+BASE_1h ML balanced,BASE,0.5303,synthetic signal at 18 bp,,not a variant,True,True,True,False
+BB_BTC_CatBoost,BB,-0.8767,"same result, different label",EXT_BTC_1h_CatBoost,model,True,True,True,False
+BB_ETH_CatBoost,BB,-1.2828,"same result, different label",EXT_ETH_1h_CatBoost,model,True,True,True,False
+BB_SOL_CatBoost,BB,-0.2063,"same result, different label",EXT_SOL_1h_CatBoost,model,True,True,True,False
+BB_LSTM_unbalanced,BB,-1.1695,counted,,model,True,True,True,True
+BB_LSTM_balanced,BB,-1.1492,counted,,model,True,True,True,True
+BB_SimpleRNN_unbalanced,BB,-1.3634,counted,,model,True,True,True,True
+SHAP_g-0.07_m-0.15_d-0.2,SHAP,0.6317,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.15_d-0.2,SHAP,0.6317,"same result, every stored value equal",SHAP_g-0.07_m-0.15_d-0.2,rule,True,True,False,False
+SHAP_g-0.05_m-0.15_d-0.2,SHAP,0.6285,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.2_d-0.2,SHAP,0.5931,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.2_d-0.2,SHAP,0.5931,"same result, every stored value equal",SHAP_g-0.07_m-0.2_d-0.2,rule,True,True,False,False
+SHAP_g-0.03_m-0.15_d-0.2,SHAP,0.5917,counted,,rule,True,True,True,True
+SHAP_g-0.05_m-0.2_d-0.2,SHAP,0.5837,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.15_d-0.1,SHAP,0.5092,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.15_d-0.1,SHAP,0.5092,"same result, every stored value equal",SHAP_g-0.1_m-0.15_d-0.1,rule,True,True,False,False
+SHAP_g-0.05_m-0.15_d-0.1,SHAP,0.5057,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.15_d-0.15,SHAP,0.5016,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.15_d-0.15,SHAP,0.5016,"same result, every stored value equal",SHAP_g-0.1_m-0.15_d-0.15,rule,True,True,False,False
+SHAP_g-0.05_m-0.15_d-0.15,SHAP,0.4982,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.1_d-0.2,SHAP,0.4952,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.15_d-0.15,SHAP,0.4544,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.15_d-0.1,SHAP,0.4413,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.2_d-0.2,SHAP,0.4412,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.15_d-0.25,SHAP,0.4296,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.15_d-0.25,SHAP,0.4296,"same result, every stored value equal",SHAP_g-0.1_m-0.15_d-0.25,rule,True,True,False,False
+SHAP_g-0.05_m-0.15_d-0.25,SHAP,0.4264,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.2_d-0.15,SHAP,0.4124,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.2_d-0.15,SHAP,0.4124,"same result, every stored value equal",SHAP_g-0.07_m-0.2_d-0.15,rule,True,True,False,False
+SHAP_g-0.07_m-0.2_d-0.25,SHAP,0.4082,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.2_d-0.25,SHAP,0.4082,"same result, every stored value equal",SHAP_g-0.07_m-0.2_d-0.25,rule,True,True,False,False
+SHAP_g-0.05_m-0.2_d-0.15,SHAP,0.4026,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.2_d-0.1,SHAP,0.4024,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.2_d-0.1,SHAP,0.4024,"same result, every stored value equal",SHAP_g-0.07_m-0.2_d-0.1,rule,True,True,False,False
+SHAP_g-0.05_m-0.2_d-0.25,SHAP,0.399,counted,,rule,True,True,True,True
+SHAP_g-0.05_m-0.2_d-0.1,SHAP,0.3921,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.1_d-0.2,SHAP,0.3894,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.1_d-0.2,SHAP,0.3894,"same result, every stored value equal",SHAP_g-0.1_m-0.1_d-0.2,rule,True,True,False,False
+SHAP_g-0.05_m-0.1_d-0.2,SHAP,0.3855,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.15_d-0.25,SHAP,0.3806,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.05_d-0.2,SHAP,0.3773,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.1_d-0.15,SHAP,0.3679,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.05_d-0.2,SHAP,0.3204,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.05_d-0.2,SHAP,0.3204,"same result, every stored value equal",SHAP_g-0.1_m-0.05_d-0.2,rule,True,True,False,False
+SHAP_g-0.05_m-0.05_d-0.2,SHAP,0.316,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.1_d-0.1,SHAP,0.308,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.05_d-0.15,SHAP,0.2691,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.1_d-0.25,SHAP,0.2628,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.1_d-0.15,SHAP,0.2618,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.1_d-0.15,SHAP,0.2618,"same result, every stored value equal",SHAP_g-0.1_m-0.1_d-0.15,rule,True,True,False,False
+SHAP_g-0.05_m-0.1_d-0.15,SHAP,0.2576,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.2_d-0.25,SHAP,0.2522,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.2_d-0.15,SHAP,0.2455,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.1_d-0.1,SHAP,0.2181,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.1_d-0.1,SHAP,0.2181,"same result, every stored value equal",SHAP_g-0.07_m-0.1_d-0.1,rule,True,True,False,False
+SHAP_g-0.05_m-0.1_d-0.1,SHAP,0.2136,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.05_d-0.15,SHAP,0.2125,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.05_d-0.15,SHAP,0.2125,"same result, every stored value equal",SHAP_g-0.1_m-0.05_d-0.15,rule,True,True,False,False
+SHAP_g-0.03_m-0.2_d-0.1,SHAP,0.2108,counted,,rule,True,True,True,True
+SHAP_g-0.05_m-0.05_d-0.15,SHAP,0.2079,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.1_d-0.25,SHAP,0.1677,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.1_d-0.25,SHAP,0.1677,"same result, every stored value equal",SHAP_g-0.07_m-0.1_d-0.25,rule,True,True,False,False
+SHAP_g-0.05_m-0.1_d-0.25,SHAP,0.1637,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.05_d-0.25,SHAP,0.1316,counted,,rule,True,True,True,True
+SHAP_g-0.03_m-0.05_d-0.1,SHAP,0.1232,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.05_d-0.1,SHAP,0.0913,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.05_d-0.1,SHAP,0.0913,"same result, every stored value equal",SHAP_g-0.1_m-0.05_d-0.1,rule,True,True,False,False
+SHAP_g-0.05_m-0.05_d-0.1,SHAP,0.0862,counted,,rule,True,True,True,True
+SHAP_g-0.1_m-0.05_d-0.25,SHAP,0.0829,counted,,rule,True,True,True,True
+SHAP_g-0.07_m-0.05_d-0.25,SHAP,0.0829,"same result, every stored value equal",SHAP_g-0.1_m-0.05_d-0.25,rule,True,True,False,False
+SHAP_g-0.05_m-0.05_d-0.25,SHAP,0.0785,counted,,rule,True,True,True,True
+OF_trade_imbalance_CatBoost,OF,-1.3913,counted,,model,True,True,True,True
+OF_trade_imbalance_LightGBM,OF,-1.8595,counted,,model,True,True,True,True
+OF_trade_imbalance_RF,OF,-1.4798,counted,,model,True,True,True,True
+OF_buy_sell_ratio_CatBoost,OF,-1.5202,counted,,model,True,True,True,True
+OF_buy_sell_ratio_LightGBM,OF,-1.6726,counted,,model,True,True,True,True
+OF_buy_sell_ratio_RF,OF,-1.5804,counted,,model,True,True,True,True
+OF_net_flow_zscore_24_CatBoost,OF,-1.3395,counted,,model,True,True,True,True
+OF_net_flow_zscore_24_LightGBM,OF,-1.4884,counted,,model,True,True,True,True
+OF_net_flow_zscore_24_RF,OF,-1.5691,counted,,model,True,True,True,True
+OF_net_flow_zscore_168_CatBoost,OF,-1.1545,counted,,model,True,True,True,True
+OF_net_flow_zscore_168_LightGBM,OF,-1.3551,counted,,model,True,True,True,True
+OF_net_flow_zscore_168_RF,OF,-1.1801,counted,,model,True,True,True,True
+OF_cum_imbalance_24h_CatBoost,OF,-1.6082,counted,,model,True,True,True,True
+OF_cum_imbalance_24h_LightGBM,OF,-1.3316,counted,,model,True,True,True,True
+OF_cum_imbalance_24h_RF,OF,-1.3079,counted,,model,True,True,True,True
+OF_cum_imbalance_72h_CatBoost,OF,-1.549,counted,,model,True,True,True,True
+OF_cum_imbalance_72h_LightGBM,OF,-1.4965,counted,,model,True,True,True,True
+OF_cum_imbalance_72h_RF,OF,-1.7604,counted,,model,True,True,True,True
+OF_impact_zscore_CatBoost,OF,-1.3742,counted,,model,True,True,True,True
+OF_impact_zscore_LightGBM,OF,-1.7328,counted,,model,True,True,True,True
+OF_impact_zscore_RF,OF,-1.4591,counted,,model,True,True,True,True
+OF_amihud_zscore_CatBoost,OF,-1.6469,counted,,model,True,True,True,True
+OF_amihud_zscore_LightGBM,OF,-1.4877,counted,,model,True,True,True,True
+OF_amihud_zscore_RF,OF,-1.5604,counted,,model,True,True,True,True
+OF_roll_spread_CatBoost,OF,-1.4567,counted,,model,True,True,True,True
+OF_roll_spread_LightGBM,OF,-1.388,counted,,model,True,True,True,True
+OF_roll_spread_RF,OF,-1.2396,counted,,model,True,True,True,True
+OF_signed_run_CatBoost,OF,-1.4304,counted,,model,True,True,True,True
+OF_signed_run_LightGBM,OF,-1.7983,counted,,model,True,True,True,True
+OF_signed_run_RF,OF,-1.6485,counted,,model,True,True,True,True
+OF_vol_price_divergence_CatBoost,OF,-1.606,counted,,model,True,True,True,True
+OF_vol_price_divergence_LightGBM,OF,-1.7553,counted,,model,True,True,True,True
+OF_vol_price_divergence_RF,OF,-1.4921,counted,,model,True,True,True,True
+FORT_vol_1,FORT,0.4049,counted,,rule,True,True,True,True
+FORT_vol_2,FORT,0.5539,counted,,rule,True,True,True,True
+FORT_vol_3,FORT,0.4494,counted,,rule,True,True,True,True
+FORT_vol_4,FORT,0.6328,counted,,rule,True,True,True,True
+FORT_vol_5,FORT,-0.8309,counted,,rule,True,True,True,True
+FORT_vol_6,FORT,-0.841,counted,,rule,True,True,True,True
+FORT_vol_7,FORT,0.6968,counted,,rule,True,True,True,True
+FORT_vol_8,FORT,0.6707,counted,,rule,True,True,True,True
+XS_mom7d_top3,XS,-0.3094,counted,,rule,True,True,True,True
+XS_mom7d_top5,XS,-0.3688,counted,,rule,True,True,True,True
+XS_mom7d_top10,XS,-0.8397,counted,,rule,True,True,True,True
+XS_mom14d_top3,XS,0.049,counted,,rule,True,True,True,True
+XS_mom14d_top5,XS,-0.0073,counted,,rule,True,True,True,True
+XS_mom14d_top10,XS,-0.7397,counted,,rule,True,True,True,True
+XS_mom30d_top3,XS,-0.0921,counted,,rule,True,True,True,True
+XS_mom30d_top5,XS,-0.5008,counted,,rule,True,True,True,True
+XS_mom30d_top10,XS,-0.9384,counted,,rule,True,True,True,True
+XS_mom60d_top3,XS,-0.0879,counted,,rule,True,True,True,True
+XS_mom60d_top5,XS,-0.3566,counted,,rule,True,True,True,True
+XS_mom60d_top10,XS,-0.8211,counted,,rule,True,True,True,True
+XS_mom90d_top3,XS,0.1058,counted,,rule,True,True,True,True
+XS_mom90d_top5,XS,-0.3366,counted,,rule,True,True,True,True
+XS_mom90d_top10,XS,-0.907,counted,,rule,True,True,True,True
+XS_mom120d_top3,XS,0.1815,counted,,rule,True,True,True,True
+XS_mom120d_top5,XS,-0.1716,counted,,rule,True,True,True,True
+XS_mom120d_top10,XS,-0.8652,counted,,rule,True,True,True,True
+XS_mom252d_top3,XS,0.1349,counted,,rule,True,True,True,True
+XS_mom252d_top5,XS,-0.1035,counted,,rule,True,True,True,True
+XS_mom252d_top10,XS,-0.9179,counted,,rule,True,True,True,True
+XS_CTREND_top3,XS,0.3498,counted,,rule,True,True,True,True
+XS_CTREND_top5,XS,-0.2157,counted,,rule,True,True,True,True
+XS_CTREND_top10,XS,-0.8442,counted,,rule,True,True,True,True
+TB_pt1.0_sl1.5_CatBoost,TB,-1.8749,counted,,model,True,True,True,True
+TB_pt1.0_sl1.5_LightGBM,TB,-1.5749,counted,,model,True,True,True,True
+TB_pt1.0_sl1.5_RF,TB,-1.5188,counted,,model,True,True,True,True
+TB_pt1.0_sl2.0_CatBoost,TB,-1.5389,counted,,model,True,True,True,True
+TB_pt1.0_sl2.0_LightGBM,TB,-1.5267,counted,,model,True,True,True,True
+TB_pt1.0_sl2.0_RF,TB,-1.7297,counted,,model,True,True,True,True
+TB_pt1.0_sl2.5_CatBoost,TB,-1.4763,counted,,model,True,True,True,True
+TB_pt1.0_sl2.5_LightGBM,TB,-1.386,counted,,model,True,True,True,True
+TB_pt1.0_sl2.5_RF,TB,-1.2817,counted,,model,True,True,True,True
+TB_pt1.5_sl1.5_CatBoost,TB,-1.5713,counted,,model,True,True,True,True
+TB_pt1.5_sl1.5_LightGBM,TB,-1.6192,counted,,model,True,True,True,True
+TB_pt1.5_sl1.5_RF,TB,-1.494,counted,,model,True,True,True,True
+TB_pt1.5_sl2.0_CatBoost,TB,-1.1333,counted,,model,True,True,True,True
+TB_pt1.5_sl2.0_LightGBM,TB,-2.2988,counted,,model,True,True,True,True
+TB_pt1.5_sl2.0_RF,TB,-0.9225,counted,,model,True,True,True,True
+TB_pt1.5_sl2.5_CatBoost,TB,-1.1226,counted,,model,True,True,True,True
+TB_pt1.5_sl2.5_LightGBM,TB,-1.4186,counted,,model,True,True,True,True
+TB_pt1.5_sl2.5_RF,TB,-1.4676,counted,,model,True,True,True,True
+TB_pt2.0_sl1.5_CatBoost,TB,-1.4121,counted,,model,True,True,True,True
+TB_pt2.0_sl1.5_LightGBM,TB,-1.5101,counted,,model,True,True,True,True
+TB_pt2.0_sl1.5_RF,TB,-1.7774,counted,,model,True,True,True,True
+TB_pt2.0_sl2.0_CatBoost,TB,-1.6301,counted,,model,True,True,True,True
+TB_pt2.0_sl2.0_LightGBM,TB,-1.714,counted,,model,True,True,True,True
+TB_pt2.0_sl2.0_RF,TB,-1.2422,counted,,model,True,True,True,True
+TB_pt2.0_sl2.5_CatBoost,TB,-1.3576,counted,,model,True,True,True,True
+TB_pt2.0_sl2.5_LightGBM,TB,-1.6146,counted,,model,True,True,True,True
+TB_pt2.0_sl2.5_RF,TB,-1.1633,counted,,model,True,True,True,True
+TB_pt2.5_sl1.5_CatBoost,TB,-1.2102,counted,,model,True,True,True,True
+TB_pt2.5_sl1.5_LightGBM,TB,-2.0375,counted,,model,True,True,True,True
+TB_pt2.5_sl1.5_RF,TB,-1.4338,counted,,model,True,True,True,True
+TB_pt2.5_sl2.0_CatBoost,TB,-1.6996,counted,,model,True,True,True,True
+TB_pt2.5_sl2.0_LightGBM,TB,-1.9758,counted,,model,True,True,True,True
+TB_pt2.5_sl2.0_RF,TB,-1.3291,counted,,model,True,True,True,True
+TB_pt2.5_sl2.5_CatBoost,TB,-1.1783,counted,,model,True,True,True,True
+TB_pt2.5_sl2.5_LightGBM,TB,-1.1585,counted,,model,True,True,True,True
+TB_pt2.5_sl2.5_RF,TB,-1.0313,counted,,model,True,True,True,True
+EXT_fr_binance_daily_CatBoost,EXT,0.6652,counted,,model,True,True,True,True
+EXT_fr_binance_daily_LightGBM,EXT,0.7039,counted,,model,True,True,True,True
+EXT_fr_binance_daily_RF,EXT,-0.6618,counted,,model,True,True,True,True
+EXT_fr_binance_zscore_CatBoost,EXT,0.6912,"same result, every stored value equal",EXT_BTC_1d_CatBoost,model,True,True,False,False
+EXT_fr_binance_zscore_LightGBM,EXT,0.3842,"same result, every stored value equal",EXT_BTC_1d_LightGBM,model,True,True,False,False
+EXT_fr_binance_zscore_RF,EXT,0.6641,"same result, every stored value equal",EXT_BTC_1d_RF,model,True,True,False,False
+EXT_fr_binance_cum7_CatBoost,EXT,0.6912,"same result, every stored value equal",EXT_BTC_1d_CatBoost,model,True,True,False,False
+EXT_fr_binance_cum7_LightGBM,EXT,0.3842,"same result, every stored value equal",EXT_BTC_1d_LightGBM,model,True,True,False,False
+EXT_fr_binance_cum7_RF,EXT,0.6641,"same result, every stored value equal",EXT_BTC_1d_RF,model,True,True,False,False
+EXT_fr_bybit_daily_CatBoost,EXT,0.6912,"same result, every stored value equal",EXT_BTC_1d_CatBoost,model,True,True,False,False
+EXT_fr_bybit_daily_LightGBM,EXT,0.3842,"same result, every stored value equal",EXT_BTC_1d_LightGBM,model,True,True,False,False
+EXT_fr_bybit_daily_RF,EXT,0.6641,"same result, every stored value equal",EXT_BTC_1d_RF,model,True,True,False,False
+EXT_fr_bybit_cum7_CatBoost,EXT,0.6912,"same result, every stored value equal",EXT_BTC_1d_CatBoost,model,True,True,False,False
+EXT_fr_bybit_cum7_LightGBM,EXT,0.3842,"same result, every stored value equal",EXT_BTC_1d_LightGBM,model,True,True,False,False
+EXT_fr_bybit_cum7_RF,EXT,0.6641,"same result, every stored value equal",EXT_BTC_1d_RF,model,True,True,False,False
+EXT_oi_level_CatBoost,EXT,0.2364,counted,,model,True,True,True,True
+EXT_oi_level_LightGBM,EXT,0.0685,counted,,model,True,True,True,True
+EXT_oi_level_RF,EXT,-0.2612,counted,,model,True,True,True,True
+EXT_oi_change_7d_CatBoost,EXT,0.8126,counted,,model,True,True,True,True
+EXT_oi_change_7d_LightGBM,EXT,0.0464,counted,,model,True,True,True,True
+EXT_oi_change_7d_RF,EXT,-0.4224,counted,,model,True,True,True,True
+EXT_oi_zscore_30d_CatBoost,EXT,0.5483,counted,,model,True,True,True,True
+EXT_oi_zscore_30d_LightGBM,EXT,0.541,counted,,model,True,True,True,True
+EXT_oi_zscore_30d_RF,EXT,0.4094,counted,,model,True,True,True,True
+EXT_vix_ret_7d_CatBoost,EXT,0.6758,counted,,model,True,True,True,True
+EXT_vix_ret_7d_LightGBM,EXT,0.8488,counted,,model,True,True,True,True
+EXT_vix_ret_7d_RF,EXT,-0.4214,counted,,model,True,True,True,True
+EXT_vix_ret_30d_CatBoost,EXT,0.786,counted,,model,True,True,True,True
+EXT_vix_ret_30d_LightGBM,EXT,0.1474,counted,,model,True,True,True,True
+EXT_vix_ret_30d_RF,EXT,-0.235,counted,,model,True,True,True,True
+EXT_vix_zscore_60d_CatBoost,EXT,0.6271,counted,,model,True,True,True,True
+EXT_vix_zscore_60d_LightGBM,EXT,-0.6922,counted,,model,True,True,True,True
+EXT_vix_zscore_60d_RF,EXT,0.238,counted,,model,True,True,True,True
+EXT_dxy_ret_7d_CatBoost,EXT,1.5681,counted,,model,True,True,True,True
+EXT_dxy_ret_7d_LightGBM,EXT,0.4912,counted,,model,True,True,True,True
+EXT_dxy_ret_7d_RF,EXT,0.1431,counted,,model,True,True,True,True
+EXT_dxy_ret_30d_CatBoost,EXT,0.5076,counted,,model,True,True,True,True
+EXT_dxy_ret_30d_LightGBM,EXT,-0.173,counted,,model,True,True,True,True
+EXT_dxy_ret_30d_RF,EXT,-0.2512,counted,,model,True,True,True,True
+EXT_dxy_zscore_60d_CatBoost,EXT,1.0388,counted,,model,True,True,True,True
+EXT_dxy_zscore_60d_LightGBM,EXT,0.5867,counted,,model,True,True,True,True
+EXT_dxy_zscore_60d_RF,EXT,-0.239,counted,,model,True,True,True,True
+EXT_gold_ret_7d_CatBoost,EXT,1.3664,counted,,model,True,True,True,True
+EXT_gold_ret_7d_LightGBM,EXT,0.6335,counted,,model,True,True,True,True
+EXT_gold_ret_7d_RF,EXT,0.2465,counted,,model,True,True,True,True
+ML_BTC_15m_CatBoost,ML,-2.6111,counted,,model,True,True,True,True
+ML_BTC_15m_LightGBM,ML,-2.6877,counted,,model,True,True,True,True
+ML_BTC_15m_RF,ML,-2.701,counted,,model,True,True,True,True
+ML_BTC_4h_CatBoost,ML,0.2759,counted,,model,True,True,True,True
+ML_BTC_4h_LightGBM,ML,-0.1378,counted,,model,True,True,True,True
+ML_BTC_4h_RF,ML,0.3567,counted,,model,True,True,True,True
+ML_ETH_15m_CatBoost,ML,-1.8017,counted,,model,True,True,True,True
+ML_ETH_15m_LightGBM,ML,-1.7742,counted,,model,True,True,True,True
+ML_ETH_15m_RF,ML,-1.7529,counted,,model,True,True,True,True
+ML_ETH_4h_CatBoost,ML,-0.6075,counted,,model,True,True,True,True
+ML_ETH_4h_LightGBM,ML,0.5718,counted,,model,True,True,True,True
+ML_ETH_4h_RF,ML,-0.3532,counted,,model,True,True,True,True
+ML_SOL_15m_CatBoost,ML,-1.334,counted,,model,True,True,True,True
+ML_SOL_15m_LightGBM,ML,-1.7976,counted,,model,True,True,True,True
+ML_SOL_15m_RF,ML,-1.3361,counted,,model,True,True,True,True
+ML_SOL_4h_CatBoost,ML,0.3453,counted,,model,True,True,True,True
+ML_SOL_4h_LightGBM,ML,-0.1114,counted,,model,True,True,True,True
+ML_SOL_4h_RF,ML,0.5254,counted,,model,True,True,True,True
+OF_trade_imbalance_ETH_CatBoost,OF,-0.846,counted,,model,True,True,True,True
+OF_buy_sell_ratio_ETH_CatBoost,OF,-0.7345,counted,,model,True,True,True,True
+OF_net_flow_zscore_24_ETH_CatBoost,OF,-1.3918,counted,,model,True,True,True,True
+OF_net_flow_zscore_168_ETH_CatBoost,OF,-1.0269,counted,,model,True,True,True,True
+OF_cum_imbalance_24h_ETH_CatBoost,OF,-1.0487,counted,,model,True,True,True,True
+OF_cum_imbalance_72h_ETH_CatBoost,OF,-1.1959,counted,,model,True,True,True,True
+OF_impact_zscore_ETH_CatBoost,OF,-1.0556,counted,,model,True,True,True,True
+OF_amihud_zscore_ETH_CatBoost,OF,-1.5802,counted,,model,True,True,True,True
+OF_roll_spread_ETH_CatBoost,OF,-1.231,counted,,model,True,True,True,True
+OF_signed_run_ETH_CatBoost,OF,-1.1405,counted,,model,True,True,True,True
+OF_vol_price_divergence_ETH_CatBoost,OF,-1.3227,counted,,model,True,True,True,True
+OF_trade_imbalance_SOL_CatBoost,OF,-0.3839,counted,,model,True,True,True,True
+OF_buy_sell_ratio_SOL_CatBoost,OF,-0.4373,counted,,model,True,True,True,True
+OF_net_flow_zscore_24_SOL_CatBoost,OF,-0.5656,counted,,model,True,True,True,True
+OF_net_flow_zscore_168_SOL_CatBoost,OF,-0.6267,counted,,model,True,True,True,True
+OF_cum_imbalance_24h_SOL_CatBoost,OF,-0.6533,counted,,model,True,True,True,True
+OF_cum_imbalance_72h_SOL_CatBoost,OF,-0.6447,counted,,model,True,True,True,True
+OF_impact_zscore_SOL_CatBoost,OF,-0.4386,counted,,model,True,True,True,True
+OF_amihud_zscore_SOL_CatBoost,OF,-0.7108,counted,,model,True,True,True,True
+OF_roll_spread_SOL_CatBoost,OF,-0.543,counted,,model,True,True,True,True
+OF_signed_run_SOL_CatBoost,OF,-0.5912,counted,,model,True,True,True,True
+OF_vol_price_divergence_SOL_CatBoost,OF,-0.6461,counted,,model,True,True,True,True
+ABLATION_Full_VALID,ABLATION,-1.6349,ablation refit,,not a variant,True,True,True,False
+ABLATION_No_CPCV,ABLATION,-1.6349,ablation refit,,not a variant,True,True,False,False
+ABLATION_No_Balance,ABLATION,0.1899,ablation refit,,not a variant,True,True,True,False
+ABLATION_No_Cost,ABLATION,-0.0565,ablation refit,,not a variant,True,True,True,False
+ABLATION_No_Permutation,ABLATION,-1.6349,ablation refit,,not a variant,True,True,False,False
+ABLATION_AUC_Only,ABLATION,0.3183,ablation refit,,not a variant,True,True,True,False
+ABLATION_No_Balance_No_CPCV,ABLATION,0.1899,ablation refit,,not a variant,True,True,False,False
+ABLATION_No_Cost_No_Perm,ABLATION,-0.0565,ablation refit,,not a variant,True,True,False,False
+ABLATION_Full_LightGBM,ABLATION,-1.554,ablation refit,,not a variant,True,True,True,False
+ABLATION_Full_RF,ABLATION,-1.8054,ablation refit,,not a variant,True,True,True,False
+ABLATION_No_CPCV_LightGBM,ABLATION,-1.554,ablation refit,,not a variant,True,True,False,False
+ABLATION_No_CPCV_RF,ABLATION,-1.8054,ablation refit,,not a variant,True,True,False,False
+DL_MLP_2layer_BTC_1h,DL,-0.2564,counted,,model,True,True,True,True
+DL_MLP_3layer_BTC_1h,DL,0.0752,counted,,model,True,True,True,True
+DL_MLP_2layer_BTC_1d,DL,0.4553,counted,,model,True,True,True,True
+DL_MLP_3layer_BTC_1d,DL,0.5303,counted,,model,True,True,True,True
+DL_MLP_2layer_ETH_1h,DL,-0.3654,counted,,model,True,True,True,True
+DL_MLP_3layer_ETH_1h,DL,-0.2782,counted,,model,True,True,True,True
+DL_MLP_2layer_ETH_1d,DL,-0.279,counted,,model,True,True,True,True
+DL_MLP_3layer_ETH_1d,DL,-0.7809,counted,,model,True,True,True,True
+DL_MLP_2layer_SOL_1h,DL,-0.079,counted,,model,True,True,True,True
+DL_MLP_3layer_SOL_1h,DL,0.1295,counted,,model,True,True,True,True
+DL_MLP_2layer_SOL_1d,DL,1.2118,counted,,model,True,True,True,True
+DL_MLP_3layer_SOL_1d,DL,0.7791,counted,,model,True,True,True,True
+DL_Transformer_BTC_1h,DL,-1.1688,counted,,model,True,True,True,True
+DL_LSTM_bidir_BTC_1h,DL,-0.7485,counted,,model,True,True,True,True
+DL_TCN_BTC_1h,DL,-1.2413,counted,,model,True,True,True,True
+DL_Transformer_BTC_1d,DL,-1.1564,counted,,model,True,True,True,True
+DL_LSTM_bidir_BTC_1d,DL,-0.2212,counted,,model,True,True,True,True
+DL_TCN_BTC_1d,DL,-0.8795,counted,,model,True,True,True,True
+DL_Transformer_ETH_1h,DL,-1.1853,counted,,model,True,True,True,True
+DL_LSTM_bidir_ETH_1h,DL,-0.6433,counted,,model,True,True,True,True
+DL_TCN_ETH_1h,DL,-0.793,counted,,model,True,True,True,True
+DL_Transformer_ETH_1d,DL,1.9787,counted,,model,True,True,True,True
+DL_LSTM_bidir_ETH_1d,DL,1.4642,counted,,model,True,True,True,True
+DL_TCN_ETH_1d,DL,1.0772,counted,,model,True,True,True,True
+DL_Transformer_SOL_1h,DL,-1.3408,counted,,model,True,True,True,True
+DL_LSTM_bidir_SOL_1h,DL,-0.3336,counted,,model,True,True,True,True
+DL_TCN_SOL_1h,DL,-0.7776,counted,,model,True,True,True,True
+DL_Transformer_SOL_1d,DL,0.0459,counted,,model,True,True,True,True
+DL_LSTM_bidir_SOL_1d,DL,-0.1475,counted,,model,True,True,True,True
+DL_TCN_SOL_1d,DL,0.911,counted,,model,True,True,True,True

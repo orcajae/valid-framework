@@ -48,20 +48,21 @@ class TestV5:
 
 
 class TestFullReport:
-    def test_paper_example(self):
+    def test_illustrative_example(self):
+        # Illustrative values only, not results from the paper (CHANGELOG E16).
         checker = VALIDChecker()
         report = checker.run_all(
-            y_pred_unbal=np.array([1] * 972 + [0] * 28),
-            y_pred_bal=np.array([1] * 423 + [0] * 577),
+            y_pred_unbal=np.array([1] * 900 + [0] * 100),
+            y_pred_bal=np.array([1] * 480 + [0] * 520),
             has_temporal_split=True,
-            pbo_value=0.000, n_configs=15, var_sr_is=0.012,
-            has_permutation_test=True, permutation_p=0.000,
-            gross_sr=0.84, net_sr=0.135, cost_bp=18,
-            sr_at_costs={0: 0.640, 18: 0.530, 50: 0.335},
-            ml_sr=0.530,
-            baseline_srs={"buy_hold": 0.618, "sma200": 0.723},
-            has_bear_market_eval=True, trades_per_year=30.8,
-            gross_alpha=0.84, cost_drag=0.71, code_available=True,
+            pbo_value=0.35, n_configs=8, var_sr_is=0.01,
+            has_permutation_test=True, permutation_p=0.03,
+            gross_sr=0.80, net_sr=0.20, cost_bp=18,
+            sr_at_costs={0: 0.80, 18: 0.20, 50: -0.30},
+            ml_sr=0.20,
+            baseline_srs={"buy_hold": 0.60, "sma200": 0.70},
+            has_bear_market_eval=True, trades_per_year=50,
+            gross_alpha=0.80, cost_drag=0.60, code_available=True,
         )
         assert isinstance(report, VALIDReport)
         assert report.total == 12

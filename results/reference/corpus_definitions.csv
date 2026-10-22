@@ -1,0 +1,5 @@
+definition,rows,negative,share_pct,dsr_benchmark,best_sr,best_dsr,dsr_passes,ladder_15m,ladder_1h,ladder_4h,ladder_1d
+as_printed,340,178,52.4,2.73,1.98,0.33,0,9/9,128/133,4/9,17/77
+no_cost_rows,322,177,55.0,2.71,1.98,0.33,0,9/9,128/133,4/9,17/77
+no_cost_rows_equal_rows_merged,288,172,59.7,2.68,1.98,0.33,0,9/9,123/127,4/9,17/65
+corrected,278,165,59.4,2.67,1.98,0.33,0,9/9,116/118,4/9,17/65

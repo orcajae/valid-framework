@@ -4,18 +4,19 @@ Recompute the corpus-level headline figures from the 340-variant corpus, and
 report how they change when the cost-level entries are removed.
 
 Source : results/reference/variants_340.csv
-Prints : (a) full corpus (the printed figures: 52% negative, 15 above benchmark)
+Prints : (a) full corpus (the printed figures: 52% negative, 15 above benchmark;
+             restated in CHANGELOG E16, see scripts/corpus_definitions.py)
          (b) corpus without the 18 COST_* cost-level entries
          (c) the identifiers of every variant exceeding the benchmark
          (d) corpus without every entry traced to a synthetic signal proxy
 
-The benchmark threshold is the rounded net Sharpe of the DM 252/126+CB
+The benchmark threshold is the rounded net Sharpe of the rule
 benchmark (0.917) as printed in the paper; the full-precision comparison is also
 reported because two variants sit between the rounded and full-precision
 thresholds (documented in REPRODUCE.md).
 
 Provenance of the excluded rows (see poster/RUN_ATTRIBUTION_AUDIT.md):
-  COST_benchmark_*   rule-based DM+CB benchmark at six cost levels   (real)
+  COST_benchmark_*   rule-based benchmark at six cost levels         (real)
   COST_ML_1h_*       signal proxy `ml_sig`      at six cost levels   (synthetic)
   COST_ML_15m_*      signal proxy `ml_15m_sig`  at six cost levels   (synthetic)
   BASE_1h ML balanced  the same `ml_sig` proxy at 18 bp             (synthetic)

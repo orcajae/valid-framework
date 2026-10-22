@@ -1,6 +1,6 @@
 # Changelog — camera-ready revision (2026-08-01)
 
-> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design).** Entries below are in the order they were made.
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures that E13 kept are restated in [E16](#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated).** Entries below are in the order they were made.
 
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
@@ -942,6 +942,284 @@ numbers. SSRN v3.3 predates this entry.
   in-sample measure were not run, or that their behaviour is open, or that the
   two permutation candidates, a dependence-preserving permutation and a purged
   holdout, were not tested.
+
+## E16: The 340-variant corpus re-counted; E13's corpus figures restated
+
+**How it surfaced.** On 21 October 2026, during proofreading of text that cites
+E13's corpus figures, rows were found in `results/reference/variants_340.csv`
+that are not strategy variants at 18 bp. Each kind of row was then traced to the
+code that wrote it. E13 says of every result it lists as still standing that
+"the definition in the paper, the computation in the code and the stored value
+agree". For the corpus count this does not hold. As E13 states, the stored
+values reproduce from their inputs, but not every row counted is a variant at
+18 bp, and some results are counted more than once.
+
+**What can be cited after E16.**
+- A majority of the strategy variants in the archive have a negative net Sharpe
+  ratio at 18 bp under every definition below; 165 of 278 under the corrected
+  count.
+- 15-minute 9 of 9 and 4-hour 4 of 9 under every definition; 1-hour 98% and
+  daily 26% under the corrected count.
+- The 1h tree models' long share: 79.5–98.4% without class weighting,
+  32.3–52.8% with it.
+- The order-flow run: net Sharpe ratio 0.135 against a gross 0.750 at 101
+  trades a year, from a published row; 82% as a ratio of those two values, not
+  as a stored value; its permutation pass with the qualifications below.
+- The Deflated Sharpe Ratio: no variant passes, but no stored row could pass
+  the gate as computed, so the result carries no evidence about multiple
+  testing.
+
+**What the 340 rows contain.** Rows that are not, or not separately, strategy
+variants at 18 bp:
+
+| Rows | Count | Negative in `net_sr_18bp` | What they are |
+|---|---|---|---|
+| Cost sweep at 0, 5, 10, 30 and 50 bp | 15 | 1 | The cost-sensitivity rows of three signals, stored under `net_sr_18bp` although their cost is not 18 bp |
+| Synthetic signals at 18 bp | 3 | 0 | `COST_ML_1h_18bp`, `COST_ML_15m_18bp` and `BASE_1h ML balanced`: the random-signal proxies withdrawn in E2 |
+| `ABLATION_` | 12 | 9 | Refits of the three `EXT_BTC_1h` models with checklist items switched on or off (see below) |
+| Same result, every stored value equal | 28 | 0 | 12 funding-rate rows and 16 gold-threshold rows (see below) |
+| Same result under a different label | 4 | 3 | `BB_{BTC,ETH,SOL}_CatBoost` and `COST_benchmark_18bp` (see below) |
+
+- **Funding-rate rows (12).** In the model step, a feature missing on half of
+  the event rows or more is dropped without a log line. The added feature of
+  four of the five funding-rate variants was dropped this way, so their models
+  are the base models. Each of these rows repeats `EXT_BTC_1d_*` for the same
+  model. The variant built on daily Binance funding is the one whose feature
+  entered the model.
+- **Gold-threshold rows (16).** The rule filters named `SHAP_g…` require a
+  minimum gold return. On this sample, the thresholds −0.07 and −0.10 select the
+  same signal days under every setting of the other two filters, so each of the
+  16 pairs holds one result.
+- **`BB_{asset}_CatBoost` (3).** A second script re-ran the configuration of
+  `EXT_{asset}_1h_CatBoost`. The two runs differ by less than 1e-8 in net Sharpe
+  ratio. The stored Sharpe ratio, AUC, long shares and event count are equal;
+  the `BB_` rows leave `pbo` blank.
+- **`COST_benchmark_18bp` (1).** It repeats `BASE_momentum_benchmark`: same
+  signal, same cost.
+- **`ABLATION_` (12).**
+  - These rows refit the three `EXT_BTC_1h` models with class weighting, CPCV,
+    costs and the permutation test switched on or off, and score them one bar
+    ahead instead of four.
+  - The CPCV and permutation switches change no stored number, except that
+    switching CPCV off leaves `pbo` blank. The 12 rows therefore hold six
+    distinct results from four fitted models.
+  - Three rows (`No_Cost`, `No_Cost_No_Perm` and `AUC_Only`) store a Sharpe
+    ratio before costs under `net_sr_18bp`.
+  - The BTC 1h CatBoost fit therefore appears in the corpus with two values at
+    18 bp: −1.6349 (one bar ahead) and −0.8767 (four bars ahead).
+
+**Definitions.** Each is computed from `variants_340.csv` by
+`scripts/corpus_definitions.py`. The Deflated Sharpe Ratio is computed as in
+E13, with N equal to the number of rows of the definition. The ladder counts
+the rows that `scripts/derive_tf_ladder.py` counts.
+
+| Definition | Rows | Negative at 18 bp | 15m | 1h | 4h | Daily | DSR benchmark / best SR / best DSR / passes |
+|---|---|---|---|---|---|---|---|
+| As printed in E13 | 340 | 178 (52.4%) | 9/9 | 128/133 | 4/9 | 17/77 | 2.73 / 1.98 / 0.33 / 0 |
+| Without the 18 `COST_` rows (the footnote in "Corpus composition") | 322 | 177 (55.0%) | 9/9 | 128/133 | 4/9 | 17/77 | 2.71 / 1.98 / 0.33 / 0 |
+| … and rows with the same asset, frequency and model label, equal in every stored result except a blank `pbo`, merged | 288 | 172 (59.7%) | 9/9 | 123/127 | 4/9 | 17/65 | 2.68 / 1.98 / 0.33 / 0 |
+| Corrected: 18 bp, no synthetic signal, no `ABLATION_`, each result once | 278 | 165 (59.4%) | 9/9 | 116/118 | 4/9 | 17/65 | 2.67 / 1.98 / 0.33 / 0 |
+
+- **The corrected count is the author's reading.** It reads the paper's wording
+  as strategy variants at 18 bp, with each result counted once. It was settled
+  after the numbers above were known.
+- **Three choices are arguable.**
+  - All twelve `ABLATION_` rows are excluded, although four of their six
+    distinct results are fits at 18 bp scored one bar ahead. Keeping those four
+    gives 282 rows, 168 negative (59.6%).
+  - The five baselines are kept. Excluding them gives 273 rows, 165 negative
+    (60.4%).
+  - The eight `FORT_` rows are kept, although each uses later data (see
+    Limits). Excluding them gives 270 rows, 163 negative (60.4%).
+- **Two earlier versions.** Both were computed before the corrected count was
+  settled. Neither changes a conclusion.
+  - 282 rows, 168 negative (59.6%): it kept the four rows that repeat a result
+    under another label. These are the same totals as keeping the four
+    `ABLATION_` results; the 1h rung differs (119 of 121 against 119 of 122).
+  - 279 rows, 165 negative (59.1%): it kept `COST_benchmark_18bp`.
+- **Removed rows.** The 62 rows removed from the 340 include 13 negative ones,
+  so the share rises.
+- **Composition of the corrected 278 rows.**
+  - 85 are rule-based: 5 baselines, 48 gold filters on the rule benchmark, 24
+    cross-sectional configurations and 8 `FORT_` rows. 21 of them are negative.
+    The `FORT_` rows filter the momentum benchmark by a percentile rank of
+    realised volatility. They fit no model, although the corpus table of the
+    camera-ready paper and SSRN v3.2 calls them "Volatility prediction
+    overlays".
+  - 193 are model variants, of which 144 (74.6%) are negative.
+
+**What changes in E13's list of results that still stand.**
+- **The negative share.** E13 says "178 of the 340 variants (52%) have a
+  negative net Sharpe ratio at 18 bp". The corrected count is 165 of 278 (59%).
+  - The direction holds under every definition: a majority is negative.
+  - The level is a property of this archive. It depends on which experiments
+    the corpus contains: 144 of 193 model variants are negative, against 21 of
+    85 rule rows.
+- **The ladder.**
+  - Unchanged: 15-minute 9 of 9 and 4-hour 4 of 9 (44%).
+  - 1-hour: 96% (128 of 133) becomes 98% (116 of 118).
+  - Daily: 22% (17 of 77) becomes 26% (17 of 65). E13 calls the ladder rows
+    "model variants", but the daily rung also counts the eight rule-based
+    `FORT_` rows. Without them it is 15 of 57. The README carries 26%, the rung
+    under the filter of `derive_tf_ladder.py`, applied to the corrected rows.
+  - The ordering is unchanged.
+- **Bull bias.** E13 says that without class weighting "tree models predict
+  'long' for 90–97% of test observations (BTC 97.2%, ETH 90.5%, SOL 97.0%)" and
+  that weighting brings this to 32–45%. Those six values come from the three
+  1h CatBoost rows.
+  - Across the nine 1h tree rows of the same experiment, the unweighted long
+    share is 79.5–98.4%: CatBoost 90.5–97.2%, LightGBM 79.5–88.7% and random
+    forest 95.4–98.4%.
+  - With weighting it is 32.3–52.8%, with AUC 0.49–0.53.
+  - The other tree rows of the corpus use other labels and frequencies. Across
+    the 175 tree rows of the 340 that store a long share, the unweighted share
+    ranges from 2.6% to 99.9%.
+  - The README's "Weighting removes the bias" becomes "weighting brings the long
+    share to 32–53%" (32.3–52.8%).
+  - **Deep learning.** E13's range of 58–93% is a range of per-architecture
+    means over seven architectures, which E13 does not say.
+    - Two of the seven are single rows from a separate bull-bias run: LSTM
+      57.7% and SimpleRNN 63.3%.
+    - The other five are means over six `DL_` rows each, from TCN 75.3% to MLP
+      93.2%.
+    - Single rows range from 57.7% to 100%.
+    - "[F]or the two MLP rows the 'balanced' column repeats the unbalanced
+      value" holds for all 12 MLP rows.
+- **The Deflated Sharpe Ratio.** No variant passes under any definition or
+  choice above (a benchmark of 2.65–2.73 in the units of the stored Sharpe
+  ratios, against a best observed value of 1.98). This carries no evidence
+  about multiple testing. With T set to the 20% holdout, no row reaches 0.95
+  even against a benchmark of zero: the highest value is 0.92, on 131 holdout
+  events. A gate that no stored row can pass does not separate these variants.
+- **The order-flow 1h run.**
+  - E2 cites `results/round_a_orderflow/backtest_with_costs.csv` as the source.
+    That file was never in this repository. It is a four-row summary (sha256
+    `dea45b24f6334cff9847f0cb93eb50384bcfa3649c340cdefd1ab0009ec39d5c`) written
+    by a private script.
+  - The model is fitted on hourly order-flow features. The backtest takes one
+    position a day and uses daily returns.
+  - Gross Sharpe 0.750, net Sharpe 0.135 and 101 trades a year reproduce from
+    the file. Its row for the model, which carries no strategy parameter, is
+    now published (`results/reference/order_flow_summary.csv`).
+  - The row is consistent with a flat-or-long position charged 18 bp per
+    change, 36 bp a round trip, as for the rule rows: its exposure equals its
+    long share (0.41), and its total cost of 24.66% equals 137 changes at
+    0.18%. The net 0.135 and the 82% depend on that convention.
+  - "82%" is 1 − 0.135/0.750. It stands as a ratio of the two stored Sharpe
+    ratios, computed in the text, not as a stored value or a code output. The
+    file's own cost column is a different quantity: total cost as a share of
+    gross return, 83.05%.
+  - **The permutation test.**
+    - The same script and run wrote the permutation result: real AUC 0.5703, a
+      95th percentile of 0.5163 over 200 permutations, and none of the 200
+      permuted AUCs at or above the real one. The stored p is 0 (0 of 200). E13
+      reports it as p < 0.005, the resolution of 200 permutations.
+    - The 200 permuted AUCs were not kept, so these values cannot be recomputed.
+    - Each permutation shuffles the whole label vector and refits the model.
+      This is the full-shuffle design that E14 and E15 found to run above its
+      nominal size in the daily pipeline, where the labels overlap; E15's
+      comparisons there are descriptive and establish no cause. Whether this
+      run's labels overlap was not traced.
+    - The features and hyperparameters were chosen before the test. The
+      hyperparameter search's stored best AUC equals the reported holdout AUC
+      to full precision. The permutations reuse these choices and do not repeat
+      the search, so the p-value does not account for it.
+    - The backtest model is built by the same code, data and seed as the model
+      of the test, but its predictions were not stored.
+    - E13's "passes a 200-permutation test" stands as a stored result,
+      qualified by the full-shuffle design and by the search not being
+      repeated.
+
+**What changes in this repository.**
+- **New files.**
+  - `scripts/corpus_definitions.py`, which writes
+    `results/reference/corpus_definitions.csv` (the definitions above) and
+    `results/reference/corpus_rows.csv` (one line per row of `variants_340.csv`,
+    with its kind, its group and its membership in each definition);
+  - `results/reference/order_flow_summary.csv`: the model's row of the
+    order-flow summary named above.
+- **Restated with the corrected count.**
+  - the README's "What still stands", including its bull-bias, order-flow and
+    DSR bullets;
+  - the landing page;
+  - the canon list of `scripts/gate_landing.py`, which required "340" and "52%";
+  - `scripts/README.md`;
+  - the docstring of `scripts/derive_tf_ladder.py`.
+- **Benchmark parameters.** `scripts/derive_tf_ladder.py` and
+  `scripts/derive_corpus_stats.py` no longer state the rule benchmark's
+  parameters.
+- **The checklist example.** The example run in `valid/checklist.py` and the
+  test `test_paper_example` used the paper's figures:
+  - PBO 0.000 and the cost-ladder values 0.640, 0.530 and 0.335 are withdrawn
+    (E2, E13).
+  - Permutation p = 0.000 was replaced by p < 0.005 (E13).
+  - Var(SR_IS) = 0.012 stands as a stored value, but its comparison is
+    withdrawn (E13).
+  - The gross Sharpe ratio 0.84 matches the mean out-of-sample CPCV Sharpe ratio
+    of the best configuration of a different 1h run (0.8411, a private output).
+    No stored output gives 0.84 as the order-flow run's gross Sharpe ratio, yet
+    the example pairs it with that run's net 0.135.
+
+  The example and the test (now `test_illustrative_example`) use illustrative
+  values, labelled as such.
+- **`KNOWN_ISSUES.md`.**
+  - item 8: the silent feature drop;
+  - item 9: the `net_sr_18bp` column holding other cost levels and Sharpe ratios
+    before costs.
+- **Pointers.** The README's banner, file tree and BibTeX note, the landing
+  page's links and the note in `CITATION.cff` point to E16.
+
+**Limits.**
+- The corpus is a record of earlier experiments, not a designed sample of
+  strategies. Rows are not independent trials: for example, the 48 gold filters
+  share one rule benchmark.
+- The stored Sharpe ratios are annualised with √252 at every bar frequency
+  (KNOWN_ISSUES #4). Signs, and so every count here, do not depend on that
+  scale. The DSR uses them as E13 did.
+- **Cost convention.** The paper calls 18 bp a round-trip cost. The code
+  applies it in three ways:
+  - Model rows (`EXT_`, `ML_`, `DL_`, `OF_`, `TB_`, `BB_`): positions of +1 or
+    −1, and 18 bp per change of predicted class. That is 18 bp per round trip
+    of one unit.
+  - Rule rows with flat-or-long positions (baselines, the benchmark, `SHAP_`,
+    `FORT_`): 18 bp per change, so a round trip costs 36 bp. Each partial step
+    of a gradual `FORT_` overlay pays the full 18 bp.
+  - Cross-sectional rows (`XS_`): 20 bp per trade, with trades derived from an
+    assumed turnover and counted twice, so 40 bp a round trip, rather than
+    from the measured changes.
+
+  Comparisons between rule and model rows inherit these differences.
+- The `FORT_` rows rank realised volatility over the full series, so each
+  day's rank uses later data.
+- The traces from rows to code rest on private scripts from March and April
+  2026 that were not under version control.
+
+**Supersedes.**
+- **In E13's "What still stands".**
+  - the negative share, the ladder and the bull-bias ranges, as restated above;
+  - the sentence that definition, code and stored value agree, for those items
+    and for the order-flow run;
+  - the DSR item as evidence about multiple testing: it stands as a
+    computation, but no stored row can pass the gate (highest 0.92 at a
+    benchmark of 0);
+  - the DSR benchmark 2.73 as the single figure;
+  - the order-flow bullet, qualified as above.
+- **In the "Corpus composition" section.** The 52% and 178/340 kept "as the
+  figures for the corpus as constructed".
+- **In E2.**
+  - the citation of the order-flow file as a source in this repository;
+  - 82% as a value stored in that file;
+  - the ladder counts n = 133 and n = 77.
+- **In this repository.** The README's "What still stands" and the sentence
+  that introduces it, the landing page's corpus sentence, and the two
+  `scripts/README.md` lines on the corpus share and the ladder ("which stands",
+  "The ordering and the share of negative variants stand").
+- **In SSRN v3.3.** Where it states 178 of 340, 52%, the 96% and 22% rungs, or
+  82% as a stored value; the 32–45% range and "it removes the bias but not the
+  weakness"; the deep-learning range 58–93% as a range of rows; the label
+  "model variants" for the ladder; the DSR benchmark 2.73 as the single figure
+  and the abstract's DSR clause as evidence about multiple testing; and that
+  these results passed the re-verification.
 
 ## Unchanged
 
