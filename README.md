@@ -47,7 +47,9 @@ computed live on deterministic synthetic data; see
 for Machine Learning in Cryptocurrency Trading"* —
 [SSRN preprint 6508779](https://ssrn.com/abstract=6508779), presented orally at
 the 9th ACM SIGKDD Workshop on Machine Learning in Finance (KDD-MLF 2026),
-Jeju, August 2026. Most of its empirical results are withdrawn (E13).
+Jeju, August 2026. Most of its empirical results are withdrawn (E13). Version 3.4
+(October 2026) reports the re-measurement and its robustness study (E14, E15)
+and the corpus re-count (E16).
 
 ## What still stands (October 2026)
 
@@ -149,8 +151,8 @@ Stage 2 (Economic) is V7–V12: required before anything is traded.
 | V11 | Report trade frequency | 2 · Economic | Hidden turnover |
 | V12 | Provide code for reproducibility | 2 · Economic | Irreproducibility |
 
-The split follows Table 1 of the camera-ready and of the revised SSRN version
-(v3.3). Version 3.2 of the SSRN paper grouped V9 and V12 under Stage 1; v3.3
+The split follows Table 1 of the camera-ready and of the revised SSRN versions
+(v3.3 and v3.4). Version 3.2 of the SSRN paper grouped V9 and V12 under Stage 1; v3.3
 records that change in its Appendix A.
 
 The checklist is meant to be applied honestly, including to its authors. The
