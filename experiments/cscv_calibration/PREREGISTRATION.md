@@ -279,4 +279,8 @@ Every stage runs under the unattended-run rules of this project:
 
 ## Change log
 
-(empty)
+- 2026-10-23, before any registered series was run. Implementation details that the text above leaves open are listed in `run.py` (IMPLEMENTATION_NOTES). These touch the text above:
+  - §1 gives ρ_P(0.5) as 0.488. Numerical integration gives 0.4874, and ρ_P(0.9) = 0.8941. The generator test uses the integrated values, which every run log records.
+  - §2: F1 and F2 run with the interpolated value rounded to three decimals; the unrounded value is stored beside it. In the calibration, a seed whose preparation step returns None is skipped, and the number of seeds used is recorded.
+  - §3: in step 4 of the calibrated p-value, PBO_obs is the PBO of the observed matrix before demeaning. The L = 5 and L = 50 runs reuse the random draws of L = 20 (the same start, uniforms and jump indices); only the block-start rule changes. The Reality Check is computed at L = 20 only.
+  - §6: timing checks use seeds outside the registered ranges. Stage 1 starts only after all three stages have been timed, and a stage's B is fixed when its first shard starts. For Stage 3 the B decision uses the serial projection rather than half of it, because each CatBoost fit already uses all cores. Layer 1 uses one BLAS thread per worker; the unit tests show bitwise-identical outputs.
