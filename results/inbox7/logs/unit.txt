@@ -1,0 +1,18 @@
+{
+ "cscv_dominant": 0.0,
+ "cscv_identical": 1.0,
+ "pbo_fast_eq_eq1": true,
+ "blocksum_sr_maxdiff": 3.469446951953614e-17,
+ "shift_circ_ac1_maxdiff": 8.326672684688674e-17,
+ "shift_linear_ac1_maxdiff": 0.002462132733602601,
+ "block_single_identity": true,
+ "block_multi_is_permutation": true,
+ "demean_abs_mean": {
+  "BTC": 1.5597002900225699e-18,
+  "ETH": 6.817158923136926e-19,
+  "SOL": 2.6986461463907547e-18
+ },
+ "beta0_eq_none": true,
+ "sb_mean_block_len": 19.82278481012658
+}
+UNIT PASS

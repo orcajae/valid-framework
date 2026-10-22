@@ -42,6 +42,7 @@ CANON = [
     (r"Correction, October 2026", "correction notice on the page"),
     (r"\bE13\b", "link to CHANGELOG E13"),
     (r"\bE14\b", "link to CHANGELOG E14 (pre-registered re-measurement)"),
+    (r"\bE15\b", "link to CHANGELOG E15 (pre-registered robustness study)"),
     (r"\b340\b", "340 variants"),
     (r"52%", "52% net-negative (stands)"),
     (r"26\.5%", "AUC alone 27.0/30.0/26.5% (stands, E13)"),

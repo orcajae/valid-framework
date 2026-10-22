@@ -57,12 +57,18 @@
         twelve checklist items are unchanged as a proposal; what is withdrawn is
         the evidence the paper claimed for them.</p>
       <p class="story-text">A pre-registered re-measurement (E14) then found
-        that PBO, computed with the paper's rank statistic, almost never passes at
-        its 0.20 threshold, with or without a planted signal, so for item V4 we now recommend reporting PBO
-        as a description of the search rather than using it as a gate. The permutation test separates signal
-        from noise but runs at about three times its nominal 5%.</p>
+        that PBO, computed with the paper's rank statistic on refitted CPCV splits,
+        almost never passes at its 0.20 threshold, with or without a planted signal.
+        A pre-registered robustness study (E15) found that canonical CSCV does move
+        with a planted signal, but also passes 13.0–15.5% of demeaned series
+        without one at 0.20, and 23% when the drift is kept. For item V4 we now recommend reporting PBO as a description of the
+        search, with its construction named, rather than using it as a gate. The
+        permutation test passes more planted-signal series than signal-free ones but runs at about three times
+        its nominal 5%; permutations that keep the dependence between neighbouring
+        labels run closer to 5%, at a cost in power (E15).</p>
       <p class="story-self"><a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification">Read the full correction (E13)</a>
         · <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design">Read the re-measurement (E14)</a>
+        · <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design">Read the robustness study (E15)</a>
         · <a href="https://github.com/orcajae/valid-framework/blob/main/KNOWN_ISSUES.md">Known issues in the code</a></p>
     </div>
   </div>

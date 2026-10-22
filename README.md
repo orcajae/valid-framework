@@ -6,7 +6,7 @@
 > - the multiple-testing survivors,
 > - the parameter-space variance comparison.
 >
-> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -88,6 +88,34 @@ On 600 signal-free series and 200 series with a planted signal:
 Details, design and outputs:
 [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design),
 [`experiments/true_pbo/`](experiments/true_pbo/), [`results/true_pbo/`](results/true_pbo/).
+
+## Re-tested for robustness (E15)
+
+A second pre-registered study changed the null, the PBO construction, the model
+family and the permutation scheme:
+
+- **PBO on refitted CPCV splits**, with in-sample measured on the fitted
+  training events, passes fewer series at 0.50 as the planted signal grows, in
+  CatBoost and in LightGBM.
+- **Canonical CSCV** (Bailey et al. 2017), applied to out-of-sample returns
+  from purged six-fold cross-validation, moves with the planted signal: at 0.20
+  it passes 46% of series at the stronger signal, but also 13.0–15.5% of
+  demeaned series without one, and 23% when the drift is kept. A PBO
+  threshold is not a test level;
+  for item V4, report PBO as a description of the search and name the
+  construction.
+- **The permutation test:** on 600 series without a signal, purging the holdout
+  moves the full-shuffle pass rate by at most one point (14.0–15.5% after
+  purging). Permutations that keep the dependence between neighbouring labels
+  pass 6.0–8.5% of those series: the circular shift meets the pre-registered
+  size rule and the block shuffle does not. They cost power: 48% and 50% of
+  series at the stronger planted signal, against 75% for the purged full
+  shuffle. The pre-registered outcome is "partial".
+- These comparisons are descriptive; none establishes a cause.
+
+Details, design and outputs:
+[E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design),
+[`experiments/inbox7/`](experiments/inbox7/), [`results/inbox7/`](results/inbox7/).
 
 ## The VALID Checklist (12 items)
 
@@ -172,15 +200,17 @@ valid-framework/
 ├── examples/               # worked_example.py — the 30-second demo
 ├── experiments/            # reproduction pipeline (see REPRODUCE.md);
 │                           #   true_pbo/ = the E14 re-measurement
+│                           #   inbox7/ = the E15 robustness study
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
 ├── audit/                  # literature audit: withdrawn (see audit/README.md)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
 ├── results/true_pbo/       # E14 outputs (per series, per path, per shuffle)
+├── results/inbox7/         # E15 outputs (per series, per split, per shuffle)
 ├── releases/               # downloadable 12-item checklist PDF
 ├── docker/                 # containerized reproduction
 ├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
-└── CHANGELOG_CR.md         # every correction, E1–E14
+└── CHANGELOG_CR.md         # every correction, E1–E15
 ```
 
 ## Citation

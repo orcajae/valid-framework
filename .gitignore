@@ -16,6 +16,8 @@ results/reference/*
 !results/reference/*.json
 !results/reference/*.md
 !results/true_pbo/
+!results/inbox7/
+results/inbox7/parts/
 catboost_info/
 *.DS_Store
 .env

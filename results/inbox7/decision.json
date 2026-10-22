@@ -1,0 +1,268 @@
+{
+ "stage1": {
+  "D1": {
+   "cells": [
+    {
+     "statistic": "S1_PBO<0.20",
+     "size_k": 0,
+     "size_n": 100,
+     "size": 0.0,
+     "power_k": 0,
+     "power_n": 100,
+     "power": 0.0,
+     "diff_pp": 0.0,
+     "fisher_p_one_sided": 1.0,
+     "verdict": "no power",
+     "variant": "V1",
+     "threshold": 0.2
+    },
+    {
+     "statistic": "S1_PBO<0.50",
+     "size_k": 48,
+     "size_n": 100,
+     "size": 0.48,
+     "power_k": 6,
+     "power_n": 100,
+     "power": 0.06,
+     "diff_pp": -42.0,
+     "fisher_p_one_sided": 0.9999999999997297,
+     "verdict": "no power",
+     "variant": "V1",
+     "threshold": 0.5
+    },
+    {
+     "statistic": "S2_PBO<0.20",
+     "size_k": 0,
+     "size_n": 100,
+     "size": 0.0,
+     "power_k": 3,
+     "power_n": 100,
+     "power": 0.03,
+     "diff_pp": 3.0,
+     "fisher_p_one_sided": 0.12311557788944724,
+     "verdict": "no power",
+     "variant": "V2",
+     "threshold": 0.2
+    },
+    {
+     "statistic": "S2_PBO<0.50",
+     "size_k": 47,
+     "size_n": 100,
+     "size": 0.47,
+     "power_k": 71,
+     "power_n": 100,
+     "power": 0.71,
+     "diff_pp": 24.0,
+     "fisher_p_one_sided": 0.0004459582046120454,
+     "verdict": "has power",
+     "variant": "V2",
+     "threshold": 0.5,
+     "size_in_A_and_C": {
+      "A-BTC": {
+       "k": 104,
+       "n": 200
+      },
+      "C": {
+       "k": 105,
+       "n": 200
+      }
+     }
+    },
+    {
+     "statistic": "S3_PBO<0.20",
+     "size_k": 13,
+     "size_n": 100,
+     "size": 0.13,
+     "power_k": 46,
+     "power_n": 100,
+     "power": 0.46,
+     "diff_pp": 33.0,
+     "fisher_p_one_sided": 2.0901928864059245e-07,
+     "verdict": "has power",
+     "variant": "V3",
+     "threshold": 0.2,
+     "size_in_A_and_C": {
+      "A-BTC": {
+       "k": 31,
+       "n": 200
+      },
+      "C": {
+       "k": 29,
+       "n": 200
+      }
+     }
+    },
+    {
+     "statistic": "S3_PBO<0.50",
+     "size_k": 54,
+     "size_n": 100,
+     "size": 0.54,
+     "power_k": 84,
+     "power_n": 100,
+     "power": 0.84,
+     "diff_pp": 29.999999999999993,
+     "fisher_p_one_sided": 3.4563340839192987e-06,
+     "verdict": "has power",
+     "variant": "V3",
+     "threshold": 0.5,
+     "size_in_A_and_C": {
+      "A-BTC": {
+       "k": 108,
+       "n": 200
+      },
+      "C": {
+       "k": 109,
+       "n": 200
+      }
+     }
+    },
+    {
+     "statistic": "S4_PBO<0.20",
+     "size_k": 0,
+     "size_n": 100,
+     "size": 0.0,
+     "power_k": 0,
+     "power_n": 100,
+     "power": 0.0,
+     "diff_pp": 0.0,
+     "fisher_p_one_sided": 1.0,
+     "verdict": "no power",
+     "variant": "V4",
+     "threshold": 0.2
+    },
+    {
+     "statistic": "S4_PBO<0.50",
+     "size_k": 54,
+     "size_n": 100,
+     "size": 0.54,
+     "power_k": 25,
+     "power_n": 100,
+     "power": 0.25,
+     "diff_pp": -29.000000000000004,
+     "fisher_p_one_sided": 0.9999940501735729,
+     "verdict": "no power",
+     "variant": "V4",
+     "threshold": 0.5
+    }
+   ],
+   "no_power_at_both_thresholds": {
+    "V1": true,
+    "V2": false,
+    "V3": false,
+    "V4": true
+   },
+   "variants_with_power": [
+    "V2@0.5",
+    "V3@0.2",
+    "V3@0.5"
+   ],
+   "outcome": "A variant with power exists"
+  }
+ },
+ "D2": {
+  "cells": [
+   {
+    "statistic": "T2",
+    "A_per_asset": {
+     "BTC": {
+      "k": 28,
+      "n": 200,
+      "rate": 0.14
+     },
+     "ETH": {
+      "k": 29,
+      "n": 200,
+      "rate": 0.145
+     },
+     "SOL": {
+      "k": 31,
+      "n": 200,
+      "rate": 0.155
+     }
+    },
+    "each_le_7.5pct": false,
+    "pooled_k": 88,
+    "pooled_n": 600,
+    "pooled_wilson_hi": 0.17722151497135172,
+    "pooled_hi_le_9pct": false,
+    "size_controlled": false,
+    "B2_k": 75,
+    "B2_n": 100,
+    "B2_rate": 0.75,
+    "power_kept": true
+   },
+   {
+    "statistic": "T3",
+    "A_per_asset": {
+     "BTC": {
+      "k": 13,
+      "n": 200,
+      "rate": 0.065
+     },
+     "ETH": {
+      "k": 13,
+      "n": 200,
+      "rate": 0.065
+     },
+     "SOL": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06
+     }
+    },
+    "each_le_7.5pct": true,
+    "pooled_k": 38,
+    "pooled_n": 600,
+    "pooled_wilson_hi": 0.08573589161984428,
+    "pooled_hi_le_9pct": true,
+    "size_controlled": true,
+    "B2_k": 48,
+    "B2_n": 100,
+    "B2_rate": 0.48,
+    "power_kept": false
+   },
+   {
+    "statistic": "T4",
+    "A_per_asset": {
+     "BTC": {
+      "k": 17,
+      "n": 200,
+      "rate": 0.085
+     },
+     "ETH": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075
+     },
+     "SOL": {
+      "k": 14,
+      "n": 200,
+      "rate": 0.07
+     }
+    },
+    "each_le_7.5pct": false,
+    "pooled_k": 46,
+    "pooled_n": 600,
+    "pooled_wilson_hi": 0.10075165027844246,
+    "pooled_hi_le_9pct": false,
+    "size_controlled": false,
+    "B2_k": 50,
+    "B2_n": 100,
+    "B2_rate": 0.5,
+    "power_kept": true
+   }
+  ],
+  "outcome": "partial"
+ },
+ "prereg": {
+  "file": "valid-framework experiments/inbox7/PREREGISTRATION.md",
+  "commit": "bae70d3",
+  "sha256": "7ee7d405274d60f7cbda05989920b0f999baeb1730bd617726f98167a441fad2"
+ },
+ "rules": {
+  "size": "pass rate in B0",
+  "power": "pass rate in B2",
+  "test": "scipy.stats.fisher_exact([[k_B2, n_B2-k_B2], [k_B0, n_B0-k_B0]], alternative='greater')",
+  "pbo_pass": "PBO < threshold (NaN = not passing)"
+ }
+}

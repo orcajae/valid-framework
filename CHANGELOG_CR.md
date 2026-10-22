@@ -1,6 +1,6 @@
 # Changelog — camera-ready revision (2026-08-01)
 
-> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design).** Entries below are in the order they were made.
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design).** Entries below are in the order they were made.
 
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
@@ -661,6 +661,287 @@ variance.
 - **Robustness study.** The study of these findings is pre-registered in
   [`experiments/inbox7/PREREGISTRATION.md`](experiments/inbox7/PREREGISTRATION.md)
   (committed before any run).
+
+## E15: The E14 findings re-tested under a pre-registered robustness design
+
+E14's addendum pointed to a robustness study of its two findings, pre-registered
+before any run. This entry reports that study, as the pre-registration requires
+whatever the results. Nothing in E14 is withdrawn: its numbers stay as published,
+and this entry sets the scope of two of its conclusions.
+
+- Design: [`experiments/inbox7/PREREGISTRATION.md`](experiments/inbox7/PREREGISTRATION.md),
+  committed in bae70d3 before any series was run. Its sha256 (`7ee7d405…fad2`)
+  was checked against this repository before the code was written. Its change
+  log is empty: the design was not changed.
+- Code: [`experiments/inbox7/`](experiments/inbox7/). It imports the E14
+  pipeline (`experiments/true_pbo/run.py`) unchanged. The published scripts
+  differ from the executed copy only in file paths and comments. Re-running 18
+  series with them (two of each arm in the PBO stage; two each of A-ETH, A-SOL
+  and B2 in the permutation stage) reproduced every stored matrix and permuted
+  AUC bit for bit, and every stored per-series value other than run times to
+  within 1e-16, the
+  rounding of the stored CSV files.
+- Outputs: [`results/inbox7/`](results/inbox7/). Per-series values, the
+  matrices behind every PBO (for S3, the per-block counts, sums and sums of
+  squares from which every half-split Sharpe ratio is computed), every permuted
+  AUC, every rate with its 95% Wilson interval, and the decision file.
+
+**Design.** Daily Binance data with the same sha256 digests as E14.
+
+| Arm | Series | Construction |
+|---|---|---|
+| A | BTC, ETH, SOL × 200 (seeds 0–199) | i.i.d. bootstrap of daily returns with the sample mean removed |
+| B0, B1, B2 | BTC × 100 each (seeds 1000–1099) | As A, plus E14's planted mechanism at β = 0, 0.117 and 0.163. β was not recalibrated after removing the mean |
+| B0′ (B0p in the files) | BTC × 100 (seeds 1000–1099) | E14's base with the mean kept, β = 0: the matched control for E14's planted arms |
+| C | BTC × 200 (seeds 0–199) | Stationary bootstrap of demeaned returns, mean block length 20 days |
+
+- PBO, four ways, each on an eight-configuration grid with per-event Sharpe
+  ratios before costs:
+  - S1, E14's method: refitted CPCV (N = 6, k = 2, 15 splits), in-sample
+    measured on the training events each configuration was fitted to.
+  - S2: as S1, with in-sample measured on a validation slice (the last 20% of
+    each split's training events, after a 20-event gap), which is not fitted.
+  - S3, canonical CSCV: out-of-sample per-event returns from purged 6-fold
+    cross-validation, cut into 16 blocks; all 12,870 half-splits, no refitting.
+  - S4: as S1, with eight LightGBM configurations.
+- Permutation test, four ways, 100 refitted permutations each. A series passes
+  if its real holdout AUC exceeds the 95th percentile of the 100 permuted AUCs.
+  - T1, E14's test: full shuffle, holdout not purged.
+  - T2: full shuffle, with the 20 training events before the holdout dropped.
+  - T3: as T2, with the labels rolled by a random offset (circular shift),
+    which keeps the dependence between neighbouring labels.
+  - T4: as T2, with the order of blocks of 20 consecutive labels shuffled.
+- Decision rules, fixed in advance (pre-registration §3): size is the pass rate
+  in B0 for PBO and in A for the permutation test; power is the pass rate in B2.
+
+**Checks.**
+- The pre-registered unit tests passed before the run: CSCV gives PBO = 0 when
+  one column dominates every block and 1 for identical columns; a circular shift
+  keeps the circular lag-1 autocorrelation of a synthetic label vector (the
+  ordinary lag-1 changes by at most 0.0025); a one-block shuffle is the identity; the demeaned
+  returns have mean below 1e-12 (largest 2.7e-18).
+- S1 and T1 on E14's base reproduced the stored E14 values for seeds 0–4: PBO
+  and the permuted 95th percentile identical, AUC within 6e-17.
+- The timing check passed: projected 1.7 h and 2.2 h against limits of 7.2 h
+  and 8.0 h.
+- After the run, every PBO was recomputed from the stored matrices (0
+  mismatches in 800 series), and every permutation verdict from the stored
+  permuted AUCs (0 mismatches in 3,600).
+
+**Implementation choices the pre-registration left open.** None changes a
+definition. They are listed in `experiments/inbox7/run.py`.
+- B0 and B0′ are generated with β unset. E14's drift step with β = 0 adds
+  exactly zero (unit test: identical arrays).
+- C's blocks wrap around the end of the series.
+- S2: the validation slice is the last 20% of the split's training events in
+  time order, and the 20 events before it are dropped.
+- S3: rows are cut into 16 blocks whose sizes differ by at most one. A tie for
+  the in-sample best goes to the earlier configuration, as in E14.
+- S4: LightGBM settings that the pre-registration does not name are left at
+  their defaults.
+- A PBO that cannot be computed counts as not passing. None occurred.
+- G on the purged holdout fits the base model on the events before the
+  20-event gap.
+- T3 offsets are drawn from ⌊0.1n⌋ to ⌈0.9n⌉ inclusive. T4 blocks are counted
+  from the start of the series. T1 and T2 use the same permuted label vectors.
+- When an AUC cannot be computed it is set to 0.5, as in E14. AUC equals 0.5
+  exactly in 314 of 360,000 permuted fits and 2 of 1,800 real fits; the code
+  does not record which of these came from the fallback. A real AUC of 0.5
+  cannot pass, since the smallest permuted 95th percentile is 0.545. Excluding
+  the permuted values of 0.5 would change one of 3,600 verdicts (T1, one SOL
+  series) and no rate in the decision rules.
+- The machine slept during part of the PBO stage. This affected run time, not
+  results: the computation is deterministic, and the 500 series run in both
+  stages, including three that spanned the sleep, gave identical AUC and net
+  Sharpe ratios.
+
+**Results: PBO.** Pass rate, % [95% Wilson]. One-sided Fisher exact test of
+B2 > B0. Rule: "has power" if B2 − B0 is at least 20 points and p < 0.05; "no
+power" if it is under 10 points and p ≥ 0.05; "inconclusive" otherwise.
+Intervals for every cell are in `results/inbox7/stage1_rates.csv`.
+
+| Variant | Threshold | B0 | B1 | B2 | B2 − B0 (pp) | p | Verdict | A-BTC | C |
+|---|---|---|---|---|---|---|---|---|---|
+| S1, E14 method | 0.20 | 0 [0.0, 3.7] | 0 | 0 [0.0, 3.7] | 0 | 1.0 | no power | 0.5 | 1.5 |
+| | 0.50 | 48 [38.5, 57.7] | 17 | 6 [2.8, 12.5] | −42 | 1.0 | no power | 52.0 | 57.5 |
+| S2, validation slice | 0.20 | 0 [0.0, 3.7] | 1 | 3 [1.0, 8.5] | +3 | 0.12 | no power | 0.0 | 1.5 |
+| | 0.50 | 47 [37.5, 56.7] | 64 | 71 [61.5, 79.0] | +24 | 4.5e-4 | has power | 52.0 | 52.5 |
+| S3, canonical CSCV | 0.20 | 13 [7.8, 21.0] | 26 | 46 [36.6, 55.7] | +33 | 2.1e-7 | has power | 15.5 | 14.5 |
+| | 0.50 | 54 [44.3, 63.4] | 70 | 84 [75.6, 89.9] | +30 | 3.5e-6 | has power | 54.0 | 54.5 |
+| S4, LightGBM | 0.20 | 0 [0.0, 3.7] | 0 | 0 [0.0, 3.7] | 0 | 1.0 | no power | 0.5 | 1.0 |
+| | 0.50 | 54 [44.3, 63.4] | 36 | 25 [17.5, 34.3] | −29 | 1.0 | no power | 49.5 | 63.5 |
+
+A-BTC and C beside the three cells with power: S2 at 0.50, 52.0 [45.1, 58.8]
+and 52.5 [45.6, 59.3]; S3 at 0.20, 15.5 [11.1, 21.2] and 14.5 [10.3, 20.0]; S3
+at 0.50, 54.0 [47.1, 60.8] and 54.5 [47.6, 61.3]. Outside the decision rules:
+with A-BTC or C as the size reference, S2 at 0.50 would fall short of the
+20-point margin (71 against 52.0 and 52.5); the S3 cells would not.
+
+**Outcome for PBO: a variant with power exists** (precedence rule 1): S2 at
+0.50, S3 at 0.20 and at 0.50.
+
+Mean PBO, with a series-level bootstrap 95% interval for B0 and B2 (all arms in
+`results/inbox7/stage1_mean_pbo.csv`), and the mean holdout AUC of the base
+model:
+
+| | A-BTC | C | B0′ | B0 | B1 | B2 |
+|---|---|---|---|---|---|---|
+| S1 | 0.509 | 0.483 | 0.606 | 0.510 [0.485, 0.535] | 0.624 | 0.712 [0.687, 0.737] |
+| S2 | 0.493 | 0.485 | 0.481 | 0.509 [0.484, 0.535] | 0.461 | 0.409 [0.381, 0.437] |
+| S3 | 0.483 | 0.463 | 0.443 | 0.482 [0.435, 0.531] | 0.384 | 0.274 [0.229, 0.320] |
+| S4 | 0.499 | 0.456 | 0.475 | 0.486 [0.462, 0.511] | 0.545 | 0.585 [0.558, 0.613] |
+| Holdout AUC, not purged | 0.503 | 0.536 | 0.517 | 0.514 | 0.558 | 0.604 |
+
+**Results: permutation test.** Pass rate, %. Size is measured on A, power on
+B2. Intervals for every cell are in `results/inbox7/stage2_rates.csv`.
+
+| Variant | A-BTC | A-ETH | A-SOL | A pooled: k of 600, Wilson upper bound | B0 | B1 | B2 | Size controlled | Power kept |
+|---|---|---|---|---|---|---|---|---|---|
+| T1, full shuffle, not purged (E14) | 15.0 | 15.0 | 15.5 | 91, 18.26 | 25 | 43 | 74 | not in the rule | not in the rule |
+| T2, full shuffle, purged | 14.0 | 14.5 | 15.5 | 88, 17.72 | 19 | 44 | 75 | no | yes |
+| T3, circular shift, purged | 6.5 | 6.5 | 6.0 | 38, 8.57 | 8 | 26 | 48 | yes | no |
+| T4, block shuffle, purged | 8.5 | 7.5 | 7.0 | 46, 10.08 | 11 | 25 | 50 | no | yes |
+
+Rule: size is controlled if the rate is at most 7.5% on each asset and the
+pooled upper bound is at most 9%; power is kept if B2 is at least 50%. Outside
+the decision rules, B2 exceeds B0 under every variant (one-sided Fisher
+p ≤ 1.1e-9).
+
+**Outcome for the permutation test: partial.**
+- T3 meets the pre-registered size criterion (pooled 6.3% [4.6, 8.6]), but its
+  power is 48%, two series short of 50%.
+- T4 keeps power at exactly 50%, but fails both size conditions: 17 of 200
+  A-BTC series (8.5%), and a pooled upper bound of 10.08% (46 of 600; at most
+  40 would meet the bound).
+- The thresholds were fixed in advance and are not adjusted.
+
+**Other pre-registered rates.** Pass rate, %, on the same holdout: not purged
+for T1, purged for T2–T4. Every permutation pass also had AUC > 0.55 on that
+holdout, so AUC combined with Tk equals Tk. "Net Sharpe" uses E14's cost rule
+(18 bp charged on changes of predicted class); G′ charges 18 bp at every event.
+Net Sharpe alone, and the AUC and G rates for B0′ and C (not run in the
+permutation stage), are in `results/inbox7/`.
+
+| Rate | A-BTC | A-ETH | A-SOL | B0 | B1 | B2 |
+|---|---|---|---|---|---|---|
+| AUC > 0.55, not purged | 25.5 | 29.0 | 31.0 | 34 | 57 | 85 |
+| AUC > 0.55, purged | 20.5 | 29.5 | 28.0 | 28 | 54 | 82 |
+| G (AUC > 0.55 and net Sharpe > 0), not purged | 14.5 | 18.0 | 17.0 | 21 | 44 | 80 |
+| G, purged | 12.0 | 20.5 | 17.5 | 18 | 42 | 77 |
+| G′ (net Sharpe > 0 with cost at every event), not purged | 20.5 | 31.5 | 36.5 | 25 | 54 | 81 |
+| G′, purged | 22.5 | 27.5 | 34.0 | 22 | 51 | 75 |
+| T1 and net Sharpe > 0 | 9.0 | 10.0 | 11.0 | 16 | 35 | 71 |
+| T1 and G′ | 6.0 | 9.5 | 10.5 | 14 | 31 | 65 |
+| T2 and net Sharpe > 0 | 9.0 | 9.0 | 10.0 | 12 | 35 | 72 |
+| T2 and G′ | 5.5 | 7.0 | 8.0 | 8 | 29 | 62 |
+| T3 and net Sharpe > 0 | 3.5 | 4.0 | 3.5 | 6 | 24 | 47 |
+| T3 and G′ | 2.5 | 3.0 | 2.5 | 4 | 19 | 42 |
+| T4 and net Sharpe > 0 | 5.5 | 5.0 | 5.0 | 9 | 22 | 50 |
+| T4 and G′ | 4.0 | 4.0 | 4.0 | 6 | 19 | 45 |
+
+**What this means for E14.** These set the scope of E14's conclusions; none is
+withdrawn.
+- **PBO on refitted CPCV splits (S1, S4).** E14 concluded that PBO, computed
+  its way, is not a test for an edge. That holds for the construction it names,
+  refitted CPCV splits with in-sample measured on the fitted training events,
+  and it now holds in two model families. In both, PBO < 0.50 passes fewer
+  series as the planted effect grows (CatBoost 48, 17 and 6%; LightGBM 54, 36
+  and 25%), and mean PBO rises (0.510 to 0.712; 0.486 to 0.585).
+- **PBO under canonical CSCV and the validation slice (S3, S2).** Here PBO moves
+  with the planted effect in the three cells with power. Canonical CSCV passes
+  13, 26 and 46% at 0.20, and 54, 70 and 84% at 0.50. The validation slice
+  passes 47, 64 and 71% at 0.50; at 0.20 it passes 0 to 3% and has no power.
+- **PBO thresholds are not test levels.** Without a planted effect, canonical
+  CSCV passes 13.0–15.5% of demeaned series at 0.20 (B0, A-BTC, C) and 23% with
+  the mean kept (B0′); at 0.50 it passes 54.0–54.5% (B0′ 59%). E14's guidance
+  for V4 stands: report PBO with the grid and the in-sample measure, as a
+  description of the search, not as a pass-or-fail gate. This entry adds: name
+  the construction (refitted CPCV or canonical CSCV).
+- **What drives the difference is untested.** S2 and S3 differ from S1 in more
+  than the in-sample measure: S2 fits on fewer events, and S3 uses six-fold
+  predictions without refitting per split. E14 observed that in-sample selection
+  on fitted events picks one of the two depth-6, learning-rate-0.1
+  configurations on 94–99% of splits. Whether in-sample selection on
+  fitted events causes the opposite direction of S1 and S4 was not tested.
+- **Drift.** E14's signal-free PBO < 0.50 rates (31.5–32.5%) were measured on
+  series that keep each asset's mean return. On the seeds of the planted arms,
+  S1 passes 26% of series with the mean kept (B0′) and 48% with it removed (B0);
+  paired by seed, exact McNemar p = 0.002, a comparison outside the
+  pre-registration. E14
+  compared its planted arms (21% and 8%) with signal-free series on other seeds.
+  Their matched control is B0′, at 26%.
+- **Permutation test.** E14 named two untested candidates for the excess size.
+  - Purging the holdout moves A by at most one point: T1 to T2 goes from 15.0,
+    15.0 and 15.5% to 14.0, 14.5 and 15.5% (B0 25 to 19%, B2 74 to 75%).
+  - Keeping the dependence between neighbouring labels lowers the rate, to
+    6.0–6.5% (T3) and 7.0–8.5% (T4). It also lowers power: B2 passes 75% under
+    T2, 48% under T3 and 50% under T4.
+  - Removing the mean does not remove the excess: T1 passes 15.0–15.5% of
+    demeaned series, against E14's 14.0–17.5% with drift kept.
+  - These comparisons are descriptive, as pre-registered, and do not establish
+    a cause.
+- **V6** stands with E14's qualification. In this pipeline a full shuffle of
+  overlapping labels runs above its nominal size, and a dependence-preserving
+  permutation runs closer to it at a cost in power.
+- **AUC alone.** On demeaned series, AUC > 0.55 flags 25.5, 29.0 and 31.0% (BTC,
+  ETH, SOL; holdout not purged), against E13's 27.0, 30.0 and 26.5% with drift
+  kept.
+
+**Other observations, outside the decision rules.**
+- Arm C keeps serial dependence within blocks, and the base model finds
+  structure in it: mean holdout AUC 0.536, AUC > 0.55 on 43.5% of series. C is a
+  null for drift, not for predictability. Its PBO rates are close to A's, except
+  S4 at 0.50 (63.5% against 49.5%).
+- B0 and A-BTC come from the same generator on different seeds. B0 passes more
+  often on several statistics, for example T1 at 25% against 15.0% (two-sided
+  Fisher p = 0.04, one of many unplanned comparisons). We do not interpret this.
+  The decision rules use B0 for PBO size and A for permutation size, as fixed in
+  advance.
+
+**Use of the outcomes.** The pre-registration ties the outcomes to the decision
+on a further paper: a full measurement paper if both outcomes are informative,
+a shorter paper if one is, none if neither is. It does not define
+"informative". We take the conservative reading: the PBO outcome is
+informative and the permutation outcome ("partial") is not, so the outcomes
+support at most a shorter paper on PBO. Whether to write it will be decided
+after a search of prior work on the same question. This search was not
+pre-registered.
+
+**Limits.**
+- One grid per model family (eight configurations), and one planted mechanism,
+  which is close to one of the features. β was not recalibrated after removing
+  the mean (mean holdout AUC 0.558 and 0.604).
+- The power arms are BTC, 100 series each. Every arm is daily. An intraday null
+  is outside this study, so V5 remains unresolved.
+- No intervention tests which design difference drives the PBO contrast, or
+  whether label dependence causes the excess size.
+- Under exact exchangeability, the pass rule (real AUC above the interpolated
+  95th percentile of 100 permuted AUCs) passes about 5.9% of series, not 5%. The
+  size thresholds were fixed with this rule.
+- Neither T3 nor T4 is an exact randomization test when labels are serially
+  dependent; T3's offsets exclude shifts close to zero.
+- Three verdicts are within two series of their thresholds: T3 power is two
+  series short of 50%, T4 power is exactly 50%, and S2 at 0.20 would be
+  inconclusive rather than no power with two more B2 passes.
+
+**What this study does not change** (pre-registration §5). The checklist
+wording, the list of results that still stand in E13, and E14's published
+numbers. SSRN v3.3 predates this entry.
+
+**Supersedes.**
+- E14's sentence "Canonical CSCV and a validation-slice in-sample measure were
+  not run."
+- E14's description of the two permutation candidates as untested: both were
+  compared descriptively here; neither is established as the cause.
+- E14's KNOWN_ISSUES 6 bullet ("neither threshold makes PBO a test for an edge
+  in this pipeline") and `KNOWN_ISSUES.md` #6 ("at neither threshold is PBO a
+  test for an edge in this pipeline"): both hold for refitted CPCV splits with
+  in-sample measured on the fitted training events (S1, S4), not for canonical
+  CSCV (S3) or, at 0.50, a validation-slice in-sample measure (S2).
+- SSRN v3.3, where it says that canonical CSCV and a validation-slice
+  in-sample measure were not run, or that their behaviour is open, or that the
+  two permutation candidates, a dependence-preserving permutation and a purged
+  holdout, were not tested.
 
 ## Unchanged
 

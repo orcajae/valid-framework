@@ -1,0 +1,54 @@
+{
+ "what": "Robustness study of the E14 findings, pre-registered (experiments/inbox7/PREREGISTRATION.md). CHANGELOG E15. Stage 1: arms A-BTC, B0, B1, B2, B0p, C with G and S1-S4. Stage 2: arms A (BTC, ETH, SOL), B0, B1, B2 with G, G' and T1-T4.",
+ "prereg": {
+  "file": "experiments/inbox7/PREREGISTRATION.md",
+  "commit": "bae70d32fe4bd2c08c80cbe194c5d7eff566e45b",
+  "sha256": "7ee7d405274d60f7cbda05989920b0f999baeb1730bd617726f98167a441fad2"
+ },
+ "valid_framework_commit": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861",
+ "valid_journal_commit_at_run": {
+  "stage1": "9d8cae295cb63b8ca5a0f0560eb68cbd0b79da71",
+  "stage2": "df6129c80cb0bce412f951e2a98d827c5725d4f8"
+ },
+ "worktree": "git worktree add --detach /tmp/vf-pbo 018f4ea (removed after the run)",
+ "python": "python3 -I (anaconda 3.11); numpy 2.4.4, scipy 1.17.1, catboost 1.2.10, lightgbm 4.6.0, scikit-learn 1.8.0",
+ "data_sha256": {
+  "binance_btcusdt_ohlcv_1d.csv": "19dd18c523032b82723e07f45410f38f9158136f7f8c48036761dade79c44d29",
+  "binance_ethusdt_ohlcv_1d.csv": "8d0851f3b7e21a250dbc8a88d13f6d5c96959e61a8bb5e0469f497027ac0d5fe",
+  "binance_solusdt_ohlcv_1d.csv": "33db1e362fd1ae6e51b03950e983dda1c240fe3f37b083f327c6284e21d6af95"
+ },
+ "data_note": "Daily CSVs written from the Binance daily OHLCV files read by experiments/data_sources.py; sha256 listed above, identical to E14 (results/true_pbo/summary.json). (Local path removed for publication.)",
+ "commands": {
+  "unit": "python3 -I experiments/inbox7/run.py unit",
+  "repl": "python3 -I experiments/inbox7/run.py repl",
+  "stage1_time": "python3 -I experiments/inbox7/run.py time --stage 1",
+  "stage1_series": "python3 -I experiments/inbox7/run.py series --stage 1 --arm {A,B0,B1 | C,B2,B0p} --out results/inbox7/parts/s1_<arm>  (2 workers, arms in sequence per worker)",
+  "stage1_summarize": "python3 -I experiments/inbox7/summarize.py 1",
+  "stage2_time": "python3 -I experiments/inbox7/run.py time --stage 2",
+  "stage2_series": "python3 -I experiments/inbox7/run.py series --stage 2 --arm {A --asset BTC, A --asset SOL, B0 | A --asset ETH, B1, B2} --out results/inbox7/parts/s2_<arm>  (2 workers)",
+  "stage2_summarize": "python3 -I experiments/inbox7/summarize.py 2",
+  "recompute": "python3 -I experiments/inbox7/recompute.py results/inbox7"
+ },
+ "deviations": "Implementation choices the pre-registration left open: experiments/inbox7/run.py DEVIATIONS and CHANGELOG E15.",
+ "stage1": {
+  "pre_run_checks": {
+   "unit": "PASS (logs/unit.txt)",
+   "replication": "PASS: S1 and T1 on the E14 base, BTC seeds 0-4: PBO and permuted 95th percentile identical to results/true_pbo/null.csv; AUC within 5.6e-17 (CSV round trip of the stored value) (logs/repl.txt)",
+   "timing": "1.68 h projected (2 workers, one series per arm timed) against the pre-registered 3.6 h, limit 7.2 h (logs/time_stage1.txt)"
+  },
+  "series": 800,
+  "wall_h": 6.05,
+  "sleep_note": "The machine slept during part of this stage. Five series spanned the sleep; the three also run in stage 2 (B1) gave identical AUC and net Sharpe ratios there, and the computation is deterministic.",
+  "recompute": "S1, S2, S4 by Eq. 1 from *_is / *_oos and S3 by CSCV: 0 mismatches of 3,200 PBO values (800 series x 4)"
+ },
+ "stage2": {
+  "pre_run_checks": {
+   "timing": "2.15 h projected (2 workers, one series per arm timed) against the pre-registered 4.0 h, limit 8.0 h (logs/time_stage2.txt)"
+  },
+  "series": 900,
+  "wall_h": 3.86,
+  "recompute": "T1-T4 verdicts from the stored 100 permuted AUCs per series: 0 mismatches of 3,600; G, AUC and net Sharpe of the 500 series run in both stages identical (largest difference 0.0)"
+ },
+ "published_reduction": "stage1_arrays.npz stores, for S3, the per-block counts, sums and sums of squares (*_S3_n, *_S3_sum, *_S3_sumsq; 16 row blocks) instead of the per-event returns on bootstrap series; experiments/inbox7/recompute.py recomputes every S3 PBO from them. run.py writes *_S3_R (events x 8); the published statistics are those of np.array_split of its rows into 16 blocks, so a re-run is compared after that reduction.",
+ "paths_note": "Script and output paths renamed for publication (tools/inbox7 -> experiments/inbox7, canon/inbox7 -> results/inbox7, canon/true_pbo -> results/true_pbo, tools/true_pbo -> experiments/true_pbo; the public copy adds E14's private-input guards, which this study does not reach). valid_journal_commit_at_run refers to the private working repository."
+}
