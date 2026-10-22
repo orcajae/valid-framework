@@ -379,6 +379,8 @@ validation alone, 0% with CPCV and PBO). We describe the two as complementary.
 
 **Unchanged.** No number, table or figure changes.
 
+*Superseded in part by E13 (October 2026): the sentence quoting "0% with CPCV and PBO". The AUC-only rates, as E13 lists them, are 27.0, 30.0 and 26.5% (BTC, ETH, SOL).*
+
 ## E13: Most empirical results withdrawn after a full re-verification
 
 **How it surfaced.** On 18 and 19 October 2026, while preparing a journal
