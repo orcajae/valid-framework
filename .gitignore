@@ -18,6 +18,9 @@ results/reference/*
 !results/true_pbo/
 !results/inbox7/
 results/inbox7/parts/
+!results/cscv_calibration/
+results/cscv_calibration/parts/
+results/cscv_calibration/stage3_R.npz
 catboost_info/
 *.DS_Store
 .env

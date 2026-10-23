@@ -1,0 +1,62 @@
+{
+ "pass": true,
+ "seeds": [
+  {
+   "seed": 0,
+   "events": 826,
+   "n_equal": true,
+   "sum_maxdiff": 0.0,
+   "sumsq_maxdiff": 0.0,
+   "pbo_count": 2008,
+   "pbo_count_ref": 2008,
+   "pass": true
+  },
+  {
+   "seed": 1,
+   "events": 888,
+   "n_equal": true,
+   "sum_maxdiff": 0.0,
+   "sumsq_maxdiff": 0.0,
+   "pbo_count": 2647,
+   "pbo_count_ref": 2647,
+   "pass": true
+  },
+  {
+   "seed": 2,
+   "events": 926,
+   "n_equal": true,
+   "sum_maxdiff": 0.0,
+   "sumsq_maxdiff": 0.0,
+   "pbo_count": 11034,
+   "pbo_count_ref": 11034,
+   "pass": true
+  },
+  {
+   "seed": 3,
+   "events": 873,
+   "n_equal": true,
+   "sum_maxdiff": 0.0,
+   "sumsq_maxdiff": 0.0,
+   "pbo_count": 8049,
+   "pbo_count_ref": 8049,
+   "pass": true
+  },
+  {
+   "seed": 4,
+   "events": 870,
+   "n_equal": true,
+   "sum_maxdiff": 0.0,
+   "sumsq_maxdiff": 0.0,
+   "pbo_count": 5809,
+   "pbo_count_ref": 5809,
+   "pass": true
+  }
+ ],
+ "log": "<OUT>/logs/repl_0of1_20261023T044735_16369.json",
+ "vf": {
+  "path": "<VF>",
+  "head": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861"
+ },
+ "ns": "reg",
+ "run_py_sha256": "bc0e7065c4d36daa0e7bd00c826e1a5c9a4610c9f14a4bc1c2d5db4fb74294a3"
+}

@@ -1,0 +1,236 @@
+{
+ "pass": true,
+ "checks": {
+  "cscv_dominant_0": true,
+  "cscv_identical_1": true,
+  "rho_p_matches_prereg_text_0.001": true,
+  "generator_corr_within_0.01": true,
+  "generator_sr_within_0.1": true,
+  "demean_1e-12": true,
+  "no_recentring": true,
+  "p_in_range": true,
+  "sb_vectorised_eq_loop": true,
+  "sb_eq_e15_make_sb_series": true,
+  "rc_orig_vs_demeaned": true,
+  "make_series_w5_eq_e14": true,
+  "z40_recursion": true,
+  "grid_M8_eq_GRID_P": true,
+  "grid_subsets": true,
+  "make_c_eq_make_p_plus_l2": true,
+  "tie_rules_eq_ties_py": true,
+  "blas_threads_invariant": true,
+  "betalog_roundtrip": true,
+  "cells": true,
+  "n3_pairs_p2": true,
+  "uneq_sigma": true,
+  "repl_reference_counts": true
+ },
+ "results": {
+  "cscv_dominant": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "cscv_identical": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "rho_p": {
+   "0.0": 0.0,
+   "0.5": 0.487432416696651,
+   "0.9": 0.8940705762252261
+  },
+  "rho_p_minus_prereg_text": {
+   "0.0": 0.0,
+   "0.5": -0.0005675833033489952,
+   "0.9": 7.05762252261044e-05
+  },
+  "generator_corr_T1e6": {
+   "IID_0.0": {
+    "target": 0.0,
+    "max_abs_dev": 0.0013522132463101876,
+    "var_e_range": [
+     0.9964171035326244,
+     1.0021063865110427
+    ]
+   },
+   "IID_0.5": {
+    "target": 0.5,
+    "max_abs_dev": 0.001345084038436195,
+    "var_e_range": [
+     0.9991046609243605,
+     1.00188336030017
+    ]
+   },
+   "IID_0.9": {
+    "target": 0.9,
+    "max_abs_dev": 0.0003420055017008261,
+    "var_e_range": [
+     1.0001091625184997,
+     1.0024065842449408
+    ]
+   },
+   "GARCH_0.0": {
+    "target": 0.0,
+    "max_abs_dev": 0.0045930695901215575,
+    "var_e_range": [
+     0.989242924597828,
+     1.0020535518671358
+    ]
+   },
+   "GARCH_0.5": {
+    "target": 0.487432416696651,
+    "max_abs_dev": 0.002747874747490442,
+    "var_e_range": [
+     0.966240254784254,
+     0.9772702617483839
+    ]
+   },
+   "GARCH_0.9": {
+    "target": 0.8940705762252261,
+    "max_abs_dev": 0.000980169100211925,
+    "var_e_range": [
+     0.9904218640544211,
+     0.9965853348399675
+    ]
+   },
+   "MA10_0.0": {
+    "target": 0.0,
+    "max_abs_dev": 0.004802405962706781,
+    "var_e_range": [
+     0.9945909692120387,
+     1.0037786130539947
+    ]
+   },
+   "MA10_0.5": {
+    "target": 0.5,
+    "max_abs_dev": 0.004429203745590249,
+    "var_e_range": [
+     0.9937390356006762,
+     1.0041168929598525
+    ]
+   },
+   "MA10_0.9": {
+    "target": 0.9,
+    "max_abs_dev": 0.000807287903637377,
+    "var_e_range": [
+     0.9948450039960586,
+     0.9988371467573776
+    ]
+   }
+  },
+  "generator_annual_sr": {
+   "IID_0.0_T1e+06": {
+    "max_abs_dev": 0.023527711302876144,
+    "sr_col1": 0.9828661539463408
+   },
+   "IID_0.5_T1e+06": {
+    "max_abs_dev": 0.02231445163816033,
+    "sr_col1": 0.9829866256627754
+   },
+   "IID_0.9_T1e+06": {
+    "max_abs_dev": 0.0182126864189586,
+    "sr_col1": 0.9874459855164618
+   },
+   "GARCH_0.0_T1e+06": {
+    "max_abs_dev": 0.025567365434140486,
+    "sr_col1": 1.008322164990951
+   },
+   "GARCH_0.5_T1e+06": {
+    "max_abs_dev": 0.042667589517944006,
+    "sr_col1": 0.9690372818659203
+   },
+   "GARCH_0.9_T1e+06": {
+    "max_abs_dev": 0.04914246464522509,
+    "sr_col1": 0.9508575353547749
+   },
+   "MA10_0.0_T1e+07": {
+    "max_abs_dev": 0.030600212684328998,
+    "sr_col1": 0.969399787315671
+   },
+   "MA10_0.5_T1e+07": {
+    "max_abs_dev": 0.018409246748164576,
+    "sr_col1": 0.9815907532518354
+   },
+   "MA10_0.9_T1e+07": {
+    "max_abs_dev": 0.00783394262754939,
+    "sr_col1": 0.997100330473657
+   }
+  },
+  "demeaned_abs_mean_max": [
+   1.7277845820728999e-18,
+   8.239936510889833e-19,
+   6.392456008974534e-19,
+   3.0815627827252e-18,
+   1.935951399190117e-18,
+   6.334390959292533e-18
+  ],
+  "no_recentring": {
+   "sd_min": 0.00023613811925252582,
+   "max_abs_avg_over_se": 1.4287600356868955
+  },
+  "p_values": [
+   0.105,
+   0.08,
+   0.04,
+   0.145,
+   0.01,
+   0.03,
+   0.005,
+   0.025,
+   0.005,
+   0.015,
+   0.005,
+   0.005,
+   1.0,
+   1.0,
+   1.0,
+   0.41
+  ],
+  "rc_orig_vs_demeaned_maxdiff": 9.75781955236954e-19,
+  "z40_recursion_maxdiff": 6.938893903907228e-18,
+  "blas": [],
+  "betalog_lines": [
+   "- 2026-10-24 \u03b2 F1 = 0.066 (interpolated 0.06573; target mean holdout AUC 0.56; seeds 2000\u20132019)",
+   "- 2026-10-24 \u03b2 F2 dropped (no bracketing pair up to 0.150)"
+  ],
+  "n3_pair_maxdev": 3.144186300207963e-18,
+  "repl_reference_counts": [
+   2008,
+   2647,
+   11034,
+   8049,
+   5809
+  ],
+  "wall_s": 18.76282024383545
+ },
+ "versions": {
+  "python": "3.11.4",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "cpu_count": 10,
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0",
+  "catboost": "1.2.10",
+  "lightgbm": "4.6.0"
+ },
+ "prereg": {
+  "file_sha256": "d23517d44a25d0dfefe50d8010c0febc8b9ce1f55104c1229fb469698c09ebe8",
+  "body_sha256": "cf81e2099a6cdd08c831df0df0e0274838c6c0e0af3fd599db626bf92d7dd73a",
+  "change_log": "## Change log\n\n- 2026-10-23, before any registered series was run. Implementation details that the text above leaves open are listed in `run.py` (IMPLEMENTATION_NOTES). These touch the text above:\n  - \u00a71 gives \u03c1_P(0.5) as 0.488. Numerical integration gives 0.4874, and \u03c1_P(0.9) = 0.8941. The generator test uses the integrated values, which every run log records.\n  - \u00a72: F1 and F2 run with the interpolated value rounded to three decimals; the unrounded value is stored beside it. In the calibration, a seed whose preparation step returns None is skipped, and the number of seeds used is recorded.\n  - \u00a73: in step 4 of the calibrated p-value, PBO_obs is the PBO of the observed matrix before demeaning. The L = 5 and L = 50 runs reuse the random draws of L = 20 (the same start, uniforms and jump indices); only the block-start rule changes. The Reality Check is computed at L = 20 only.\n  - \u00a76: timing checks use seeds outside the registered ranges. Stage 1 starts only after all three stages have been timed, and a stage's B is fixed when its first shard starts. For Stage 3 the B decision uses the serial projection rather than half of it, because each CatBoost fit already uses all cores. Layer 1 uses one BLAS thread per worker; the unit tests show bitwise-identical outputs.\n"
+ },
+ "vf": {
+  "path": "<VF>",
+  "head": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861"
+ },
+ "ns": "reg",
+ "run_py_sha256": "bc0e7065c4d36daa0e7bd00c826e1a5c9a4610c9f14a4bc1c2d5db4fb74294a3"
+}

@@ -1,0 +1,137 @@
+{
+ "cmd": "stage3",
+ "args": {
+  "cmd": "stage3",
+  "stage": 1,
+  "shard": "0/2",
+  "cells": null,
+  "arms": null,
+  "seeds": null,
+  "out": "<OUT>",
+  "dev": false,
+  "n": null,
+  "B": null,
+  "append": false
+ },
+ "ns": "reg",
+ "start": "2026-10-23T06:15:08.208874+00:00",
+ "pid": 26219,
+ "expected_end": "2026-10-23T09:02:58.767380+00:00",
+ "expected_s": 10070.5585064888,
+ "stop_conditions": [
+  "a check before Stage 1 is missing or did not pass (checks/unit.json, repl.json, timing_s1/2/3.json; same run.py sha256; registered namespace): every stage refuses to start",
+  "Stage 1 timing projects more than 10 h with 2 workers: the stages refuse to start (prereg section 6)",
+  "Stage 2 timing over 10 h (2 workers) / Stage 3 timing over 12 h (unhalved) at B = 199: B = 99 in that stage",
+  "the stage lock (B, timing sha256, run.py sha256) differs once parts of the stage exist, or Stage 2/3 timing differs from the file frozen when Stage 1 started: refuse",
+  "PREREGISTRATION.md before the Change log differs from 2ead385, the data sha256 differs from E14, or the VF worktree is not at 018f4ea: refuse",
+  "seeds 1000-1099 before both betas are in the Change log, committed and on origin/main: refuse",
+  "the same shard is already running (shard lock), or the output directory holds the other namespace: refuse",
+  "a check fails inside a unit (demeaned column mean > 1e-12, p outside [1/(B+1), 1], tie_rules != pbo_fast): the shard stops; finished part files are kept and skipped on restart"
+ ],
+ "prereg": {
+  "file_sha256": "6f02d5277e312ff9e1cfc4670697767a76b46a54ad9ecb84fc8e0deb63c242a6",
+  "body_sha256": "cf81e2099a6cdd08c831df0df0e0274838c6c0e0af3fd599db626bf92d7dd73a",
+  "change_log": "## Change log\n\n- 2026-10-23, before any registered series was run. Implementation details that the text above leaves open are listed in `run.py` (IMPLEMENTATION_NOTES). These touch the text above:\n  - \u00a71 gives \u03c1_P(0.5) as 0.488. Numerical integration gives 0.4874, and \u03c1_P(0.9) = 0.8941. The generator test uses the integrated values, which every run log records.\n  - \u00a72: F1 and F2 run with the interpolated value rounded to three decimals; the unrounded value is stored beside it. In the calibration, a seed whose preparation step returns None is skipped, and the number of seeds used is recorded.\n  - \u00a73: in step 4 of the calibrated p-value, PBO_obs is the PBO of the observed matrix before demeaning. The L = 5 and L = 50 runs reuse the random draws of L = 20 (the same start, uniforms and jump indices); only the block-start rule changes. The Reality Check is computed at L = 20 only.\n  - \u00a76: timing checks use seeds outside the registered ranges. Stage 1 starts only after all three stages have been timed, and a stage's B is fixed when its first shard starts. For Stage 3 the B decision uses the serial projection rather than half of it, because each CatBoost fit already uses all cores. Layer 1 uses one BLAS thread per worker; the unit tests show bitwise-identical outputs.\n- 2026-10-23 \u03b2 F1 = 0.058 (interpolated 0.05760; target mean holdout AUC 0.56; seeds 2000\u20132019)\n- 2026-10-23 \u03b2 F2 = 0.077 (interpolated 0.07721; target mean holdout AUC 0.60; seeds 2000\u20132019)\n",
+  "commit": "2ead3855749b3a2a314f647ad0f6fca2fd0429fe"
+ },
+ "git_head": "a364ea83c88039c1685e7f8f390188eec349eb6e",
+ "vf": {
+  "path": "<VF>",
+  "head": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861"
+ },
+ "run_py_sha256": "bc0e7065c4d36daa0e7bd00c826e1a5c9a4610c9f14a4bc1c2d5db4fb74294a3",
+ "versions": {
+  "python": "3.11.4",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "cpu_count": 10,
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0",
+  "catboost": "1.2.10",
+  "lightgbm": "4.6.0"
+ },
+ "rho_p": {
+  "0.0": 0.0,
+  "0.5": 0.487432416696651,
+  "0.9": 0.8940705762252261
+ },
+ "rho_p_prereg_text": {
+  "0.0": 0.0,
+  "0.5": 0.488,
+  "0.9": 0.894
+ },
+ "implementation_notes": [
+  "Equicorrelated Gaussian rows: Z = rng.standard_normal((n, M + 1)); g = sqrt(rho) * Z[:, :1] + sqrt(1 - rho) * Z[:, 1:] (one common factor; unit variance, Pearson correlation rho); also the Gaussian copula of GARCH",
+  "IID: e = g(T rows). MA10: g drawn for T + 9 rows (rows 0-8 are the lags before t = 0); e(t) = (sum over k = 0..9 of xi(t - k), added in order k = 0..9) / sqrt(10)",
+  "GARCH draw order: eta = rng.standard_t(5, T + 500) / sqrt(5/3) first, then Z for the T kept periods only (h depends on eta alone, so no column shocks are drawn for burn-in periods); h(0) = 1, u = sqrt(h(t-1)) * eta(t-1), h(t) = 0.02 + 0.08 * u * u + 0.90 * h(t-1) in Python floats; periods 0-499 dropped; e = sqrt(h) * eps",
+  "t(5) copula marginal: eps = F_t5^-1(Phi(g)) / sqrt(5/3), evaluated sign-symmetrically as -sign(g) * stdtrit(5, ndtr(-|g|)) so that the upper tail is not rounded to Phi = 1",
+  "rho_P(rho): nested scipy.integrate.quad of E[eps_1 eps_2] over +-12 sd (epsrel 1e-12); recorded in every run log; the GARCH correlation test targets the integrated value",
+  "Means: mu_m = SR_m / sqrt(252) * sigma_m with SR_m the arm's annual Sharpe ratio; N2: SR_m = -1.0 * (m - 1) / (M - 1); N3: mu = mu(P2) - mu_1(P2) for every column, r = mu + sigma * e with e from the P2 seed [5, c, j]",
+  "Unequal volatility (cell 216): sigma_m = 0.005 * 4 ** ((m - 1) / (M - 1)), reference-cell T, M, S, rho, serial; arms N1, N2, P2; seeds [a, 216, j]",
+  "Full-sample Sharpe ratio (best configuration, reported per series): mean / (sd + 1e-10), sd with divisor n, ties to the first configuration (np.argmax); Layer 1 reports the arm's population annual SR of it",
+  "PBO is stored as integer counts k of K splits (PBO = k / K, bitwise equal to pbo_fast, asserted at every call); last-listed and mean-rank rules and the count of splits with an in-sample tie come from tie_rules(), unit-tested equal to the per-split rule of experiments/inbox7/ties.py",
+  "PBO screens: PBO < tau (strict), tau in {0.05, 0.10, 0.20, 0.50}; computed in summarize.py from the counts",
+  "Stationary bootstrap: rng = default_rng(stream); start = rng.integers(T); u = rng.random(T - 1); jump = rng.integers(0, T, size=T - 1) (the order of E15 make_sb_series, on a Generator); a block starts at t if u[t-1] < 1/L (index jump[t-1]), else index = previous + 1 mod T; vectorised, unit-tested equal to the loop",
+  "Calibrated p: D = demeaned(R) = R - R.mean(0) (checked |column mean| <= 1e-12); boot(D, stream, Ls) returns the indices and D[idx] per L (not demeaned again); PBO*_b = pbo_fast(cscv_matrices(D[idx_b], S)); PBO_obs = pbo_fast on R (first-listed tie rule); p = (1 + #{PBO*_b <= PBO_obs}) / (B + 1); the section 6 demeaning and no-re-centring tests call demeaned() and boot()",
+  "L sensitivity (L = 5, 50) reuses the streams of L = 20 (same start, u, jump); only the block-start rule u < 1/L changes; the Reality Check is computed at L = 20 only",
+  "Reality Check: V_obs = max_m sqrt(T) * mean_m; V*_b = max_m sqrt(T) * (mean(R[idx_b])_m - mean_m) with the L = 20 indices of the same stream; p_RC = (1 + #{V*_b >= V_obs}) / (B + 1)",
+  "Stage 2 regenerates series j = 0..499 from their Stage 1 seeds; summarize.py stops if an observed PBO differs from Stage 1's",
+  "Layer 2 grid order: [(d, lr, cw, l2) for d in (4, 6, 8) for lr in (0.03, 0.1) for cw in (None, 'Balanced') for l2 in (3, 10)]; sub-grids keep this order (M = 8 equals E15 GRID_P order, unit-tested; M = 16 = columns 0-15)",
+  "CatBoost: CatBoostClassifier(depth, iterations=100, learning_rate, verbose=0, random_seed=42, l2_leaf_reg, auto_class_weights only when set); thread_count not set (CatBoost default -1 = all cores), as E15",
+  "Layer 2 arms via E15 build(): A-<asset> = 'A', C = 'C', B0/B1/B2 = same names, D = 'B0p' (E14 base, not demeaned: identical to e14.make_series(seed, r, ...)); F1/F2 = make_series_w(window=40) on demean(r); R as E14 cmd_real (ret = close.pct_change().fillna(0) on the actual BTC series)",
+  "F calibration: seeds whose prepare() returns None are skipped (E14 calib convention); bracketing pair = first i from beta = 0 up with (AUC_i - target) * (AUC_i+1 - target) <= 0; beta = beta_i + (target - AUC_i) * (beta_i+1 - beta_i) / (AUC_i+1 - AUC_i) (beta_i if AUC_i = AUC_i+1); the run uses beta rounded to 3 decimals (E14 convention) and stores the unrounded value beside it; an arm without a bracketing pair is stored as {dropped: true, reason}",
+  "Change-log beta lines are generated by 'betalog' (date in KST), one per arm: '- YYYY-MM-DD \u03b2 F1 = 0.066 (interpolated 0.06573; target mean holdout AUC 0.56; seeds 2000\u20132019)' or '- YYYY-MM-DD \u03b2 F2 dropped (no bracketing pair up to 0.150)'; '--append' replaces the '(empty)' placeholder only if it is still there",
+  "Any registered Stage 3 unit with seeds 1000-1099 (B0, B1, B2, F1, F2) refuses unless (i) the Change log has exactly one strictly parsed beta line per arm, equal to beta_F.json (beta at 3 decimals, interpolated value at 5, target), (ii) git diff --quiet HEAD -- PREREGISTRATION.md, (iii) after git fetch origin, the last commit touching PREREGISTRATION.md is an ancestor of origin/main; both shas go to the run log; dropped arms are skipped and reported as dropped",
+  "Registered Layer 2 commands (repl, calib, stage3) refuse a CatBoost version other than E15's 1.2.10",
+  "Layer 2 bootstrap streams [8, k, s, b] are shared by (M = 8, S = 16), (M = 16, S = 8) and the L sensitivity",
+  "Median pairwise correlation: np.median of the upper triangle of np.corrcoef of the M columns (NaN if a column is constant)",
+  "Layer 2 invalid series (prepare() is None) are rows with valid = 0; summarize.py counts them as not passing",
+  "Dev namespace: seeds [99, ...] in Layer 1 and Layer 2 streams, Layer 2 RandomState seed 99,000,000 + s, synthetic data_sources 'synthetic' with the real lengths; outputs under results/ are refused",
+  "Timing commands use dev-namespace seeds on the run's data (no registered series is run); Stage 1 times every (T, M, S, serial) shape at rho = 0.5, each arm; Stages 1-2 project with 2 workers halving the wall time (one BLAS thread each, scaling measured); Stage 3 records the halved and the unhalved projection and decides B on the unhalved one, because CatBoost uses all cores in each worker",
+  "Checks before Stage 1 (prereg section 6): every registered stage refuses unless checks/unit.json and checks/repl.json pass and checks/timing_s1.json, timing_s2.json and timing_s3.json exist, all written in the registered namespace by this run.py (same sha256), and Stage 1's timing is within its limit",
+  "Stage lock: checks/stage<k>_lock.json freezes B, the timing file's sha256 and run.py's sha256 when a shard of stage k starts; a later shard refuses if any differs once parts of that stage exist. Stage 1's lock also freezes the sha256 of timing_s2.json and timing_s3.json; Stages 2 and 3 refuse to start before Stage 1 has started or with a timing file other than the frozen one, so their B is fixed before any Stage 1 result exists",
+  "Layer 1 (Stages 1-2 and their timing) runs numpy BLAS with one thread (threadpoolctl); unit-tested to give bitwise-equal PBO and calibrated-p outputs; Layer 2 keeps the BLAS and CatBoost thread defaults of E15",
+  "Parts are written atomically per (cell, arm) in Stages 1-2 and per 10-seed chunk in Stage 3 (temporary names carry the pid); existing parts are skipped (resume); each shard writes its own run log",
+  "Shard lock: locks/<stage, shard, filters>.lock created with O_CREAT | O_EXCL, holding pid and host; a second launch of the same shard refuses; a lock of a dead pid on the same host is cleared; removed at exit",
+  "Namespace marker: OUT/NAMESPACE holds 'reg' or 'dev'; a run of the other namespace (or into a directory whose parts carry the other namespace) refuses",
+  "Safety checks (data and prereg digests, VF worktree at 018f4ea, namespaces, dev-only options, seed ranges, unit invariants) raise SystemExit through need(), so they hold under python -O",
+  "Unit-test seeds: default_rng([4242 + i, ...]), never a registered tuple; generator tests at M = 8"
+ ],
+ "beta_publication": {
+  "beta_F_json_sha256": "90a81255f221df11954a07b0e26e5f31a4ec727f06aae612ee0bdd8b7206dc9a",
+  "prereg_last_commit": "a364ea83c88039c1685e7f8f390188eec349eb6e",
+  "origin_main": "a364ea83c88039c1685e7f8f390188eec349eb6e"
+ },
+ "stage_lock": {
+  "stage": 3,
+  "B": 199,
+  "run_py_sha256": "bc0e7065c4d36daa0e7bd00c826e1a5c9a4610c9f14a4bc1c2d5db4fb74294a3",
+  "timing_sha256": "8222fb4ed9b733a4ac1e7194242e4c2d193a0ff06077b7b7bccd97d9bb7b1278"
+ },
+ "stage": 3,
+ "B": 199,
+ "units": 76,
+ "units_todo": 76,
+ "shard_lock": "<OUT>/locks/stage3_0-2_cNone_aNone_sNone.lock",
+ "blas": [],
+ "data_sha256": {
+  "BTC": "19dd18c523032b82723e07f45410f38f9158136f7f8c48036761dade79c44d29",
+  "ETH": "8d0851f3b7e21a250dbc8a88d13f6d5c96959e61a8bb5e0469f497027ac0d5fe",
+  "SOL": "33db1e362fd1ae6e51b03950e983dda1c240fe3f37b083f327c6284e21d6af95"
+ },
+ "catboost_threads": {
+  "thread_count_param": "not set (CatBoost default -1 = all processor cores)",
+  "os_cpu_count": 10,
+  "process_threads_before_fit": 3,
+  "process_threads_peak_during_fit": 22
+ },
+ "betas": {
+  "F1": 0.058,
+  "F2": 0.077
+ },
+ "end": "2026-10-23T11:37:27.057289+00:00",
+ "status": "complete",
+ "units_done": 76,
+ "wall_s": 19338.197680711746
+}

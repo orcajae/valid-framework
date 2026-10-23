@@ -46,6 +46,7 @@ CANON = [
     (r"\bE14\b", "link to CHANGELOG E14 (pre-registered re-measurement)"),
     (r"\bE15\b", "link to CHANGELOG E15 (pre-registered robustness study)"),
     (r"\bE16\b", "link to CHANGELOG E16 (corpus re-count)"),
+    (r"\bE17\b", "link to CHANGELOG E17 (PBO thresholds across designs)"),
     (r"\b278\b", "corrected corpus count 165 of 278 (E16)"),
     (r"26\.5%", "AUC alone 27.0/30.0/26.5% (stands, E13)"),
 ]

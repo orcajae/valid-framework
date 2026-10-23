@@ -1,6 +1,6 @@
 # Changelog — camera-ready revision (2026-08-01)
 
-> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures that E13 kept are restated in [E16](#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated).** Entries below are in the order they were made.
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures that E13 kept are restated in [E16](#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). A pre-registered Monte Carlo study of PBO thresholds across designs is [E17](#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo).** Entries below are in the order they were made.
 
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
@@ -1266,6 +1266,287 @@ the rows that `scripts/derive_tf_ladder.py` counts.
   "model variants" for the ladder; the DSR benchmark 2.73 as the single figure
   and the abstract's DSR clause as evidence about multiple testing; and that
   these results passed the re-verification.
+
+## E17: PBO thresholds across designs, under a pre-registered Monte Carlo
+
+E15 found that canonical CSCV responds to a planted effect but passes 13.0–15.5%
+of demeaned series without one at PBO < 0.20, on one grid, one block count and
+one daily pipeline. This entry reports the pre-registered study that measures,
+over a range of designs, how often PBO thresholds pass sets of strategies
+without an edge and how often they pass a set that contains one. It also tests a
+p-value for rank persistence calibrated on null matrices built from the data. As
+the pre-registration requires, the results are reported whatever they show.
+Nothing in E14, E15 or E16 is withdrawn.
+
+- Design: [`experiments/cscv_calibration/PREREGISTRATION.md`](experiments/cscv_calibration/PREREGISTRATION.md),
+  committed in 2ead385 before any registered series was run. Its preamble
+  reports a scratch pilot outside the registered cells, run in an independent
+  review of the first draft, and the two thresholds changed after it: the D3
+  per-cell size bound (7.5% to 8.0%) and the R95 term of D1. Neither change
+  decides the outcome row: every D3 cell is at most 6.8%, below the earlier
+  7.5% bound as well, and without the R95 term D1 at τ = 0.05 would read
+  "design-dependent" instead of "intermediate", which leads to the same outcome
+  row (D1 at τ = 0.20 is "design-dependent" either way). The thresholds added
+  after the pilot (the D3 Layer 2 bound, which decides D3 here, and the D4
+  bounds) concern Layer 2 and N3, which the pilot did not measure. Its change
+  log records the implementation details the text left open (f17e045, before
+  any registered series was run) and the calibrated β of arms F1 and F2
+  (a364ea8, before Stage 1). The unit tests, the timing checks and the β
+  calibration, on seeds outside the registered ranges, and the pre-registered
+  replication of E15's A-BTC seeds 0–4, whose PBO counts E15 had published, ran
+  before a364ea8. The text before the change log is unchanged.
+- Code: [`experiments/cscv_calibration/`](experiments/cscv_calibration/)
+  (f17e045). It imports the E15 and E14 pipelines unchanged. `blockstats.py`
+  and the verifier `recompute.py` are added with this entry.
+- Outputs: [`results/cscv_calibration/`](results/cscv_calibration/): per-series
+  values of every stage, the PBO count of every bootstrap resample, every rate
+  with its 95% Wilson interval, and the decision file. The Layer 2 per-event
+  return matrices are not published: they are resampled exchange data, and for
+  arm R the real series. The block statistics from which every Layer 2 PBO
+  except arm R's is computed are published.
+
+**Design.**
+- **Layer 1, synthetic return matrices.** Each series is a T × M matrix whose
+  columns are configurations. 216 cells: T ∈ {250, 1000, 2500} × M ∈ {4, 8, 16,
+  32} × S ∈ {8, 16} CSCV blocks × correlation between configurations ρ ∈ {0,
+  0.5, 0.9} × serial structure (i.i.d. Gaussian; GARCH(1,1) volatility with
+  Student-t(5) shocks; MA10, in which each shock is the scaled sum of the
+  current and nine previous Gaussian draws, so returns are correlated up to
+  lag 9). Arms in every cell:
+  - N1: all means equal, no edge (1,000 series);
+  - N2: means falling from an annual Sharpe ratio of 0 to −1.0, no positive
+    edge (1,000);
+  - N3: the means of P2 shifted down by the edge, so one configuration at 0 and
+    the others at −1.0 (500, each paired with a P2 series on the same shocks);
+  - P1, P2, P3: one configuration with an annual Sharpe ratio of 0.5, 1.0 or
+    2.0, the others at 0 (500 each).
+  The reference cell is T = 1000, M = 8, S = 16, ρ = 0.5, GARCH.
+- **Layer 2, the ML pipeline of E15.** Daily Binance data with the E14 digests,
+  the E15 features, events, labels and purged 6-fold out-of-sample per-event
+  returns, with a grid of 24 CatBoost configurations. Sub-grids of M = 4, 8, 16
+  and 24 columns (M = 8 is the E15 grid), each at S ∈ {8, 16}. Arms:
+  - A: demeaned i.i.d. bootstrap, BTC, ETH and SOL, 200 each;
+  - D: the same with the mean kept (BTC, 200);
+  - C: demeaned stationary bootstrap (BTC, 200);
+  - B0, B1, B2: E15's planted mechanism near a feature (BTC, 100 each);
+  - F1, F2: a planted effect on the 40-day return, only partly spanned by the
+    features, at β = 0.058 and 0.077 (BTC, 100 each);
+  - R: the real BTC series, for illustration only.
+- **Statistics.**
+  - PBO by canonical CSCV, as in E15. A set passes a threshold τ if PBO < τ,
+    for τ ∈ {0.05, 0.10, 0.20, 0.50}.
+  - The calibrated p-value tests H0 "all configurations have the same mean".
+    Each column is demeaned once; the rows are resampled 199 times with a
+    stationary bootstrap (mean block 20) without re-centring; p is the share of
+    resamples whose PBO is at most the observed one, counting the observed. A
+    set passes if p ≤ 0.05. It does not test whether any configuration has a
+    positive edge.
+  - Comparator, outside the decision rules: a stationary-bootstrap Reality
+    Check (White 2000) on the same resamples.
+
+**Checks.**
+- Before the run, 23 unit tests passed, among them the generator's
+  correlations (T = 1,000,000) and Sharpe ratios (T = 1,000,000; 10,000,000
+  under MA10), the demeaning, the absence of re-centring, and the format of
+  the β lines.
+- The Layer 2 pipeline reproduced E15: on A-BTC seeds 0–4, the S3 block arrays
+  matched with a largest difference of 0.0, and the PBO counts were 2008, 2647,
+  11034, 8049 and 5809 of 12,870, as stored in E15.
+- The timing check passed for all three stages before Stage 1 started, and the
+  bootstrap count stayed at 199 in Stages 2 and 3.
+- Before the run, a second implementation written from the pre-registration
+  text reproduced the generator, PBO under three tie rules, the calibrated
+  p-value, the Reality Check and Layer 2 on development seeds, with no
+  mismatch.
+- After the run:
+  - every decision below was recomputed from the row files with separately
+    written code;
+  - 2,000 Layer 1 series drawn at random across all 216 cells and six arms were
+    regenerated from their seeds with a separately written generator, and gave
+    the stored PBO count in every case;
+  - all 12,008 Layer 2 PBO counts were recomputed from the stored matrices;
+  - the 600 calibrated p-values of arm A at M = 8, S = 16 were recomputed from
+    their bootstrap streams, giving the same counts and 51 passes;
+  - Stage 2's observed PBO equalled Stage 1's in all 38,000 series;
+  - at M = 8, S = 16 the Layer 2 PBO equalled E15's S3 PBO for all 700 series
+    the two studies share (A-BTC, C, B0, B1, B2; largest difference 1.1e-16).
+  No mismatch was found. [`recompute.py`](experiments/cscv_calibration/recompute.py)
+  repeats, from the published files, the decisions, the Stage 2 against Stage 1
+  comparison, the calibrated-p counts from the stored resample counts, and the
+  12,000 Layer 2 PBO counts of every arm except R from the block statistics;
+  with `--regen 2000` it regenerates the same 2,000 Layer 1 series.
+  Recomputing the calibrated p-values from their bootstrap streams, and arm R's
+  eight PBO counts, needs the per-event return matrices, which are not
+  published.
+
+**Results: D1, do PBO thresholds hold their pass rate across designs?** Pass
+rate of N1 (equal means), %, over the 216 cells, 1,000 series per cell. The
+span is the highest cell rate minus the lowest; R95 is the span expected from
+Monte Carlo error alone (95th percentile, 10,000 draws). Rule: "design-dependent"
+if span − R95 exceeds 5 points, "design-invariant" if it is at most 2,
+"intermediate" otherwise.
+
+| τ | Pooled | Lowest cell | Highest cell | Span | R95 | Span − R95 | Verdict |
+|---|---|---|---|---|---|---|---|
+| 0.20 | 10.4 | 3.1 (T 1000, M 32, S 16, ρ 0, GARCH) | 23.7 (T 250, M 4, S 16, ρ 0, MA10) | 20.6 | 6.3 | 14.3 | **design-dependent** |
+| 0.05 | 1.3 | 0.0 (14 cells) | 5.3 (T 250, M 4, S 8, ρ 0.9, GARCH) | 5.3 | 2.4 | 2.9 | intermediate |
+
+Outside the rule: at τ = 0.10 the pooled rate is 3.2% (cells 0.2–11.5%), and at
+τ = 0.50 it is 51.5% (44.4–73.5%). At τ = 0.20 the rate falls with the number of
+configurations (M = 4, 8, 16, 32: 15.7, 11.6, 8.3 and 6.0%), is higher under
+MA10 (12.0%, against 9.7% i.i.d. and 9.5% GARCH), mainly at T = 250 (15.2%,
+against 10.1% at T = 2,500), and otherwise moves little with T (11.5, 9.9,
+9.8%), S (10.5, 10.3%) or ρ (10.4% at each level). These factor means are
+descriptive.
+
+**Results: D2, does PBO respond to unequal means without an edge?** Reference
+cell, PBO < 0.20, 1,000 series per arm. Rule: "responds" if N2 − N1 is at least
+10 points and a one-sided Fisher exact test gives p < 0.05.
+
+| N1 | N2 | N2 − N1 (pp) | p | Verdict |
+|---|---|---|---|---|
+| 9.9 [8.2, 11.9] | 43.9 [40.9, 47.0] | +34.0 | 1.2e-69 | **responds** |
+
+Configurations that differ only in how much they lose keep their ranking
+between halves of the sample, and PBO passes them. Outside the rule, N2 passes
+more often than N1 in 211 of the 216 cells, by at least 10 points in 132. With unequal volatilities
+across configurations (reference cell, reported outside the rules) the rates
+are 9.5% (N1), 43.1% (N2) and 67.2% (P2).
+
+**Results: D4, can PBO tell an edge from a spread of means?** Reference cell,
+500 pairs: N3 series j is P2 series j with every mean lowered by the edge, on
+the same shocks. Exact two-sided McNemar test. Rule: "separates" if P2 − N3 is
+at least 10 points with p < 0.05; "does not separate" if |P2 − N3| is under 5
+points.
+
+| Screen | P2 | N3 | P2 only / N3 only | P2 − N3 (pp) | p | Verdict |
+|---|---|---|---|---|---|---|
+| PBO < 0.20 | 69.6 | 70.2 | 4 / 7 | −0.6 | 0.55 | **does not separate** |
+| Calibrated p ≤ 0.05 (reported) | 58.2 | 58.0 | 10 / 9 | +0.2 | 1.0 | does not separate |
+
+Outside the rule, |P2 − N3| is under 5 points in every one of the 216 cells
+(−2.8 to +2.0). The calibrated p-value is not built to separate them: removing
+the same amount from every mean leaves the demeaned matrix, and so the null
+distribution, unchanged; only the observed PBO can differ, through the Sharpe
+ratios.
+
+Reference-cell pass rates of PBO at every threshold, outside the rules (%):
+
+| Arm | τ = 0.05 | 0.10 | 0.20 | 0.50 |
+|---|---|---|---|---|
+| N1, equal means | 1.1 | 2.5 | 9.9 | 50.9 |
+| N2, unequal means, no positive edge | 11.5 | 22.6 | 43.9 | 83.1 |
+| N3, the spread of P2, no positive edge | 31.8 | 49.0 | 70.2 | 93.0 |
+| P1, one edge, annual Sharpe 0.5 | 4.6 | 10.0 | 24.6 | 69.6 |
+| P2, one edge, annual Sharpe 1.0 | 32.0 | 50.4 | 69.6 | 92.6 |
+| P3, one edge, annual Sharpe 2.0 | 94.2 | 96.4 | 98.6 | 99.8 |
+
+**Results: D3, does the calibrated p-value control its size, and does it have
+power?** Size is the N1 pass rate at p ≤ 0.05. Rule: size is controlled if it is
+at most 8.0% in each of the 19 Layer 1 cells of Stage 2, the pooled 95% Wilson
+upper bound is at most 6.5%, and Layer 2 arm A (600 series) passes at most 8.0%
+at both (M = 8, S = 16) and (M = 16, S = 8). Power if P2 in the reference cell
+passes at least 50%.
+
+| Condition | Value | Met |
+|---|---|---|
+| Layer 1, each of 19 cells ≤ 8.0% | 1.8–6.8% | yes |
+| Layer 1, pooled Wilson upper bound ≤ 6.5% | 406 of 9,500 (4.3%), upper bound 4.7% | yes |
+| Layer 2 arm A, M = 8, S = 16 | 51 of 600, 8.5% [6.5, 11.0] | **no** |
+| Layer 2 arm A, M = 16, S = 8 | 36 of 600, 6.0% [4.4, 8.2] | yes |
+| Power, P2 reference cell ≥ 50% | 291 of 500, 58.2% [53.8, 62.4] | yes |
+
+Outside the rule, P2 passes 4.2–49.4% in the other 18 cells, and 4.2–6.2% in
+the six MA10 cells, close to N1 there (3.0–6.8%; pooled over the six, 5.3%
+against 4.7%).
+
+**Outcome D3: fails** (size not controlled): arm A at M = 8, S = 16 passed 51
+series, where the bound allows at most 48. The bound was fixed in advance and
+is not adjusted. Beside the rule, as pre-registered: the calibrated
+p-value passes 13.8% of N2 and 22.3% of N3 series pooled over the 19 cells
+(28.6% and 58.0% in the reference cell). These are sets without a positive
+edge; the test rejects equal means for them, which is what it tests.
+
+**Use of the outcomes.** The pre-registration ties the paper to D1–D4, read in
+order. D3 is not "works"; D1 is "design-dependent" at τ = 0.20, so the second
+row applies: a short paper on the size and power of PBO thresholds, with D2
+presented as the mechanism (D2 = responds) and D4 reported.
+
+**Other observations, outside the decision rules.**
+- *Reality Check.* Layer 1, Stage 2 cells: N1 7.2% pooled (highest cell
+  11.4%), P2 23.7%; reference cell: N1 4.4%, N2 1.6%, N3 1.0%, P2 43.4%.
+  Layer 2 at M = 8, S = 16 (%): A-BTC 9.0, A-ETH 9.5, A-SOL 11.5, C 26.5,
+  D 26.0, B0 7, B1 60, B2 98, F1 24, F2 54. Arm C keeps serial dependence and
+  is a null for drift, not for predictability (E15).
+- *Block length of the calibrated p-value.* Reference cell, L = 5, 20, 50: N1
+  3.2, 3.0, 4.2%; P2 58.8, 58.2, 57.4%. Layer 2 A-BTC at M = 8, S = 16: 7.0,
+  7.0, 8.0%.
+- *Layer 2, PBO < 0.20 at M = 8, S = 16* (%): A-BTC 15.5, A-ETH 15.0, A-SOL
+  19.5, C 14.5, D 26.0, B0 13, B1 26, B2 46, F1 17, F2 13. The B arms repeat
+  E15's S3 rates (13, 26, 46), as they should: M = 8 is the E15 grid. The F
+  arms, whose effect the features span only in part, pass at about the B0 rate
+  (17 and 13, against 13). A-ETH and A-SOL were not part of E15's PBO stage;
+  with them, the demeaned arms without a planted effect (A, C, B0) at the E15
+  grid pass 13.0–19.5%, against the
+  13.0–15.5% E15 reported. Arm D passes more often than arm A in every sub-grid
+  and block count (D5 of the pre-registration, `d5_table.csv`). No Layer 2
+  series was invalid. Every sub-grid and block count is in
+  `results/cscv_calibration/`.
+- *Layer 2, calibrated p ≤ 0.05 at M = 8, S = 16* (%): A 7.0–10.0, C 7.5, D
+  14.0, B0 7, B1 13, B2 28, F1 7, F2 4.
+- *Ties.* Ties for the in-sample best occur, on average, in at most 2.13% of
+  splits in any Layer 2 arm and sub-grid (arm D, M = 16, S = 8), and the three
+  tie rules change no PBO < 0.20 pass rate by more than 0.5 points.
+- *R, the real BTC series* (one series, illustration only): PBO 0.27 at
+  M = 8, S = 16 (0.10–0.50 over the eight sub-grid and block settings; below
+  0.20 at M = 4); calibrated p 0.19 (0.47 at M = 16, S = 8); Reality Check
+  p 0.10 (0.13).
+- *Run time.* Stage 3 took 5.4 h against a projected 2.8 h with two workers.
+  Each CatBoost fit used all cores (the E15 setting), which is consistent with
+  the two workers competing for them (the projection for one worker was
+  5.6 h). Results do not depend on run time: the computation is
+  deterministic and was checked as above.
+
+**What this means.**
+- E15's statement that a PBO threshold is not a test level now holds across
+  216 designs: at τ = 0.20, sets of configurations with equal means pass 3.1–
+  23.7% of the time depending on the design, mostly with the number of
+  configurations, and more under MA10 dependence at T = 250. The rate is below
+  20% in 212 of the 216 cells, and at τ = 0.05 it is 0.0–5.3% (verdict
+  "intermediate"). What the thresholds do not do is fix that rate, or tell an
+  edge from a spread of means (D2, D4).
+- PBO measures how persistent the ranking of the configurations is. It passes
+  sets whose configurations differ only in how much they lose (D2), and it
+  passes a set with one edge no more often than the same set with the edge
+  removed (D4). A low PBO alone does not show that any configuration has a
+  positive edge: it passes a set with an edge and the same set with the edge
+  removed about equally often, in every cell.
+- The calibrated p-value held its size in the 19 synthetic cells where it was
+  computed (1.8–6.8%) and met the power criterion in the reference cell
+  (58.2%). Elsewhere its power was lower: P2 passed 4.2–49.4% in the other 18
+  cells, and under MA10 dependence about as often as N1 there (5.3% against
+  4.7%, pooled over the six cells). It
+  exceeded the pre-registered size bound on the ML pipeline at one of the two
+  (M, S) settings. It is not offered as a test.
+
+**Limits.**
+- Layer 1 matrices are stylised: constant means, one form each of volatility
+  clustering and serial dependence, Gaussian copulas.
+- Layer 2 is one daily pipeline, one model family and one grid; arm A has 600
+  series, so the size estimate behind D3 has a Wilson interval of [6.5, 11.0].
+- In Layer 2 the planted effects are of two kinds; power against other
+  mechanisms is not measured.
+- Every Layer 2 arm is daily; intraday data were not tested.
+- The Reality Check is a comparator here, not a decision. In Layer 1 it passes
+  7.2% of N1 pooled over the 19 Stage 2 cells (up to 11.4%); in Layer 2 it
+  passes 9.0–11.5% of arm A and 7% of B0, against its nominal 5%, and 26.5% of
+  arm C.
+
+**What this study does not change** (pre-registration §7, which names E14 and
+E15). The checklist wording, and the published numbers of E14, E15 and E16.
+
+**Supersedes.** Nothing. It sets the scope of E15's "PBO thresholds are not
+test levels" from one design to the 216 designs above and the Layer 2 grid.
 
 ## Unchanged
 

@@ -6,7 +6,7 @@
 > - the multiple-testing survivors,
 > - the parameter-space variance comparison.
 >
-> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures re-counted: [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures re-counted: [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). PBO thresholds measured across designs: [E17](CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -131,6 +131,36 @@ Details, design and outputs:
 [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design),
 [`experiments/inbox7/`](experiments/inbox7/), [`results/inbox7/`](results/inbox7/).
 
+## PBO thresholds across designs (E17)
+
+A third pre-registered study measured PBO thresholds (canonical CSCV) on 216
+synthetic designs and on the ML pipeline of E15, and tested a p-value for rank
+persistence calibrated on null matrices:
+
+- **At PBO < 0.20, sets of configurations with equal means pass 3.1–23.7% of
+  the time, depending on the design** (10.4% pooled), mostly with the number of
+  configurations, and more under serial dependence in short samples. The
+  pre-registered verdict is "design-dependent".
+- **PBO passes sets without a positive edge.** In the reference design,
+  configurations whose means fall from an annual Sharpe ratio of 0 to −1.0 pass
+  at 0.20 in 43.9% of series, against 9.9% with equal means. A set with one edge
+  passes about as often as the same set with the edge removed (69.6% and 70.2%;
+  within 5 points in every design).
+- **The calibrated p-value** kept its size in the 19 synthetic designs where it
+  was computed (at most 6.8% per design) and met the power criterion in the
+  reference design (58.2%), but had little or no power in several others. On
+  the ML pipeline it passed 8.5% of the 600 demeaned i.i.d. series (arm A) at
+  one of two settings, above the pre-registered 8.0%. The pre-registered
+  outcome is "fails"; it is not offered as a test.
+- For item V4: a low PBO alone does not show that any configuration has a
+  positive edge. Report it as a description of the search and name the
+  construction.
+
+Details, design, outputs and a standalone verifier:
+[E17](CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo),
+[`experiments/cscv_calibration/`](experiments/cscv_calibration/),
+[`results/cscv_calibration/`](results/cscv_calibration/).
+
 ## The VALID Checklist (12 items)
 
 Stage 1 (Statistical) is V1–V6: verifiable from the manuscript alone.
@@ -215,16 +245,18 @@ valid-framework/
 ├── experiments/            # reproduction pipeline (see REPRODUCE.md);
 │                           #   true_pbo/ = the E14 re-measurement
 │                           #   inbox7/ = the E15 robustness study
+│                           #   cscv_calibration/ = the E17 study
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
 ├── audit/                  # literature audit: withdrawn (see audit/README.md)
 ├── results/reference/      # reference outputs (340-variant corpus, MC nulls)
 ├── results/true_pbo/       # E14 outputs (per series, per path, per shuffle)
 ├── results/inbox7/         # E15 outputs (per series, per split, per shuffle)
+├── results/cscv_calibration/  # E17 outputs (per series, per resample)
 ├── releases/               # downloadable 12-item checklist PDF
 ├── docker/                 # containerized reproduction
 ├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
-└── CHANGELOG_CR.md         # every correction, E1–E16
+└── CHANGELOG_CR.md         # every correction, E1–E17
 ```
 
 ## Citation

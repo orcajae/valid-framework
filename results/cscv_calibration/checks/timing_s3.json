@@ -1,0 +1,123 @@
+{
+ "stage": 3,
+ "projected_h_2workers": 2.7953459299272962,
+ "projected_h_unhalved": 5.5906918598545925,
+ "decision_basis": "unhalved",
+ "prereg_estimate_h": [
+  4.0,
+  6.0
+ ],
+ "limit_h": 12.0,
+ "within_limit": true,
+ "per_series_s": {
+  "A-BTC": 14.62651014328003,
+  "A-ETH": 13.405531167984009,
+  "A-SOL": 13.550404787063599,
+  "D": 13.026964902877808,
+  "C": 12.977555990219116,
+  "B0": 13.278889894485474,
+  "B1": 13.134297132492065,
+  "B2": 13.142204999923706,
+  "F1": 13.132946968078613,
+  "F2": 13.25636887550354,
+  "R": 14.62651014328003
+ },
+ "series": 1501,
+ "serial_s": 20126.490695476532,
+ "parts": {
+  "A-BTC": {
+   "fit_s": 12.699166297912598,
+   "boot_s": 1.9273428916931152,
+   "events": 893
+  },
+  "A-ETH": {
+   "fit_s": 12.691801071166992,
+   "boot_s": 0.7137300968170166,
+   "events": 672
+  },
+  "A-SOL": {
+   "fit_s": 12.830999612808228,
+   "boot_s": 0.7194051742553711,
+   "events": 615
+  },
+  "D": {
+   "fit_s": 12.32357406616211,
+   "boot_s": 0.7033908367156982,
+   "events": 901
+  },
+  "C": {
+   "fit_s": 12.262166976928711,
+   "boot_s": 0.7153890132904053,
+   "events": 828
+  },
+  "B0": {
+   "fit_s": 12.515195846557617,
+   "boot_s": 0.7636940479278564,
+   "events": 840
+  },
+  "B1": {
+   "fit_s": 12.391273021697998,
+   "boot_s": 0.7430241107940674,
+   "events": 922
+  },
+  "B2": {
+   "fit_s": 12.416476964950562,
+   "boot_s": 0.7257280349731445,
+   "events": 981
+  },
+  "F1": {
+   "fit_s": 12.404286861419678,
+   "boot_s": 0.7286601066589355,
+   "events": 928
+  },
+  "F2": {
+   "fit_s": 12.55507493019104,
+   "boot_s": 0.7012939453125,
+   "events": 928
+  },
+  "R": {
+   "fit_s": 12.699166297912598,
+   "boot_s": 1.9273428916931152,
+   "events": 893,
+   "note": "= A-BTC (R not run in timing)"
+  }
+ },
+ "B_measured": 199,
+ "data_sha256": {
+  "BTC": "19dd18c523032b82723e07f45410f38f9158136f7f8c48036761dade79c44d29",
+  "ETH": "8d0851f3b7e21a250dbc8a88d13f6d5c96959e61a8bb5e0469f497027ac0d5fe",
+  "SOL": "33db1e362fd1ae6e51b03950e983dda1c240fe3f37b083f327c6284e21d6af95"
+ },
+ "betas_used_for_timing": {
+  "F1": 0.1,
+  "F2": 0.1
+ },
+ "catboost_threads": {
+  "thread_count_param": "not set (CatBoost default -1 = all processor cores)",
+  "os_cpu_count": 10,
+  "process_threads_before_fit": 11,
+  "process_threads_peak_during_fit": 12
+ },
+ "B": 199,
+ "projected_h_unhalved_B99": 5.406800282994906,
+ "projected_h_2workers_B99": 2.703400141497453,
+ "measured_at": "2026-10-23T04:51:21.394397+00:00",
+ "blas": [],
+ "versions": {
+  "python": "3.11.4",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "cpu_count": 10,
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0",
+  "catboost": "1.2.10",
+  "lightgbm": "4.6.0"
+ },
+ "vf": {
+  "path": "<VF>",
+  "head": "018f4ea26dc2a1a1ec3bf38d4a2dcb73aa659861"
+ },
+ "ns": "reg",
+ "run_py_sha256": "bc0e7065c4d36daa0e7bd00c826e1a5c9a4610c9f14a4bc1c2d5db4fb74294a3"
+}

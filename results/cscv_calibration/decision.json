@@ -1,0 +1,333 @@
+{
+ "prereg": {
+  "file": "valid-framework experiments/cscv_calibration/PREREGISTRATION.md",
+  "commit": "2ead385",
+  "body_sha256": "cf81e2099a6cdd08c831df0df0e0274838c6c0e0af3fd599db626bf92d7dd73a",
+  "file_sha256_now": "6f02d5277e312ff9e1cfc4670697767a76b46a54ad9ecb84fc8e0deb63c242a6"
+ },
+ "summarize_py_sha256": "bd232c621c3fc6c80cbdba1ee7138e338348a6b28efd1f1562c907378cf44822",
+ "completeness": {
+  "stage1_missing_units": [],
+  "stage2_missing_units": [],
+  "stage3_dropped": {},
+  "stage3_missing": {},
+  "stage3_invalid": {}
+ },
+ "consistency": {
+  "stage2_B": [
+   199
+  ],
+  "stage2_pbo_obs_eq_stage1": {
+   "compared": 38000,
+   "mismatches": 0
+  },
+  "stage3_B": [
+   199
+  ]
+ },
+ "ns": "reg",
+ "D1": {
+  "tau=0.20": {
+   "span_pp": 20.6,
+   "pooled_rate": 0.10388425925925926,
+   "R95_pp": 6.3,
+   "span_minus_R95_pp": 14.3,
+   "min_cell": 136,
+   "max_cell": 11,
+   "verdict": "design-dependent"
+  },
+  "tau=0.05": {
+   "span_pp": 5.3,
+   "pooled_rate": 0.013259259259259259,
+   "R95_pp": 2.4,
+   "span_minus_R95_pp": 2.9,
+   "min_cell": 49,
+   "max_cell": 7,
+   "verdict": "intermediate"
+  }
+ },
+ "D2": {
+  "N1": [
+   99,
+   1000
+  ],
+  "N2": [
+   439,
+   1000
+  ],
+  "N2_minus_N1_pp": 34.0,
+  "p_F": 1.1512731769125049e-69,
+  "verdict": "responds"
+ },
+ "D4": {
+  "PBO<0.20": {
+   "pairs": 500,
+   "P2_pass": 348,
+   "N3_pass": 351,
+   "P2_only": 4,
+   "N3_only": 7,
+   "P2_minus_N3_pp": -0.6,
+   "p_Q4": 0.548828125,
+   "verdict": "PBO does not separate them"
+  },
+  "calibrated_p<=0.05 (reported)": {
+   "pairs": 500,
+   "P2_pass": 291,
+   "N3_pass": 290,
+   "P2_only": 10,
+   "N3_only": 9,
+   "P2_minus_N3_pp": 0.2,
+   "p_Q4": 1.0,
+   "verdict": "the calibrated p-value does not separate them"
+  }
+ },
+ "D3": {
+  "each_cell_le_8pct": {
+   "3": true,
+   "4": true,
+   "5": true,
+   "21": true,
+   "22": true,
+   "23": true,
+   "39": true,
+   "40": true,
+   "41": true,
+   "75": true,
+   "76": true,
+   "77": true,
+   "93": true,
+   "94": true,
+   "95": true,
+   "111": true,
+   "112": true,
+   "113": true,
+   "103": true
+  },
+  "all_cells_le_8pct": true,
+  "pooled_k": 406,
+  "pooled_n": 9500,
+  "pooled_wilson_hi": 0.04699239754701619,
+  "pooled_hi_le_6.5pct": true,
+  "layer2_A": {
+   "M8_S16": {
+    "k": 51,
+    "n": 600,
+    "le_8pct": false
+   },
+   "M16_S8": {
+    "k": 36,
+    "n": 600,
+    "le_8pct": true
+   }
+  },
+  "size_controlled": false,
+  "P2_ref": [
+   291,
+   500
+  ],
+  "power": true,
+  "verdict": "fails",
+  "beside_not_in_verdict_calibrated_p_pass_rates": {
+   "N2": {
+    "per_cell": {
+     "3": [
+      63,
+      500
+     ],
+     "4": [
+      53,
+      500
+     ],
+     "5": [
+      27,
+      500
+     ],
+     "21": [
+      40,
+      500
+     ],
+     "22": [
+      37,
+      500
+     ],
+     "23": [
+      30,
+      500
+     ],
+     "39": [
+      45,
+      500
+     ],
+     "40": [
+      36,
+      500
+     ],
+     "41": [
+      19,
+      500
+     ],
+     "75": [
+      101,
+      500
+     ],
+     "76": [
+      133,
+      500
+     ],
+     "77": [
+      31,
+      500
+     ],
+     "93": [
+      102,
+      500
+     ],
+     "94": [
+      136,
+      500
+     ],
+     "95": [
+      35,
+      500
+     ],
+     "103": [
+      143,
+      500
+     ],
+     "111": [
+      117,
+      500
+     ],
+     "112": [
+      129,
+      500
+     ],
+     "113": [
+      36,
+      500
+     ]
+    },
+    "pooled": [
+     1313,
+     9500,
+     0.13821052631578948,
+     0.1314165339872628,
+     0.14529700046390062
+    ],
+    "reference_cell": [
+     143,
+     500
+    ]
+   },
+   "N3": {
+    "per_cell": {
+     "3": [
+      68,
+      500
+     ],
+     "4": [
+      92,
+      500
+     ],
+     "5": [
+      29,
+      500
+     ],
+     "21": [
+      66,
+      500
+     ],
+     "22": [
+      63,
+      500
+     ],
+     "23": [
+      28,
+      500
+     ],
+     "39": [
+      55,
+      500
+     ],
+     "40": [
+      41,
+      500
+     ],
+     "41": [
+      20,
+      500
+     ],
+     "75": [
+      216,
+      500
+     ],
+     "76": [
+      242,
+      500
+     ],
+     "77": [
+      30,
+      500
+     ],
+     "93": [
+      220,
+      500
+     ],
+     "94": [
+      234,
+      500
+     ],
+     "95": [
+      27,
+      500
+     ],
+     "103": [
+      290,
+      500
+     ],
+     "111": [
+      185,
+      500
+     ],
+     "112": [
+      187,
+      500
+     ],
+     "113": [
+      23,
+      500
+     ]
+    },
+    "pooled": [
+     2116,
+     9500,
+     0.22273684210526315,
+     0.21448276863224658,
+     0.2312150637053631
+    ],
+    "reference_cell": [
+     290,
+     500
+    ]
+   }
+  }
+ },
+ "use_of_outcomes": {
+  "row": 2,
+  "paper": "short paper on the size and power of PBO thresholds; D2 presented as the mechanism; D4 reported"
+ },
+ "D5": "d5_table.csv (descriptive, no verdict)",
+ "rules": {
+  "pbo_screen": "pass if k/K < tau (PBO under the first-listed tie rule unless a rule is named)",
+  "p_value": "pass if 20 * (1 + count) <= B + 1, i.e. p = (1 + count) / (B + 1) <= 0.05",
+  "layer2_invalid": "series with valid = 0 count as not passing every screen; denominators include them",
+  "percentage_points": "D2-D4 compare exact fractions; D1 works in counts per n series",
+  "D1_R95": "default_rng(0).binomial(n, p_bar, size=(10000, 216)) / n; span per row; np.percentile(spans, 95)",
+  "D2_test": "scipy.stats.fisher_exact([[k_N2, n-k_N2], [k_N1, n-k_N1]], alternative='greater')",
+  "D4_test": "exact two-sided McNemar: min(1, 2 * Binomial(b + c, 1/2).cdf(min(b, c))); 1 if b + c = 0",
+  "wilson": "Wilson score interval, z = 1.96 (as E15)",
+  "layer2_ties": "per arm x (M, S): mean share of splits with an in-sample tie, series with a tie, mean PBO per rule",
+  "dropped_F_arms": "F arms dropped at calibration are reported with the reason from beta_F.json, not as missing",
+  "stops": "mixed namespaces or B within a stage, Stage 2 observed PBO != Stage 1, prereg body changed, unpaired D4"
+ }
+}
