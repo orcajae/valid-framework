@@ -284,3 +284,5 @@ Every stage runs under the unattended-run rules of this project:
   - §2: F1 and F2 run with the interpolated value rounded to three decimals; the unrounded value is stored beside it. In the calibration, a seed whose preparation step returns None is skipped, and the number of seeds used is recorded.
   - §3: in step 4 of the calibrated p-value, PBO_obs is the PBO of the observed matrix before demeaning. The L = 5 and L = 50 runs reuse the random draws of L = 20 (the same start, uniforms and jump indices); only the block-start rule changes. The Reality Check is computed at L = 20 only.
   - §6: timing checks use seeds outside the registered ranges. Stage 1 starts only after all three stages have been timed, and a stage's B is fixed when its first shard starts. For Stage 3 the B decision uses the serial projection rather than half of it, because each CatBoost fit already uses all cores. Layer 1 uses one BLAS thread per worker; the unit tests show bitwise-identical outputs.
+- 2026-10-23 β F1 = 0.058 (interpolated 0.05760; target mean holdout AUC 0.56; seeds 2000–2019)
+- 2026-10-23 β F2 = 0.077 (interpolated 0.07721; target mean holdout AUC 0.60; seeds 2000–2019)
