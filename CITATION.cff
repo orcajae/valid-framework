@@ -16,6 +16,6 @@ preferred-citation:
   journal: "SSRN Electronic Journal"
   url: "https://ssrn.com/abstract=6508779"
   notes: >-
-    Presented orally at the 9th ACM SIGKDD Workshop on Machine Learning in
-    Finance (KDD-MLF 2026), Jeju, August 2026. Most empirical results were
+    Presented orally at the 9th Workshop on Machine Learning in Finance at
+    KDD 2026 (KDD-MLF 2026), Jeju, August 2026. Most empirical results were
     withdrawn in October 2026; see CHANGELOG_CR.md, E13 to E16.

@@ -63,7 +63,10 @@ RETIRED = (r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
            r"|2\.5 ?/ ?12|2\.5 of 12|0/74|74 empirical|9 ?/ ?12|9 of 12|21\.7"
            r"|27% → 0%|PBO ?= ?1\.0|4\.4%|Request an audit|27[–-]30%"
            # restated in CHANGELOG_CR.md E16
-           r"|52% of our 340")
+           r"|52% of our 340"
+           # workshop name: the official page (sites.google.com/view/kdd-mlf-2026)
+           # does not say ACM SIGKDD; record-area package, INBOX #26
+           r"|ACM SIGKDD")
 
 # ---------------------------------------------------------------- gate 3
 # October 2026 correction state (CHANGELOG_CR.md, E13). Each entry must
@@ -486,7 +489,7 @@ def anchors():
 def raw_sources():
     """Whole-file scan. Retired values must not survive even inside an href."""
     out = []
-    for path in (INDEX, SCORER, README):
+    for path in (INDEX, SCORER, README, os.path.join(ROOT, "CITATION.cff")):
         rel = os.path.relpath(path, ROOT)
         for i, line in enumerate(open(path, encoding="utf-8"), 1):
             if line.strip():

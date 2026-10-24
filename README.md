@@ -46,7 +46,7 @@ computed live on deterministic synthetic data; see
 **Who made it.** Jaewook Kim (2026), *"Beyond Accuracy: A Validation Framework
 for Machine Learning in Cryptocurrency Trading"* —
 [SSRN preprint 6508779](https://ssrn.com/abstract=6508779), presented orally at
-the 9th ACM SIGKDD Workshop on Machine Learning in Finance (KDD-MLF 2026),
+the 9th Workshop on Machine Learning in Finance at KDD 2026 (KDD-MLF 2026),
 Jeju, August 2026. Most of its empirical results are withdrawn (E13). Version 3.4
 (October 2026) reports the re-measurement and its robustness study (E14, E15)
 and the corpus re-count (E16).
