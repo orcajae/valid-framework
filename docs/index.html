@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VALID — a 12-item validation checklist for financial machine learning</title>
-<meta name="description" content="Score your study against the 12 items of VALID in about five minutes. Most empirical results of the accompanying paper were withdrawn in October 2026; see the correction.">
+<title>VALID: independent review of backtest checks</title>
+<meta name="description" content="Your backtest passed its checks. How often do those checks say yes by mistake? An independent review measures the false-pass rate and the power of the checks you use, under rules fixed before it runs.">
 
-<meta property="og:title" content="VALID — a 12-item gate for financial ML">
-<meta property="og:description" content="A 12-item checklist for financial ML backtests. Most empirical results of the accompanying paper were withdrawn in October 2026 after a full re-verification.">
+<meta property="og:title" content="VALID: how often do your backtest checks say yes by mistake?">
+<meta property="og:description" content="An independent review of the checks behind a backtest: how often they pass a strategy with no real edge, and how often they catch a planted edge. Methods, code and a public correction log are open.">
 <meta property="og:url" content="https://orcajae.github.io/valid-framework/">
 <meta name="twitter:card" content="summary">
 <link rel="canonical" href="https://orcajae.github.io/valid-framework/">
@@ -20,22 +20,267 @@
 <body>
 
 <!-- 1. HERO ============================================================== -->
-<header class="hero">
+<header class="hero" data-gate="service">
   <div class="wrap">
-    <p class="eyebrow">VALID · a 12-item checklist for financial ML</p>
-    <h1>Twelve checks a backtest<br><span class="hl">should pass first.</span></h1>
-    <p class="lede">Class balance, temporal splits, the number of configurations
-      tried, permutation tests, costs, baselines, regimes, turnover and code:
-      the questions to ask before anyone trusts a trading-strategy backtest.</p>
-    <p class="cta-row">
-      <a class="btn btn-primary" href="#scorer">Score your study — 5 min</a>
-      <a class="btn btn-ghost" href="#correction">Read the October 2026 correction</a>
-    </p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">VALID · Independent review of backtest checks</p>
+        <h1>Your backtest passed its checks.<br><span class="hl">How often do those checks say yes by mistake?</span></h1>
+        <p class="lede">We re-measure the checks you already rely on, on data where
+          the answer is known, under rules fixed before anything runs.</p>
+        <p class="cta-row">
+          <a class="btn btn-primary" href="#contact">Ask about a review</a>
+        </p>
+      </div>
+      <figure class="matrix" role="img" aria-label="What a review measures: on data with no real edge, how often a check says pass, the false-pass rate; on data with a planted edge, how often it says pass, the power.">
+        <svg viewBox="0 0 360 250" aria-hidden="true" focusable="false">
+          <text x="250" y="22" class="m-col">Check says PASS</text>
+          <text x="20" y="92" class="m-row">No real edge</text>
+          <text x="20" y="108" class="m-row-sub">in the data</text>
+          <text x="20" y="182" class="m-row">Real edge</text>
+          <text x="20" y="198" class="m-row-sub">planted in the data</text>
+          <rect x="160" y="40" width="180" height="88" rx="8" class="m-bad"/>
+          <text x="250" y="80" class="m-cell">False pass</text>
+          <text x="250" y="102" class="m-cell-sub">we measure how often</text>
+          <rect x="160" y="140" width="180" height="88" rx="8" class="m-good"/>
+          <text x="250" y="180" class="m-cell m-on-light">Catch</text>
+          <text x="250" y="202" class="m-cell-sub m-on-light">we measure how often</text>
+        </svg>
+        <figcaption>False-pass rate (size) and power, for each check you use.</figcaption>
+      </figure>
+    </div>
+    <nav class="page-nav" aria-label="On this page">
+      <a href="#how">How it works</a>
+      <a href="#review">Reviews</a>
+      <a href="#why">Independence</a>
+      <a href="#record">Record</a>
+      <a href="#faq">FAQ</a>
+      <a href="#scorer">Self-score</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </div>
 </header>
 
 <main>
 
+<!-- 2. RESULTS FROM OUR OWN STUDIES ===================================== -->
+<section id="measured" class="evidence" data-gate="service" aria-labelledby="measured-h">
+  <div class="wrap">
+    <h2 id="measured-h">Results from our own studies</h2>
+    <p class="sect-lede on-dark">Each number links to the entry that reports it, with its scope.</p>
+    <ul class="tiles tiles-3">
+      <li data-claim="auc">
+        <span class="tile-n">27.0%, 30.0%, 26.5%</span>
+        <span class="tile-l">of resampled BTC, ETH and SOL daily histories with
+          nothing to find beyond each coin's average move passed a prediction
+          check.</span>
+        <span class="tile-s">AUC &gt; 0.55 used alone; 200 daily series per asset,
+          days drawn at random with repeats.
+          <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design">E14</a></span>
+      </li>
+      <li data-claim="pbo-designs">
+        <span class="tile-n">3.1–23.7%</span>
+        <span class="tile-l">of simulated groups of strategy settings that all had
+          zero average performance passed an overfitting cutoff, depending on the
+          setup.</span>
+        <span class="tile-s">PBO &lt; 0.20 under canonical CSCV, sets with equal
+          means, across 216 synthetic designs. PBO thresholds are not test
+          levels.
+          <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo">E17</a></span>
+      </li>
+      <li data-claim="cost">
+        <span class="tile-n">165 of 278</span>
+        <span class="tile-l">strategy versions in our own archive came out
+          negative after costs (59%).</span>
+        <span class="tile-s">Net Sharpe ratio below zero at a nominal 18 bp, each
+          result counted once; 52–60% across the definitions we published; costs
+          charged differently across strategy families. The shortest bars fared
+          worst: 15-minute bars 9 of 9, 1-hour bars 116 of 118 (98%).
+          <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated">E16</a></span>
+      </li>
+    </ul>
+    <p class="tiles-foot">A low PBO alone does not show that any configuration has
+      a positive edge. These are our checks on our data; a review measures
+      yours.</p>
+  </div>
+</section>
+
+<!-- 3. HOW IT WORKS ====================================================== -->
+<section id="how" class="how" data-gate="service" aria-labelledby="how-h">
+  <div class="wrap">
+    <h2 id="how-h">How a gate calibration works (T2, T3)</h2>
+    <ol class="steps">
+      <li><b>Send the pipeline.</b> Your code, your checks and their cutoffs. If
+        your data licence bars sharing, our scripts run on your side.</li>
+      <li><b>Rules fixed in advance.</b> Test data with known answers and the pass
+        rules are written down; you get their fingerprint before anything
+        runs.</li>
+      <li><b>Get the measurement.</b> How often each check passes when nothing is
+        there, how often it catches a planted edge, and which checks to keep,
+        recalibrate or report differently. We do not tune the strategy.</li>
+    </ol>
+    <p class="uses-line">For managers raising capital, allocators and seed
+      investors, US registered investment advisers and risk teams.</p>
+  </div>
+</section>
+
+<!-- 4. REVIEWS =========================================================== -->
+<section id="review" class="review" data-gate="service" aria-labelledby="review-h">
+  <div class="wrap">
+    <h2 id="review-h">Three levels</h2>
+    <p class="sect-lede">Fees are agreed in writing before any result exists. An
+      allocator can commission T1 or T2 directly.</p>
+    <div class="tiers">
+      <article class="tier" aria-labelledby="t1-h">
+        <p class="tier-tag">T1</p>
+        <h3 id="t1-h">Backtest Review</h3>
+        <p>One backtest rerun from your code: leakage, costs, trading frequency,
+          multiple testing, and the twelve VALID items (a proposed
+          checklist, not yet tested as a set).</p>
+        <p class="tier-out"><b>You receive</b> written findings.</p>
+      </article>
+      <article class="tier" aria-labelledby="t2-h">
+        <p class="tier-tag">T2</p>
+        <h3 id="t2-h">Gate Calibration</h3>
+        <p>The false-pass rate and power of your pass-or-fail checks, on data
+          with known answers (each planted form named, since power depends on
+          it), under rules fixed before the run.</p>
+        <p class="tier-out"><b>You receive</b> a report with rates, intervals and
+          recommendations on the checks.</p>
+      </article>
+      <article class="tier" aria-labelledby="t3-h">
+        <p class="tier-tag">T3</p>
+        <h3 id="t3-h">Full Re-run</h3>
+        <p>Your full pipeline rebuilt from code, with cost sensitivity, plus
+          everything in T2.</p>
+        <p class="tier-out"><b>You receive</b> the T2 report plus pipeline
+          findings.</p>
+      </article>
+    </div>
+    <p class="tiers-foot">A re-check after you change the pipeline is available
+      at each level.</p>
+  </div>
+</section>
+
+<!-- 5. WHY RELY ON IT ==================================================== -->
+<section id="why" class="why" data-gate="service" aria-labelledby="why-h">
+  <div class="wrap">
+    <h2 id="why-h">What keeps it independent</h2>
+    <ul class="badges">
+      <li><b>Fee fixed before results.</b> It does not change with the
+        findings.</li>
+      <li><b>Rules fixed before the run.</b> Thresholds are not moved
+        afterwards.</li>
+      <li><b>Conclusions stay ours.</b> You can correct facts, not
+        conclusions.</li>
+      <li><b>Methods are public.</b> Code and studies are open to check.</li>
+    </ul>
+    <p class="why-note">Every report is a statistical review, not an audit opinion
+      or assurance, and not investment advice.</p>
+    <p class="why-note">Reviews are carried out by Jaewook Kim alone, who also
+      develops systematic trading strategies of his own. Client code, data and
+      results are never used in his own trading.
+      <a href="#coi">Conflicts of interest (under Questions below)</a></p>
+  </div>
+</section>
+
+<!-- 6. RECORD ============================================================ -->
+<section id="record" class="credibility" data-gate="service" aria-labelledby="record-h">
+  <div class="wrap">
+    <h2 id="record-h">Record</h2>
+    <ul class="record-list">
+      <li>Presented (oral) at the 9th Workshop on Machine Learning in Finance at
+        KDD 2026; the paper is <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779">SSRN working paper 6508779</a>.
+        Most of its empirical results were withdrawn in the
+        <a href="#correction">October 2026 correction</a>, and the SSRN
+        version was revised in October 2026 (version 3.4).</li>
+      <li>Studies pre-registered in the public repository before any registered
+        series was run (<a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design">E15</a>,
+        <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo">E17</a>,
+        <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e18-pbo-with-its-probability-of-loss-and-cscv-with-an-embargo-under-a-pre-registered-follow-up">E18</a>),
+        each with a standalone verifier.</li>
+      <li>Open-source <a href="https://github.com/orcajae/valid-framework">code</a>,
+        <a href="https://github.com/orcajae/valid-framework/blob/main/KNOWN_ISSUES.md">known issues</a>
+        and a public <a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md">correction log</a>.</li>
+      <li>A paper on PBO thresholds is in preparation for journal submission.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7. FAQ =============================================================== -->
+<section id="faq" class="faq-sect" data-gate="service" aria-labelledby="faq-h">
+  <div class="wrap">
+    <h2 id="faq-h">Questions</h2>
+    <details>
+      <summary>Why does this matter more now?</summary>
+      <p>AI tools make it cheap to try many more strategies and configurations.
+        The more configurations are tried, the more likely it is that the
+        best-looking one owes its rank to luck. Building a backtest has become
+        cheap; knowing whether to believe it has not.</p>
+    </details>
+    <details>
+      <summary>What do you need from us?</summary>
+      <p>Runnable code or scripts, the checks you use with their cutoffs, the
+        data source and licence, and the strength and form of edge you want to detect. By
+        default you provide the data. Where a licence bars passing data to a
+        third party, our scripts can run in your environment, and we receive the
+        output statistics and log hashes but none of the data; the report then
+        says so. You confirm that your licence permits the analysis; a review
+        does not start on data whose licence bars it.</p>
+    </details>
+    <details>
+      <summary>What is it not?</summary>
+      <p>Investment advice, a forecast of performance, an endorsement of past
+        results, a trading recommendation, or anything connected with issuing
+        or promoting a token. Performance claims, strategy tuning and regulatory
+        opinions are outside every review.</p>
+    </details>
+    <details>
+      <summary>Who sees the report, and how can it be cited?</summary>
+      <p>A report is for the client named on it, and the client decides who
+        receives it. Nothing about a client, or about a manager under review, is
+        published without that party's consent. Cite findings with the words
+        "findings, no assurance", as in "VALID checklist score N of 12 (findings,
+        no assurance)". A review is not an approval of a strategy.</p>
+    </details>
+    <details>
+      <summary>Does the SEC Marketing Rule require this?</summary>
+      <p>The rule treats backtested performance as hypothetical performance. An
+        adviser it covers may not advertise it unless, among other conditions,
+        the adviser gives the audience enough information to understand the
+        criteria used and the assumptions made. The rule does not require a
+        third-party review, and a review is not a legal or compliance
+        opinion.</p>
+    </details>
+    <details>
+      <summary>The code is public. Why pay?</summary>
+      <p>The code is public so that you can check us. What a client buys is a
+        measurement by a third party, designed around your model, labels, grid
+        and cost rules, with pass rules fixed before it runs. Security tools are
+        open source, and companies still hire outside testers to run them on
+        their own systems.</p>
+    </details>
+    <details>
+      <summary>What if an error is found later?</summary>
+      <p>The reviewer corrects or withdraws the report and tells the client in
+        writing. If your stated results cannot be reproduced from your code and
+        data, the review stops and says so.</p>
+    </details>
+    <details id="coi">
+      <summary>Conflicts of interest</summary>
+      <p>Reviews are carried out by Jaewook Kim alone. He offers the paid reviews
+        described on this page and develops systematic trading strategies of his
+        own; both are declared in every engagement letter and report. Client
+        code, data and results are never used in his own trading. Use in research
+        or case studies requires the written consent of the client, and of any
+        manager under review, and is limited to anonymised statistics that the
+        client approves before publication and that do not identify the strategy
+        or the data.</p>
+    </details>
+  </div>
+</section>
+
+<div class="record-wrap" data-gate="record">
 <!-- 1b. STORY =========================================================== -->
 <section class="story" id="correction" aria-labelledby="story-h">
   <div class="wrap">
@@ -105,7 +350,7 @@
 
       <form class="items" id="valid-form">
         <fieldset>
-          <legend><span class="stage-tag">Stage 1</span> Statistical — verifiable from the manuscript alone</legend>
+          <legend><span class="stage-tag">Stage 1</span> Statistical: verifiable from the manuscript alone</legend>
 
           <label class="item"><input type="checkbox" id="v1" data-stage="1">
             <span class="item-body">
@@ -134,7 +379,7 @@
           <label class="item"><input type="checkbox" id="v5" data-stage="1">
             <span class="item-body">
               <span class="item-q"><b>V5.</b> Do you report the variance of in-sample Sharpe across configurations?</span>
-              <span class="item-why">A PBO near zero can mean a robust signal — or a search space in which every configuration looks alike.</span>
+              <span class="item-why">A PBO near zero can mean a robust signal, or a search space in which every configuration looks alike.</span>
             </span></label>
 
           <label class="item"><input type="checkbox" id="v6" data-stage="1">
@@ -145,7 +390,7 @@
         </fieldset>
 
         <fieldset>
-          <legend><span class="stage-tag">Stage 2</span> Economic — required before anything is traded</legend>
+          <legend><span class="stage-tag">Stage 2</span> Economic: required before anything is traded</legend>
 
           <label class="item"><input type="checkbox" id="v7" data-stage="2">
             <span class="item-body">
@@ -220,38 +465,28 @@
     </div>
 
     <p class="scorer-foot"><a href="assets/valid_checklist_onepage.pdf">Download
-      the checklist (PDF)</a> — the 12 items and the scoring rule on one page.</p>
+      the checklist (PDF)</a>: the 12 items and the scoring rule on one page.</p>
   </div>
 </section>
 
-<!-- 6. CREDIBILITY ===================================================== -->
-<section class="credibility" aria-labelledby="cred-h">
-  <div class="wrap">
-    <h2 id="cred-h">Paper and code</h2>
-    <dl class="cred-list">
-      <div><dt>Workshop</dt><dd>Presented orally at KDD-MLF 2026 (9th ACM SIGKDD Workshop on Machine Learning in Finance, Jeju, Paper 18). Most empirical results withdrawn in October 2026.</dd></div>
-      <div><dt>Working paper</dt><dd><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779">SSRN Working Paper 6508779</a> — most empirical results withdrawn; see the correction.</dd></div>
-      <div><dt>Correction</dt><dd><a href="https://github.com/orcajae/valid-framework/blob/main/CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification">CHANGELOG E13</a> — what was withdrawn, what stands, and why.</dd></div>
-      <div><dt>Code</dt><dd><a href="https://github.com/orcajae/valid-framework">github.com/orcajae/valid-framework</a> — the checklist library, the stored outputs and <a href="https://github.com/orcajae/valid-framework/blob/main/KNOWN_ISSUES.md">their known issues</a>.</dd></div>
-      <div><dt>Licence</dt><dd>MIT.</dd></div>
-    </dl>
-  </div>
-</section>
+</div>
 
 </main>
 
-<!-- 7. FOOTER ========================================================== -->
-<footer aria-labelledby="footer-h">
+<!-- 10. CONTACT ========================================================= -->
+<footer id="contact" data-gate="service" aria-labelledby="footer-h">
   <div class="wrap">
     <h2 id="footer-h">Contact</h2>
-    <p class="foot-lede">Found another error? Tell us. Corrections are published in
-      the changelog.</p>
+    <p class="foot-lede">To ask about a review, write with a line on your
+      pipeline and the checks it relies on. Found an error in our work? Write
+      to the same address; corrections are logged in the public changelog.</p>
     <p class="foot-meta">
       Jaewook Kim ·
-      <a href="mailto:jwim1101@gmail.com?subject=VALID%20correction">jwim1101@gmail.com</a>
+      <a href="mailto:jwim1101@gmail.com?subject=VALID%20review">jwim1101@gmail.com</a>
+      · <a href="https://www.linkedin.com/in/jaewookkim1101/">linkedin.com/in/jaewookkim1101</a>
       · <a href="https://orcajae.github.io/valid-framework/">orcajae.github.io/valid-framework</a>
     </p>
-    <p class="foot-fine">No cookies, no trackers. VALID v1.0 — the checklist has had
+    <p class="foot-fine">No cookies, no trackers. VALID v1.0: the checklist has had
       no formal Delphi review; community revision is invited.</p>
   </div>
 </footer>

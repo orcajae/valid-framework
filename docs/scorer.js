@@ -47,8 +47,8 @@
       return "Most of the unchecked items are in Stage " + weakStage(c) +
              ". Start there.";
     }
-    return "Check each item against the artifact itself — the code, the " +
-           "data and the stored outputs — not against your memory of them.";
+    return "Check each item against the artifact itself (the code, the " +
+           "data and the stored outputs), not against your memory of them.";
   }
 
   function verdict(c) {
@@ -103,9 +103,9 @@
 
   function resultText() {
     var c = counts();
-    return "VALID self-score: " + c.total + "/12 " +
-           "(Stage 1 statistical " + c.s1 + "/6, " +
-           "Stage 2 economic " + c.s2 + "/6). " +
+    return "VALID checklist self-score " + c.total + " of 12 " +
+           "(self-assessment, no assurance; Stage 1 statistical " + c.s1 +
+           "/6, Stage 2 economic " + c.s2 + "/6). " +
            URL;
   }
 
@@ -128,7 +128,7 @@
     function done(ok) {
       elStatus.textContent = ok
         ? "Copied to the clipboard."
-        : "Copy failed — select the text above instead.";
+        : "Copy failed. Select the text above instead.";
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(

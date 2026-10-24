@@ -24,7 +24,7 @@ ML-based science. For the concurrent reporting standard
 together, see [CHANGELOG_CR.md, E12](CHANGELOG_CR.md#e12-priority-claims-withdrawn-after-a-concurrent-standard).
 
 **Score your own study in five minutes:**
-[orcajae.github.io/valid-framework](https://orcajae.github.io/valid-framework/)
+[orcajae.github.io/valid-framework](https://orcajae.github.io/valid-framework/#scorer)
 — the 12 items as an interactive scorer, plus the one-page checklist as a PDF.
 
 **See it catch an overfit strategy (30 seconds):**
