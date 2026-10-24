@@ -81,6 +81,11 @@ CANON = [
 ]
 
 # ---------------------------------------------------------------- gate 1b
+# The sample line of brief v1.2 section 12, required wherever the sample report
+# is shown. Gate 1b removes this exact sentence before it scans (it says
+# "only"); any other wording with "only" still fails.
+SAMPLE_LINE = ("SAMPLE: fictional fund, synthetic data, illustrative only. "
+               "Findings, no assurance.")
 SERVICE_BANNED = (
     r"first|only|signals?|returns|alpha|profit\w*|outperform\w*|guarantee\w*"
     r"|verif(?!ier)\w*|validated|validates|certif\w*|audit(?! opinion)\w*"
@@ -189,8 +194,9 @@ REQUIRED_SERVICE = [
     "before publication",
     "jwim1101@gmail.com",
     "linkedin.com/in/jaewookkim1101",
+    SAMPLE_LINE,          # the sample-report link on the T2 card
 ]
-REQUIRED_OPEN = [REQUIRED_SERVICE[i] for i in (0, 3, 4, 5, 6, 7, 9, 10)]
+REQUIRED_OPEN = [REQUIRED_SERVICE[i] for i in (0, 3, 4, 5, 6, 7, 9, 10, 11)]
 
 REQUIRED_IDS = ["scorer", "correction", "contact", "review"]
 
@@ -495,8 +501,13 @@ def parse_html(doc):
     return p
 
 
+def strip_sample_line(t):
+    return norm(t).replace(SAMPLE_LINE, " ").strip()
+
+
 def service_items(p):
-    return [("index.html[service]", norm(t)) for t, _, _ in p.service if norm(t)]
+    return [("index.html[service]", strip_sample_line(t)) for t, _, _ in p.service
+            if strip_sample_line(t)]
 
 
 def numbers(p):
@@ -731,6 +742,9 @@ def _bad():
         ({"1b"}, sub(plain, "The leading review service.")),
         ({"1b"}, sub(plain, "A popular overfitting cutoff.")),
         ({"1b"}, sub(plain, "Work published in a journal.")),
+        ({"1b"}, sub(plain, "The only plain sentence.")),
+        ({"1b"}, sub(plain, "It is illustrative only.")),
+        ({"1b"}, sub(plain, "Real fund, real data, illustrative only. Findings, no assurance.")),
         ({"1g"}, sub(REQUIRED_OPEN[5] + ".", "").replace(
             "<p>Contact.</p>", "<details><summary>Q</summary><p>"
             + REQUIRED_OPEN[5] + ".</p></details><p>Contact.</p>", 1)),

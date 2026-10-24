@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Tier 2 report: Sample Fund A (synthetic data)</title>
+<meta name="description" content="A sample Tier 2 gate calibration report for a fictional fund on synthetic data: how often its pass-or-fail checks pass a backtest with no edge, and how often they catch an edge planted in the data.">
+<meta property="og:title" content="Sample Tier 2 report: Sample Fund A (synthetic data)">
+<meta property="og:description" content="SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.">
+<meta property="og:url" content="https://orcajae.github.io/valid-framework/sample-report.html">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://orcajae.github.io/valid-framework/sample-report.html">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="sample-report.css">
+</head>
+<body class="sample-page">
+
+<div class="sample-bar" role="note" data-sample-banner>SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</div>
+
+<header class="sample-head">
+  <div class="wrap">
+    <p class="eyebrow">VALID · Sample Tier 2 report</p>
+    <h1>Gate calibration for Sample Fund A</h1>
+    <p class="lede">How often do the fund's pass-or-fail checks pass a backtest
+      that has no edge, and how often do they catch an edge planted in the
+      data? Measured on synthetic series under rules fixed before the run.</p>
+    <nav class="sample-toc" aria-label="Contents">
+      <ol>
+        <li><a href="#s1">Scope and independence</a></li>
+        <li><a href="#s2">Summary</a></li>
+        <li><a href="#s3">The fund's pipeline and checks</a></li>
+        <li><a href="#s4">Rules fixed before the run</a></li>
+        <li><a href="#s5">Series with no edge</a></li>
+        <li><a href="#s6">Series with a planted edge</a></li>
+        <li><a href="#s7">Results</a></li>
+        <li><a href="#s8">Diagnostics (descriptive)</a></li>
+        <li><a href="#s9">Recommendations</a></li>
+        <li><a href="#s10">Limitations</a></li>
+        <li><a href="#s11">Reproduce it</a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section id="s1" class="rsec" aria-labelledby="s1-h">
+  <div class="wrap">
+    <h2 id="s1-h"><span class="rnum">1</span> Scope and independence</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <dl class="facts">
+      <div><dt>Client</dt><dd>Sample Fund A, a fictional fund. Its pipeline, its
+        checks and its data are invented for this sample.</dd></div>
+      <div><dt>Date of the run</dt><dd>24 October 2026.</dd></div>
+      <div><dt>In scope</dt><dd>The false-pass rate (size) and the power of the
+        fund's four pass-or-fail checks, G1 to G4, and of all four together,
+        on synthetic series where the answer is known.</dd></div>
+      <div><dt>Not in scope</dt><dd>Whether the strategy has an edge in
+        practice, its performance, real data, and the twelve VALID checklist
+        items (those belong to a T1 review).</dd></div>
+      <div><dt>Rules fixed before the run</dt><dd>The pre-registration and the
+        run code were committed to the reviewer's private repository before any
+        registered series was run, in commit <code class="hash"><span data-v="commit">5d7e0b11bdd729f428a0e662d67f112286d22580</span></code>
+        at 21:04:49 KST on 24 October 2026; the run started at
+        <span data-v="run_start">21:04:56 KST</span>, seven seconds later. In a real review the client receives the commit hash and the sha256 of
+        both files before the run. Here the commit cannot be checked from
+        outside the private repository, so the published files are matched to
+        the hashes below instead.</dd></div>
+    </dl>
+    <table class="hashes">
+      <caption>File fingerprints (sha256)</caption>
+      <tbody>
+        <tr><th scope="row">PREREGISTRATION.md</th><td><code class="hash"><span data-v="sha:prereg">780eb2cd41e16da2145a771930efda32e849610692ed076aa95fa3b014c42d0c</span></code></td></tr>
+        <tr><th scope="row">run.py</th><td><code class="hash"><span data-v="sha:runpy">d833e3b95613bbbe34e3e2787b2b3ade8be3696c889f12ee07d28a147422486c</span></code></td></tr>
+        <tr><th scope="row">results/rows.csv</th><td><code class="hash"><span data-v="sha:rows">34d4073c35c9ed31440d1aac97c8a7e033fd959f5c73627bfe33b3144f035568</span></code></td></tr>
+      </tbody>
+    </table>
+    <p>In a real engagement the terms on the service page apply. Fees are
+      agreed in writing before any result exists. You can correct facts, not
+      conclusions. This sample has no client and no fee.</p>
+    <p>Every report is a statistical review, not an audit opinion or
+      assurance, and not investment advice.</p>
+    <p>Reviews are carried out by Jaewook Kim alone, who also develops
+      systematic trading strategies of his own. Client code, data and results
+      are never used in his own trading.</p>
+  </div>
+</section>
+
+<section id="s2" class="rsec" aria-labelledby="s2-h">
+  <div class="wrap">
+    <h2 id="s2-h"><span class="rnum">2</span> Summary</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>Each check was run exactly as the fund defines it, on 200 series in
+      each of four groups. A check should pass rarely when there is no edge
+      (bound for this sample: at most 15 of 200) and often when an edge is
+      planted (bound for this sample: at least 100 of 200).</p>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>Passes out of 200 series per group, with the verdict set before the run</caption>
+      <thead>
+        <tr><th scope="col">Check</th><th scope="col">No edge</th><th scope="col">Verdict</th><th scope="col">No edge, drift kept</th><th scope="col">Verdict</th><th scope="col">Stronger planted edge</th><th scope="col">Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">G1 · PBO &lt; 0.20</th><td><span data-v="gates.G1.N1.k">29</span></td><td><span data-v="verdicts.G1.size_N1" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G1.N0.k">34</span></td><td><span data-v="verdicts.G1.size_N0_drift_kept" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G1.P2.k">34</span></td><td><span data-v="verdicts.G1.power_P2" class="v-bad">weak power</span></td></tr>
+        <tr><th scope="row">G2 · Permutation p &lt; 0.05</th><td><span data-v="gates.G2.N1.k">40</span></td><td><span data-v="verdicts.G2.size_N1" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G2.N0.k">36</span></td><td><span data-v="verdicts.G2.size_N0_drift_kept" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G2.P2.k">87</span></td><td><span data-v="verdicts.G2.power_P2" class="v-bad">weak power</span></td></tr>
+        <tr><th scope="row">G3 · AUC &gt; 0.55</th><td><span data-v="gates.G3.N1.k">33</span></td><td><span data-v="verdicts.G3.size_N1" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G3.N0.k">28</span></td><td><span data-v="verdicts.G3.size_N0_drift_kept" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G3.P2.k">74</span></td><td><span data-v="verdicts.G3.power_P2" class="v-bad">weak power</span></td></tr>
+        <tr><th scope="row">G4 · Net Sharpe ratio &gt; 0</th><td><span data-v="gates.G4.N1.k">118</span></td><td><span data-v="verdicts.G4.size_N1" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G4.N0.k">141</span></td><td><span data-v="verdicts.G4.size_N0_drift_kept" class="v-bad">size exceeds bound</span></td><td><span data-v="gates.G4.P2.k">168</span></td><td><span data-v="verdicts.G4.power_P2" class="v-ok">adequate power</span></td></tr>
+        <tr><th scope="row">All four</th><td><span data-v="gates.Gall.N1.k">6</span></td><td><span data-v="verdicts.Gall.size_N1" class="v-ok">size within bound</span></td><td><span data-v="gates.Gall.N0.k">8</span></td><td><span data-v="verdicts.Gall.size_N0_drift_kept" class="v-ok">size within bound</span></td><td><span data-v="gates.Gall.P2.k">13</span></td><td><span data-v="verdicts.Gall.power_P2" class="v-bad">weak power</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>What the sample shows</h3>
+    <ul class="findings">
+      <li>Each check on its own passed series with no edge more often than the
+        bound set for the sample. The largest excess was for a net Sharpe ratio
+        above zero after choosing the best of the eight configurations:
+        <span data-v="gates.G4.N1.k">118</span> of 200 series with no edge passed it. With no edge in
+        these series, those passes come from chance and from the choice of the
+        best configuration.</li>
+      <li>The permutation check shuffles the labels at random, which breaks the
+        overlap between neighbouring five-day labels. It passed
+        <span data-v="gates.G2.N1.k">40</span> of 200 series with no edge. A version that rotates
+        the labels instead, and so keeps the overlap, passed
+        <span data-v="gates.G2c.N1.k">14</span> of 200 (descriptive; no verdict was set for it).</li>
+      <li>PBO below 0.20 passed <span data-v="gates.G1.N1.k">29</span> of 200 series with no edge
+        and <span data-v="gates.G1.P2.k">34</span> of 200 with the stronger planted edge: about as
+        often with the edge as without it. The difference was not tested.</li>
+      <li>Requiring all four checks together passed <span data-v="gates.Gall.N1.k">6</span> of
+        200 series with no edge, but caught the stronger planted edge in
+        <span data-v="gates.Gall.P2.k">13</span> of 200.</li>
+    </ul>
+    <p>Recommendations are in section 9.</p>
+  </div>
+</section>
+
+<section id="s3" class="rsec" aria-labelledby="s3-h">
+  <div class="wrap">
+    <h2 id="s3-h"><span class="rnum">3</span> The fund's pipeline and checks</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>As the fictional fund describes it:</p>
+    <ul>
+      <li><b>Strategy.</b> One daily long-or-short position in one asset, set at
+        the close and held for the next day.</li>
+      <li><b>Features.</b> Trailing 5, 20 and 60-day return sums, and a
+        persistent "flow" feature x.</li>
+      <li><b>Label.</b> Whether the sum of the next five daily moves is
+        positive. Labels of neighbouring days overlap.</li>
+      <li><b>Model.</b> L2 logistic regression, refitted every 100 days on all
+        earlier days whose labels end before the test block (a walk-forward
+        with a purge); the initial fit uses the earliest 400 usable days, less
+        those whose labels reach into the test block. About 536 test days per
+        series.</li>
+      <li><b>Configurations.</b> Eight: two feature sets, two strengths of
+        regularisation, and two trading bands (no position while the predicted
+        probability is close to 0.5).</li>
+      <li><b>Costs.</b> 18 bp for a round trip in and out.</li>
+      <li><b>Reported backtest.</b> The configuration with the highest
+        test-period net Sharpe ratio, which is the backtest the fund would
+        show.</li>
+    </ul>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>The fund's checks, run exactly as defined in the pre-registration</caption>
+      <thead><tr><th scope="col">Check</th><th scope="col">Passes when</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">G1</th><td>PBO &lt; 0.20 by canonical CSCV on the eight configurations' daily net P&amp;L (16 contiguous blocks, all 12,870 splits)</td></tr>
+        <tr><th scope="row">G2</th><td>Permutation p &lt; 0.05: the reported configuration's predictions are held fixed and the labels are shuffled 100 times, with no refit; the statistic is AUC</td></tr>
+        <tr><th scope="row">G3</th><td>Test-period AUC of the reported configuration &gt; 0.55</td></tr>
+        <tr><th scope="row">G4</th><td>Test-period net Sharpe ratio of the reported configuration &gt; 0</td></tr>
+        <tr><th scope="row">All four</th><td>G1, G2, G3 and G4 all pass</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="s4" class="rsec" aria-labelledby="s4-h">
+  <div class="wrap">
+    <h2 id="s4-h"><span class="rnum">4</span> Rules fixed before the run</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <ul data-rules>
+      <li><b>Size.</b> A check's size is within the bound if it passes at most 15
+        of the 200 series with no edge; otherwise it exceeds the bound. The same
+        rule is reported for the series that keep a drift.</li>
+      <li><b>Power.</b> A check has adequate power if it passes at least 100 of
+        the 200 series with the stronger planted edge; otherwise its power is
+        weak. Adequate here means at least half; a real review sets the level
+        with the client. The weaker planted edge is reported without a
+        verdict.</li>
+      <li><b>Exact comparisons.</b> Every rule is decided on integer counts and
+        fractions, and every rate is reported with a 95% Wilson interval.</li>
+      <li><b>Paired groups.</b> Series j in each group (j from 0 to 199) uses
+        the same random draws, so the groups differ in drift or edge and, for
+        G2 and its rotated version, in the draws used to shuffle or rotate the
+        labels.</li>
+    </ul>
+    <p>These bounds are set for the sample. In a real review they are agreed
+      with the client and written into the pre-registration before the run.</p>
+  </div>
+</section>
+
+<section id="s5" class="rsec" aria-labelledby="s5-h">
+  <div class="wrap">
+    <h2 id="s5-h"><span class="rnum">5</span> Series with no edge</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>Every series comes from a fixed-parameter generator; no market data is
+      read. Daily moves follow a GARCH(1,1) process (daily volatility 0.02,
+      ARCH 0.08, GARCH 0.90) with Student-t innovations (5 degrees of
+      freedom), over 1,000 trading days after a burn-in of 250 days. The flow
+      feature x is an AR(1) series with persistence 0.9, independent of the
+      moves.</p>
+    <ul>
+      <li><b>No edge.</b> No drift, and x has no link to the next day's
+        move.</li>
+      <li><b>No edge, drift kept.</b> The same, with a daily drift of 0.0005,
+        to show how the checks behave when the asset drifts upward.</li>
+    </ul>
+    <p>A real review builds its no-edge series from the client's own data in
+      more than one way, for example with and without the average move and by
+      resampling blocks of days. This sample uses the synthetic generator
+      alone.</p>
+  </div>
+</section>
+
+<section id="s6" class="rsec" aria-labelledby="s6-h">
+  <div class="wrap">
+    <h2 id="s6-h"><span class="rnum">6</span> Series with a planted edge</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>The planted edge links the flow feature x to the next day's move, with
+      a daily correlation of about 0.04 (weaker) or 0.08 (stronger). Both
+      strengths were set as round values before the run.</p>
+    <p>The edge works through x, which is one of the fund's own features, so
+      the power measured here is power against an edge the pipeline can see
+      directly. An edge the features do not reach would be harder to catch. A
+      real review names each planted form, because power depends on it.</p>
+  </div>
+</section>
+
+<section id="s7" class="rsec" aria-labelledby="s7-h">
+  <div class="wrap">
+    <h2 id="s7-h"><span class="rnum">7</span> Results</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable rtable-full">
+      <caption>Passes out of 200 per group: count, rate and 95% Wilson interval</caption>
+      <thead>
+        <tr><th scope="col">Check</th><th scope="col">No edge</th><th scope="col">No edge, drift kept</th><th scope="col">Weaker planted edge</th><th scope="col">Stronger planted edge</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">G1 · PBO &lt; 0.20</th><td><span data-v="gates.G1.N1.k">29</span> (<span data-v="gates.G1.N1.pct">14.5%</span>)<span class="ci"><span data-v="gates.G1.N1.ci">10.3–20.0%</span></span></td><td><span data-v="gates.G1.N0.k">34</span> (<span data-v="gates.G1.N0.pct">17.0%</span>)<span class="ci"><span data-v="gates.G1.N0.ci">12.4–22.8%</span></span></td><td><span data-v="gates.G1.P1.k">34</span> (<span data-v="gates.G1.P1.pct">17.0%</span>)<span class="ci"><span data-v="gates.G1.P1.ci">12.4–22.8%</span></span></td><td><span data-v="gates.G1.P2.k">34</span> (<span data-v="gates.G1.P2.pct">17.0%</span>)<span class="ci"><span data-v="gates.G1.P2.ci">12.4–22.8%</span></span></td></tr>
+        <tr><th scope="row">G2 · Permutation p &lt; 0.05</th><td><span data-v="gates.G2.N1.k">40</span> (<span data-v="gates.G2.N1.pct">20.0%</span>)<span class="ci"><span data-v="gates.G2.N1.ci">15.0–26.1%</span></span></td><td><span data-v="gates.G2.N0.k">36</span> (<span data-v="gates.G2.N0.pct">18.0%</span>)<span class="ci"><span data-v="gates.G2.N0.ci">13.3–23.9%</span></span></td><td><span data-v="gates.G2.P1.k">49</span> (<span data-v="gates.G2.P1.pct">24.5%</span>)<span class="ci"><span data-v="gates.G2.P1.ci">19.1–30.9%</span></span></td><td><span data-v="gates.G2.P2.k">87</span> (<span data-v="gates.G2.P2.pct">43.5%</span>)<span class="ci"><span data-v="gates.G2.P2.ci">36.8–50.4%</span></span></td></tr>
+        <tr><th scope="row">G3 · AUC &gt; 0.55</th><td><span data-v="gates.G3.N1.k">33</span> (<span data-v="gates.G3.N1.pct">16.5%</span>)<span class="ci"><span data-v="gates.G3.N1.ci">12.0–22.3%</span></span></td><td><span data-v="gates.G3.N0.k">28</span> (<span data-v="gates.G3.N0.pct">14.0%</span>)<span class="ci"><span data-v="gates.G3.N0.ci">9.9–19.5%</span></span></td><td><span data-v="gates.G3.P1.k">41</span> (<span data-v="gates.G3.P1.pct">20.5%</span>)<span class="ci"><span data-v="gates.G3.P1.ci">15.5–26.6%</span></span></td><td><span data-v="gates.G3.P2.k">74</span> (<span data-v="gates.G3.P2.pct">37.0%</span>)<span class="ci"><span data-v="gates.G3.P2.ci">30.6–43.9%</span></span></td></tr>
+        <tr><th scope="row">G4 · Net Sharpe ratio &gt; 0</th><td><span data-v="gates.G4.N1.k">118</span> (<span data-v="gates.G4.N1.pct">59.0%</span>)<span class="ci"><span data-v="gates.G4.N1.ci">52.1–65.6%</span></span></td><td><span data-v="gates.G4.N0.k">141</span> (<span data-v="gates.G4.N0.pct">70.5%</span>)<span class="ci"><span data-v="gates.G4.N0.ci">63.8–76.4%</span></span></td><td><span data-v="gates.G4.P1.k">133</span> (<span data-v="gates.G4.P1.pct">66.5%</span>)<span class="ci"><span data-v="gates.G4.P1.ci">59.7–72.7%</span></span></td><td><span data-v="gates.G4.P2.k">168</span> (<span data-v="gates.G4.P2.pct">84.0%</span>)<span class="ci"><span data-v="gates.G4.P2.ci">78.3–88.4%</span></span></td></tr>
+        <tr><th scope="row">All four</th><td><span data-v="gates.Gall.N1.k">6</span> (<span data-v="gates.Gall.N1.pct">3.0%</span>)<span class="ci"><span data-v="gates.Gall.N1.ci">1.4–6.4%</span></span></td><td><span data-v="gates.Gall.N0.k">8</span> (<span data-v="gates.Gall.N0.pct">4.0%</span>)<span class="ci"><span data-v="gates.Gall.N0.ci">2.0–7.7%</span></span></td><td><span data-v="gates.Gall.P1.k">10</span> (<span data-v="gates.Gall.P1.pct">5.0%</span>)<span class="ci"><span data-v="gates.Gall.P1.ci">2.7–9.0%</span></span></td><td><span data-v="gates.Gall.P2.k">13</span> (<span data-v="gates.Gall.P2.pct">6.5%</span>)<span class="ci"><span data-v="gates.Gall.P2.ci">3.8–10.8%</span></span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>Net Sharpe ratio above zero, with the reported configuration chosen again at each cost (passes out of 200; descriptive)</caption>
+      <thead>
+        <tr><th scope="col">Round-trip cost</th><th scope="col">No edge</th><th scope="col">No edge, drift kept</th><th scope="col">Weaker planted edge</th><th scope="col">Stronger planted edge</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">0 bp</th><td><span data-v="cost.G4_cost_0bp.N1">141</span></td><td><span data-v="cost.G4_cost_0bp.N0">157</span></td><td><span data-v="cost.G4_cost_0bp.P1">150</span></td><td><span data-v="cost.G4_cost_0bp.P2">179</span></td></tr>
+        <tr><th scope="row">9 bp</th><td><span data-v="cost.G4_cost_9bp.N1">130</span></td><td><span data-v="cost.G4_cost_9bp.N0">148</span></td><td><span data-v="cost.G4_cost_9bp.P1">140</span></td><td><span data-v="cost.G4_cost_9bp.P2">176</span></td></tr>
+        <tr><th scope="row">18 bp</th><td><span data-v="cost.G4_cost_18bp.N1">118</span></td><td><span data-v="cost.G4_cost_18bp.N0">141</span></td><td><span data-v="cost.G4_cost_18bp.P1">133</span></td><td><span data-v="cost.G4_cost_18bp.P2">168</span></td></tr>
+        <tr><th scope="row">36 bp</th><td><span data-v="cost.G4_cost_36bp.N1">104</span></td><td><span data-v="cost.G4_cost_36bp.N0">121</span></td><td><span data-v="cost.G4_cost_36bp.P1">113</span></td><td><span data-v="cost.G4_cost_36bp.P2">155</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>The fund's own cost is 18 bp; the other rows show how the pass count
+      moves with cost.</p>
+  </div>
+</section>
+
+<section id="s8" class="rsec" aria-labelledby="s8-h">
+  <div class="wrap">
+    <h2 id="s8-h"><span class="rnum">8</span> Diagnostics (descriptive)</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>These outputs were fixed before the run as descriptive. None carries a
+      verdict.</p>
+    <h3>Label overlap and the permutation check</h3>
+    <p>Rotating the labels by a random offset of at least 20 days keeps the
+      overlap between neighbouring labels, which random shuffling breaks.</p>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>Permutation p &lt; 0.05 with rotated labels (passes out of 200, 95% Wilson interval)</caption>
+      <thead>
+        <tr><th scope="col">Construction</th><th scope="col">No edge</th><th scope="col">No edge, drift kept</th><th scope="col">Weaker planted edge</th><th scope="col">Stronger planted edge</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Rotated labels</th><td><span data-v="gates.G2c.N1.k">14</span> (<span data-v="gates.G2c.N1.pct">7.0%</span>)<span class="ci"><span data-v="gates.G2c.N1.ci">4.2–11.4%</span></span></td><td><span data-v="gates.G2c.N0.k">12</span> (<span data-v="gates.G2c.N0.pct">6.0%</span>)<span class="ci"><span data-v="gates.G2c.N0.ci">3.5–10.2%</span></span></td><td><span data-v="gates.G2c.P1.k">17</span> (<span data-v="gates.G2c.P1.pct">8.5%</span>)<span class="ci"><span data-v="gates.G2c.P1.ci">5.4–13.2%</span></span></td><td><span data-v="gates.G2c.P2.k">40</span> (<span data-v="gates.G2c.P2.pct">20.0%</span>)<span class="ci"><span data-v="gates.G2c.P2.ci">15.0–26.1%</span></span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>The rotated version passed fewer series with no edge, and also fewer
+      with the stronger planted edge. Overlapping labels are one possible cause of
+      the excess under shuffling; this sample does not test it.</p>
+    <h3>Selection among the eight configurations</h3>
+    <p>The reported configuration changes from series to series in every
+      group, so every check that is applied after the choice inherits the
+      choice.</p>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>How often each configuration was the reported one (out of 200 per group)</caption>
+      <thead>
+        <tr><th scope="col">Features · C · band</th><th scope="col">No edge</th><th scope="col">No edge, drift kept</th><th scope="col">Weaker planted edge</th><th scope="col">Stronger planted edge</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">A · C 0.1 · band 0.0</th><td><span data-v="sel.N1.A|C=0.1|band=0.0">32</span></td><td><span data-v="sel.N0.A|C=0.1|band=0.0">27</span></td><td><span data-v="sel.P1.A|C=0.1|band=0.0">36</span></td><td><span data-v="sel.P2.A|C=0.1|band=0.0">24</span></td></tr>
+        <tr><th scope="row">A · C 0.1 · band 0.02</th><td><span data-v="sel.N1.A|C=0.1|band=0.02">15</span></td><td><span data-v="sel.N0.A|C=0.1|band=0.02">31</span></td><td><span data-v="sel.P1.A|C=0.1|band=0.02">13</span></td><td><span data-v="sel.P2.A|C=0.1|band=0.02">28</span></td></tr>
+        <tr><th scope="row">A · C 1.0 · band 0.0</th><td><span data-v="sel.N1.A|C=1.0|band=0.0">19</span></td><td><span data-v="sel.N0.A|C=1.0|band=0.0">29</span></td><td><span data-v="sel.P1.A|C=1.0|band=0.0">27</span></td><td><span data-v="sel.P2.A|C=1.0|band=0.0">28</span></td></tr>
+        <tr><th scope="row">A · C 1.0 · band 0.02</th><td><span data-v="sel.N1.A|C=1.0|band=0.02">23</span></td><td><span data-v="sel.N0.A|C=1.0|band=0.02">16</span></td><td><span data-v="sel.P1.A|C=1.0|band=0.02">22</span></td><td><span data-v="sel.P2.A|C=1.0|band=0.02">28</span></td></tr>
+        <tr><th scope="row">B · C 0.1 · band 0.0</th><td><span data-v="sel.N1.B|C=0.1|band=0.0">25</span></td><td><span data-v="sel.N0.B|C=0.1|band=0.0">30</span></td><td><span data-v="sel.P1.B|C=0.1|band=0.0">33</span></td><td><span data-v="sel.P2.B|C=0.1|band=0.0">29</span></td></tr>
+        <tr><th scope="row">B · C 0.1 · band 0.02</th><td><span data-v="sel.N1.B|C=0.1|band=0.02">18</span></td><td><span data-v="sel.N0.B|C=0.1|band=0.02">21</span></td><td><span data-v="sel.P1.B|C=0.1|band=0.02">20</span></td><td><span data-v="sel.P2.B|C=0.1|band=0.02">15</span></td></tr>
+        <tr><th scope="row">B · C 1.0 · band 0.0</th><td><span data-v="sel.N1.B|C=1.0|band=0.0">30</span></td><td><span data-v="sel.N0.B|C=1.0|band=0.0">26</span></td><td><span data-v="sel.P1.B|C=1.0|band=0.0">31</span></td><td><span data-v="sel.P2.B|C=1.0|band=0.0">29</span></td></tr>
+        <tr><th scope="row">B · C 1.0 · band 0.02</th><td><span data-v="sel.N1.B|C=1.0|band=0.02">38</span></td><td><span data-v="sel.N0.B|C=1.0|band=0.02">20</span></td><td><span data-v="sel.P1.B|C=1.0|band=0.02">18</span></td><td><span data-v="sel.P2.B|C=1.0|band=0.02">19</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="tscroll" role="region" tabindex="0" aria-label="Table, scrolls sideways">
+    <table class="rtable">
+      <caption>Averages per group</caption>
+      <thead>
+        <tr><th scope="col">Average</th><th scope="col">No edge</th><th scope="col">No edge, drift kept</th><th scope="col">Weaker planted edge</th><th scope="col">Stronger planted edge</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">PBO</th><td><span data-v="pbo.N1">0.490</span></td><td><span data-v="pbo.N0">0.495</span></td><td><span data-v="pbo.P1">0.518</span></td><td><span data-v="pbo.P2">0.487</span></td></tr>
+        <tr><th scope="row">AUC of the reported configuration</th><td><span data-v="auc.N1">0.499</span></td><td><span data-v="auc.N0">0.495</span></td><td><span data-v="auc.P1">0.504</span></td><td><span data-v="auc.P2">0.535</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>Drift</h3>
+    <p>Keeping an upward drift raised the share of series whose net Sharpe
+      ratio came out above zero (<span data-v="gates.G4.N0.k">141</span> against
+      <span data-v="gates.G4.N1.k">118</span> of 200), with no edge in either group.</p>
+  </div>
+</section>
+
+<section id="s9" class="rsec" aria-labelledby="s9-h">
+  <div class="wrap">
+    <h2 id="s9-h"><span class="rnum">9</span> Recommendations</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>For this pipeline and these checks:</p>
+    <ol class="recs">
+      <li><b>Keep the label overlap in the permutation check.</b> Replace random
+        shuffling with a construction that keeps it, such as rotating the
+        labels. In this sample rotation also passed fewer series with the
+        stronger planted edge (<span data-v="gates.G2c.P2.k">40</span> against
+        <span data-v="gates.G2.P2.k">87</span> of 200), so measure its power as well as its size
+        on the fund's own data before relying on it.</li>
+      <li><b>Do not use "net Sharpe ratio above zero" after choosing the best
+        configuration as a pass-or-fail check.</b> With no edge it passed most
+        series. Report it beside the number of configurations tried.</li>
+      <li><b>Report PBO as a description of the search, not as a pass-or-fail
+        check.</b> In this sample PBO below 0.20 passed about as many series with
+        the stronger planted edge as series with no edge.</li>
+      <li><b>Measure the power of a combined check before requiring it.</b>
+        Requiring all four passed few series
+        with no edge but rarely caught the stronger planted edge. Decide which edge size matters to the fund,
+        then measure power against it.</li>
+    </ol>
+    <p>These recommendations are about the checks. The review does not tune the
+      strategy.</p>
+  </div>
+</section>
+
+<section id="s10" class="rsec" aria-labelledby="s10-h">
+  <div class="wrap">
+    <h2 id="s10-h"><span class="rnum">10</span> Limitations</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <ul>
+      <li>Synthetic data from one generator. Size and power depend on the data,
+        and a real review builds its series from the client's data.</li>
+      <li>One pipeline, one grid, one label horizon and one cost rule. Other
+        pipelines, checks, grids, horizons or cost rules can give different
+        rates.</li>
+      <li>The planted edge works through one of the fund's own features. Power
+        against other forms of edge is not measured here.</li>
+      <li>200 series per group: each rate carries the Wilson interval shown in
+        section 7.</li>
+      <li>The bounds are set for the sample, not agreed with a client.</li>
+      <li>Nothing here shows whether any strategy has an edge in practice.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s11" class="rsec" aria-labelledby="s11-h">
+  <div class="wrap">
+    <h2 id="s11-h"><span class="rnum">11</span> Reproduce it</h2>
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p>The pre-registration, the run code and the outputs are public in
+      <a href="https://github.com/orcajae/valid-framework/tree/main/examples/t2_sample">examples/t2_sample</a>.
+      The run reads no data; ours took about 20 seconds with two workers.</p>
+<pre class="cmd"><code>git clone https://github.com/orcajae/valid-framework
+cd valid-framework/examples/t2_sample
+python3 -I -B run.py selftest
+python3 -I -B run.py run --out ~/t2_sample_out --workers 2
+shasum -a 256 ~/t2_sample_out/rows.csv</code></pre>
+    <p>The last line should print the rows.csv fingerprint in section 1, and
+      the new decision.json should equal the published one. The run refuses to
+      start if either file differs from its committed version. We reproduced
+      it byte for byte with Python 3.13, numpy 2.5.3, pandas 3.0.5 and scipy
+      1.18.1; other versions may change rows.csv and, rarely, a selection or a
+      pass, so compare the counts in decision.json.</p>
+    <p>Where a data licence bars passing data to a third party, the same
+      scripts run in the client's environment; the reviewer receives the
+      output statistics and log hashes but none of the data, and the report
+      says so.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="sample-foot">
+  <div class="wrap">
+    <p class="sample-tag">SAMPLE: fictional fund, synthetic data, illustrative only. Findings, no assurance.</p>
+    <p><a href="index.html#review">Back to the review levels</a></p>
+    <p class="foot-meta">Questions about this sample: Jaewook Kim ·
+      <a href="mailto:jwim1101@gmail.com?subject=VALID%20sample%20report">jwim1101@gmail.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

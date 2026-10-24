@@ -1,0 +1,88 @@
+/* Sample Tier 2 report page (docs/sample-report.html). Uses the tokens of
+   style.css; nothing here changes the service page. */
+
+.sample-bar {
+  position: sticky; top: 0; z-index: 10;
+  background: #FFF4D6; color: #5A4300;
+  border-bottom: 1px solid #E5C777;
+  font-size: .86rem; font-weight: 600; text-align: center;
+  padding: .55rem 1rem;
+}
+
+.sample-head { background: var(--slate); color: #fff; padding: clamp(2rem, 6vw, 3.6rem) 0 2rem; }
+.sample-head .eyebrow {
+  font-size: .82rem; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: #BFD3DC; margin-bottom: .9rem;
+}
+.sample-head h1 { font-size: clamp(1.6rem, 4.4vw, 2.8rem); color: #fff; }
+.sample-head .lede { color: #D3DEE3; max-width: 44rem; font-size: clamp(1rem, 2vw, 1.15rem); }
+.sample-toc { margin-top: 1.6rem; border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.sample-toc ol { margin: 0; padding-left: 1.3rem; columns: 2 14rem; column-gap: 2rem; font-size: .93rem; }
+.sample-toc li { margin-bottom: .2rem; break-inside: avoid; }
+.sample-toc a { color: #D6EFE3; }
+.sample-toc a:hover { color: #fff; }
+
+.rsec { padding: clamp(2rem, 5vw, 3rem) 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 4.75rem; }
+.rsec h2 { display: flex; align-items: baseline; gap: .6rem; font-size: clamp(1.3rem, 3vw, 1.8rem); }
+.rnum {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: var(--green); color: #fff; font-size: .95rem; font-weight: 700;
+}
+.rsec h3 { margin-top: 1.6rem; font-size: 1.08rem; }
+.rsec ul, .rsec ol { padding-left: 1.2rem; max-width: 50rem; }
+.rsec li { margin-bottom: .45rem; }
+.rsec p { max-width: 50rem; }
+
+.sample-tag {
+  display: inline-block; margin: 0 0 1rem;
+  font-size: .78rem; font-weight: 600; color: #5A4300;
+  background: #FFF4D6; border: 1px solid #E5C777; border-radius: 4px;
+  padding: .15rem .5rem;
+}
+
+.facts { margin: 0 0 1.2rem; display: grid; gap: .6rem; max-width: 50rem; }
+.facts div { display: grid; gap: .1rem 1rem; }
+@media (min-width: 40rem) { .facts div { grid-template-columns: 11rem 1fr; } }
+.facts dt { font-weight: 600; color: var(--green-d); }
+.facts dd { margin: 0; }
+
+code.hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8rem; word-break: break-all; background: #F4F7F8;
+  padding: .05rem .3rem; border-radius: 3px;
+}
+.hashes { border-collapse: collapse; margin: 0 0 1.4rem; max-width: 50rem; width: 100%; }
+.hashes caption { text-align: left; font-weight: 600; font-size: .92rem; margin-bottom: .4rem; }
+.hashes th, .hashes td { text-align: left; padding: .35rem .5rem; border-top: 1px solid var(--rule); vertical-align: top; font-size: .88rem; }
+.hashes th { white-space: nowrap; font-weight: 600; }
+
+.tscroll { overflow-x: auto; margin: 1rem 0 1.4rem; -webkit-overflow-scrolling: touch; }
+.tscroll:focus-visible { outline-offset: 4px; }
+.rtable { border-collapse: collapse; min-width: 100%; font-size: .9rem; }
+.rtable caption { text-align: left; font-weight: 600; font-size: .92rem; margin-bottom: .5rem; }
+.rtable th, .rtable td { padding: .5rem .6rem; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.rtable thead th { border-top: 2px solid var(--ink); font-size: .82rem; color: var(--soft); font-weight: 600; }
+.rtable tbody th { font-weight: 600; white-space: nowrap; position: sticky; left: 0; background: var(--paper); }
+.rtable td { font-variant-numeric: tabular-nums; }
+.rtable .ci { display: block; font-size: .8rem; color: var(--soft); }
+.v-ok { color: var(--green-d); font-weight: 600; }
+.v-bad { color: var(--red); font-weight: 600; }
+
+.findings li { margin-bottom: .7rem; }
+.recs li { margin-bottom: .8rem; }
+
+pre.cmd {
+  background: var(--slate); color: #E3EEE9; border-radius: 8px;
+  padding: 1rem 1.1rem; overflow-x: auto; font-size: .85rem; max-width: 50rem;
+}
+pre.cmd code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+.sample-foot { padding: 2rem 0 3rem; }
+.sample-foot .foot-meta { color: var(--soft); font-size: .92rem; }
+
+@media print {
+  .sample-bar { position: static; }
+  .sample-toc { display: none; }
+  .rsec { break-inside: avoid-page; }
+}
