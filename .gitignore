@@ -21,6 +21,8 @@ results/inbox7/parts/
 !results/cscv_calibration/
 results/cscv_calibration/parts/
 results/cscv_calibration/stage3_R.npz
+!results/cscv_followup/
+results/cscv_followup/parts/
 catboost_info/
 *.DS_Store
 .env

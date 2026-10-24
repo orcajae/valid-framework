@@ -1,0 +1,28 @@
+{
+ "stage": "layer1",
+ "start": "2026-10-23T15:57:38.771586+00:00",
+ "pid": 87787,
+ "host": "<host>",
+ "stop_conditions": [
+  "a unit test fails",
+  "the timing projection exceeds the limit",
+  "the Layer 2 identity fails",
+  "a registered series fails to compute"
+ ],
+ "versions": {
+  "python": "3.11.4",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2"
+ },
+ "run_py_sha256": "374cbf0fd0517c285987556807a42032ecfce57821a579eb4f08cd9ba0a8585e",
+ "prereg_body_sha256": "113407fbe33b6d51826f9d1a088bf691ff47130d87fb1b7cab1c5aa106daef78",
+ "prereg_sha256": "53a88fe6720ee31696d5fda55d0a85f06b527eeceef86a991976672482fd896f",
+ "prereg_commit": "801cc0d3f4fd9652bc13d993ef20abc8cca8c3cb",
+ "cells_todo": 216,
+ "workers": 2,
+ "expected_end": "2026-10-23T16:25:50.771564+00:00",
+ "end": "2026-10-23T16:31:03.931864+00:00",
+ "wall_s": 2005.2,
+ "rows": 864000,
+ "rows_sha256": "e8c16e97dc22a76d47c33a4866c5b346fc93967a8313d7808eac537781e060f7"
+}

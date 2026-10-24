@@ -1,0 +1,10 @@
+{
+ "projected_h": 0.47,
+ "workers": 2,
+ "limit_h": 6.0,
+ "ok": true,
+ "at": "2026-10-23T15:56:52.732607+00:00",
+ "run_py_sha256": "374cbf0fd0517c285987556807a42032ecfce57821a579eb4f08cd9ba0a8585e",
+ "prereg_body_sha256": "113407fbe33b6d51826f9d1a088bf691ff47130d87fb1b7cab1c5aa106daef78",
+ "prereg_sha256": "53a88fe6720ee31696d5fda55d0a85f06b527eeceef86a991976672482fd896f"
+}

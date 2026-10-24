@@ -6,7 +6,7 @@
 > - the multiple-testing survivors,
 > - the parameter-space variance comparison.
 >
-> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures re-counted: [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). PBO thresholds measured across designs: [E17](CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
+> What was withdrawn, what still stands and why: [CHANGELOG_CR.md, E13](CHANGELOG_CR.md#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test: [E14](CHANGELOG_CR.md#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study: [E15](CHANGELOG_CR.md#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures re-counted: [E16](CHANGELOG_CR.md#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). PBO thresholds measured across designs: [E17](CHANGELOG_CR.md#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo). The pre-registered follow-up on the probability of loss and an embargo: [E18](CHANGELOG_CR.md#e18-pbo-with-its-probability-of-loss-and-cscv-with-an-embargo-under-a-pre-registered-follow-up). Code-level causes: [KNOWN_ISSUES.md](KNOWN_ISSUES.md). The twelve checklist items are unchanged as a proposal.
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -161,6 +161,39 @@ Details, design, outputs and a standalone verifier:
 [`experiments/cscv_calibration/`](experiments/cscv_calibration/),
 [`results/cscv_calibration/`](results/cscv_calibration/).
 
+## PBO with its probability of loss, and an embargo (E18)
+
+A pre-registered follow-up, designed after E17's results were known, added the
+probability of loss (the share of CSCV splits in which the in-sample best
+configuration loses out of sample) beside PBO, and an embargo between CSCV
+blocks, on E17's 216 synthetic designs and, descriptively, on E17's ML
+pipeline matrices:
+
+- **In the reference cell, PBO < 0.20 together with a probability of loss
+  below 0.05 tells a set with one edge from the same set with the edge
+  removed** (29.2% against 2.6% of series), which PBO alone did not. The
+  pre-registered verdict is "separates".
+- **The probability of loss does not hold a fixed level after selection.**
+  Over the 144 i.i.d. and GARCH designs, sets without a positive edge have a
+  probability of loss below 0.05 in 0.0–10.0% of series depending on the
+  design (2.4–4.0% pooled), more when the configurations are strongly
+  correlated. The verdict is "level fails".
+- **The combined screen is "safe but weak" in the reference cell:** sets
+  without a positive edge pass 0.8–2.6% of the time, and the set with an edge
+  29.2%.
+- **The embargo** moves the centre of PBO for sets with equal means back to 0.5
+  under MA10 dependence in short samples, but takes their pass rate at 0.20
+  below the i.i.d. rate (verdict "overshoots"), and costs power at T = 250. The study makes no recommendation
+  for an embargo.
+- For item V4: neither threshold is a test level. If the probability of loss
+  is reported beside PBO, measure its pass rate on matched data without an
+  edge.
+
+Details, design, outputs and a standalone verifier:
+[E18](CHANGELOG_CR.md#e18-pbo-with-its-probability-of-loss-and-cscv-with-an-embargo-under-a-pre-registered-follow-up),
+[`experiments/cscv_followup/`](experiments/cscv_followup/),
+[`results/cscv_followup/`](results/cscv_followup/).
+
 ## The VALID Checklist (12 items)
 
 Stage 1 (Statistical) is V1–V6: verifiable from the manuscript alone.
@@ -246,6 +279,7 @@ valid-framework/
 │                           #   true_pbo/ = the E14 re-measurement
 │                           #   inbox7/ = the E15 robustness study
 │                           #   cscv_calibration/ = the E17 study
+│                           #   cscv_followup/ = the E18 study
 ├── notebooks/              # worked example + crypto backtesting starter kit
 ├── tests/                  # pytest suite
 ├── audit/                  # literature audit: withdrawn (see audit/README.md)
@@ -253,10 +287,11 @@ valid-framework/
 ├── results/true_pbo/       # E14 outputs (per series, per path, per shuffle)
 ├── results/inbox7/         # E15 outputs (per series, per split, per shuffle)
 ├── results/cscv_calibration/  # E17 outputs (per series, per resample)
+├── results/cscv_followup/     # E18 outputs (per series)
 ├── releases/               # downloadable 12-item checklist PDF
 ├── docker/                 # containerized reproduction
 ├── KNOWN_ISSUES.md         # code-level definition mismatches (October 2026)
-└── CHANGELOG_CR.md         # every correction, E1–E17
+└── CHANGELOG_CR.md         # every correction, E1–E18
 ```
 
 ## Citation

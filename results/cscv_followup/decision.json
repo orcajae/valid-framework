@@ -1,0 +1,347 @@
+{
+ "run_py_sha256": "374cbf0fd0517c285987556807a42032ecfce57821a579eb4f08cd9ba0a8585e",
+ "prereg_body_sha256": "113407fbe33b6d51826f9d1a088bf691ff47130d87fb1b7cab1c5aa106daef78",
+ "prereg_sha256": "53a88fe6720ee31696d5fda55d0a85f06b527eeceef86a991976672482fd896f",
+ "layer1_rows_sha256": "e8c16e97dc22a76d47c33a4866c5b346fc93967a8313d7808eac537781e060f7",
+ "F1": {
+  "P2_pass": 146,
+  "N3_pass": 13,
+  "P2_only": 133,
+  "N3_only": 0,
+  "P2_minus_N3_pp": 26.6,
+  "p_M": 1.8367099231598242e-40,
+  "verdict": "separates"
+ },
+ "F2": {
+  "cells": "IID and GARCH (144)",
+  "arms": {
+   "N1": {
+    "cells": 144,
+    "k": 4130,
+    "n": 144000,
+    "pooled": 0.028680555555555556,
+    "wilson_hi": 0.029555293286397662,
+    "span_pp": 7.1,
+    "R95_pp": 3.3,
+    "span_minus_R95_pp": 3.8,
+    "ok": false
+   },
+   "N2": {
+    "cells": 144,
+    "k": 3493,
+    "n": 144000,
+    "pooled": 0.024256944444444446,
+    "wilson_hi": 0.025064348660540827,
+    "span_pp": 6.8,
+    "R95_pp": 3.1,
+    "span_minus_R95_pp": 3.7,
+    "ok": false
+   },
+   "N3": {
+    "cells": 144,
+    "k": 2845,
+    "n": 72000,
+    "pooled": 0.03951388888888889,
+    "wilson_hi": 0.040961648727306656,
+    "span_pp": 10.0,
+    "R95_pp": 5.4,
+    "span_minus_R95_pp": 4.6,
+    "ok": false
+   }
+  },
+  "verdict": "level fails",
+  "MA10_beside_no_verdict": {
+   "canonical": {
+    "N1": {
+     "cells": 72,
+     "k": 2550,
+     "n": 72000,
+     "pooled": 0.035416666666666666,
+     "wilson_hi": 0.036791737504763555,
+     "span_pp": 10.0,
+     "R95_pp": 3.4,
+     "span_minus_R95_pp": 6.6
+    },
+    "N2": {
+     "cells": 72,
+     "k": 1864,
+     "n": 72000,
+     "pooled": 0.02588888888888889,
+     "wilson_hi": 0.027074409567557748,
+     "span_pp": 6.8,
+     "R95_pp": 3.0,
+     "span_minus_R95_pp": 3.8
+    },
+    "N3": {
+     "cells": 72,
+     "k": 801,
+     "n": 36000,
+     "pooled": 0.02225,
+     "wilson_hi": 0.02382539187254428,
+     "span_pp": 7.2,
+     "R95_pp": 3.8,
+     "span_minus_R95_pp": 3.4
+    }
+   },
+   "embargoed": {
+    "N1": {
+     "cells": 72,
+     "k": 2013,
+     "n": 72000,
+     "pooled": 0.027958333333333335,
+     "wilson_hi": 0.029187919530265814,
+     "span_pp": 7.4,
+     "R95_pp": 3.1,
+     "span_minus_R95_pp": 4.3
+    },
+    "N2": {
+     "cells": 72,
+     "k": 1505,
+     "n": 72000,
+     "pooled": 0.020902777777777777,
+     "wilson_hi": 0.021973595817378698,
+     "span_pp": 5.4,
+     "R95_pp": 2.7,
+     "span_minus_R95_pp": 2.7
+    },
+    "N3": {
+     "cells": 72,
+     "k": 645,
+     "n": 36000,
+     "pooled": 0.017916666666666668,
+     "wilson_hi": 0.01933927146005273,
+     "span_pp": 5.4,
+     "R95_pp": 3.4,
+     "span_minus_R95_pp": 2.0
+    }
+   }
+  }
+ },
+ "F3": {
+  "counts": {
+   "N1": [
+    8,
+    1000
+   ],
+   "N2": [
+    14,
+    1000
+   ],
+   "N3": [
+    13,
+    500
+   ],
+   "P1": [
+    19,
+    500
+   ],
+   "P2": [
+    146,
+    500
+   ],
+   "P3": [
+    480,
+    500
+   ]
+  },
+  "verdict": "safe but weak"
+ },
+ "F4": {
+  "N1_PBO020_counts_T250_of_24000": {
+   "MA10_canonical": 3548,
+   "MA10_embargoed": 2098,
+   "IID_canonical": 2300,
+   "IID_embargoed": 2358,
+   "GARCH_canonical": 2274,
+   "GARCH_embargoed": 2215
+  },
+  "excess0_pp": 5.2,
+  "excessE_pp": -1.0833333333333333,
+  "verdict": "overshoots"
+ },
+ "F5": {
+  "IID_T250": {
+   "P0.20_canonical": [
+    3980,
+    12000
+   ],
+   "C_canonical": [
+    874,
+    12000
+   ],
+   "P0.20_embargoed": [
+    2663,
+    12000
+   ],
+   "C_embargoed": [
+    477,
+    12000
+   ]
+  },
+  "IID_T1000": {
+   "P0.20_canonical": [
+    7513,
+    12000
+   ],
+   "C_canonical": [
+    3752,
+    12000
+   ],
+   "P0.20_embargoed": [
+    7239,
+    12000
+   ],
+   "C_embargoed": [
+    3373,
+    12000
+   ]
+  },
+  "IID_T2500": {
+   "P0.20_canonical": [
+    10349,
+    12000
+   ],
+   "C_canonical": [
+    7677,
+    12000
+   ],
+   "P0.20_embargoed": [
+    10251,
+    12000
+   ],
+   "C_embargoed": [
+    7431,
+    12000
+   ]
+  },
+  "GARCH_T250": {
+   "P0.20_canonical": [
+    4402,
+    12000
+   ],
+   "C_canonical": [
+    1141,
+    12000
+   ],
+   "P0.20_embargoed": [
+    3057,
+    12000
+   ],
+   "C_embargoed": [
+    642,
+    12000
+   ]
+  },
+  "GARCH_T1000": {
+   "P0.20_canonical": [
+    7790,
+    12000
+   ],
+   "C_canonical": [
+    4213,
+    12000
+   ],
+   "P0.20_embargoed": [
+    7422,
+    12000
+   ],
+   "C_embargoed": [
+    3885,
+    12000
+   ]
+  },
+  "GARCH_T2500": {
+   "P0.20_canonical": [
+    10465,
+    12000
+   ],
+   "C_canonical": [
+    8021,
+    12000
+   ],
+   "P0.20_embargoed": [
+    10357,
+    12000
+   ],
+   "C_embargoed": [
+    7825,
+    12000
+   ]
+  },
+  "MA10_T250": {
+   "P0.20_canonical": [
+    2124,
+    12000
+   ],
+   "C_canonical": [
+    322,
+    12000
+   ],
+   "P0.20_embargoed": [
+    1316,
+    12000
+   ],
+   "C_embargoed": [
+    148,
+    12000
+   ]
+  },
+  "MA10_T1000": {
+   "P0.20_canonical": [
+    2403,
+    12000
+   ],
+   "C_canonical": [
+    384,
+    12000
+   ],
+   "P0.20_embargoed": [
+    2089,
+    12000
+   ],
+   "C_embargoed": [
+    313,
+    12000
+   ]
+  },
+  "MA10_T2500": {
+   "P0.20_canonical": [
+    4084,
+    12000
+   ],
+   "C_canonical": [
+    993,
+    12000
+   ],
+   "P0.20_embargoed": [
+    3904,
+    12000
+   ],
+   "C_embargoed": [
+    923,
+    12000
+   ]
+  },
+  "reference_cell": {
+   "P0.20_canonical": [
+    332,
+    500
+   ],
+   "C_canonical": [
+    146,
+    500
+   ],
+   "P0.20_embargoed": [
+    290,
+    500
+   ],
+   "C_embargoed": [
+    127,
+    500
+   ]
+  }
+ },
+ "use_of_outcomes": "PREREGISTRATION.md section 4; the paper type assigned by E17 does not change",
+ "layer2_rows_sha256": "b3e14eeefae6469015bf8792e86338caf063ad00998aeee1818e78b92618d7f8",
+ "layer2": "rates_layer2.csv (descriptive, no verdict)"
+}

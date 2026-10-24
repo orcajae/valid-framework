@@ -1,6 +1,6 @@
 # Changelog — camera-ready revision (2026-08-01)
 
-> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures that E13 kept are restated in [E16](#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). A pre-registered Monte Carlo study of PBO thresholds across designs is [E17](#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo).** Entries below are in the order they were made.
+> **October 2026: most empirical results of the paper are withdrawn. See [E13](#e13-most-empirical-results-withdrawn-after-a-full-re-verification). The pre-registered re-measurement of PBO and the permutation test is [E14](#e14-pbo-and-the-permutation-test-re-measured-under-a-pre-registered-design). Its pre-registered robustness study, which sets the scope of two E14 conclusions, is [E15](#e15-the-e14-findings-re-tested-under-a-pre-registered-robustness-design). The corpus figures that E13 kept are restated in [E16](#e16-the-340-variant-corpus-re-counted-e13s-corpus-figures-restated). A pre-registered Monte Carlo study of PBO thresholds across designs is [E17](#e17-pbo-thresholds-across-designs-under-a-pre-registered-monte-carlo). A pre-registered follow-up on the probability of loss beside PBO and an embargo between CSCV blocks is [E18](#e18-pbo-with-its-probability-of-loss-and-cscv-with-an-embargo-under-a-pre-registered-follow-up).** Entries below are in the order they were made.
 
 Baseline: `main_v1_submitted.tex.bak` (submitted camera-ready, 2026-07-07).
 Evidence: `valid-framework/poster/RUN_ATTRIBUTION_AUDIT.md`.
@@ -1547,6 +1547,359 @@ E15). The checklist wording, and the published numbers of E14, E15 and E16.
 
 **Supersedes.** Nothing. It sets the scope of E15's "PBO thresholds are not
 test levels" from one design to the 216 designs above and the Layer 2 grid.
+
+## E18: PBO with its probability of loss, and CSCV with an embargo, under a pre-registered follow-up
+
+E17 found that, in its reference cell, PBO < 0.20 passed a set with one
+configuration at an annual Sharpe ratio of 1.0 about as often as the same set
+with the edge removed (69.6% and 70.2%), and, outside its decision rules, that
+equal-mean sets passed more often under MA10 dependence in short samples. This
+entry reports a pre-registered follow-up **designed after E17's results were
+known**. Part A adds the companion statistic that Bailey et al. (2017; Section
+3.2 of the February 2015 revised version) report beside PBO, the probability of
+loss (PoL). Part B removes the first rows of every CSCV
+block (an embargo). As the pre-registration requires, the results are reported
+whatever they show. Nothing in E14, E15, E16 or E17 is withdrawn.
+
+- Design: [`experiments/cscv_followup/PREREGISTRATION.md`](experiments/cscv_followup/PREREGISTRATION.md),
+  committed in 801cc0d before any registered series was run. Its preamble
+  states that the study was designed after E17, lists what was computed before
+  the commit (E17 figures from E17's published rows, unit tests, timing and the
+  decision code on fabricated counts; no pilot; no probability of loss or
+  embargoed statistic of any E17 or registered series was printed, stored or
+  inspected, though an earlier draft formed the loss count of 300 E17 series in
+  memory only, and the pre-registration notes that this cannot be checked from
+  the repository), and reports the design
+  changes made after two independent reviews and a regression check of earlier
+  drafts: the primary screen moved from C(0.20, 0.20) to C(0.20, 0.05), the
+  level check F2 was added and then restricted to the 144 IID and GARCH cells,
+  and the run gates were tightened. All of these were made before the commit.
+  The change of screen decides F3 (see F3 below).
+  Its change log is empty: nothing was changed after the run started.
+- Code: [`experiments/cscv_followup/run.py`](experiments/cscv_followup/run.py)
+  (801cc0d). The verifier `recompute.py` is added with this entry.
+- Outputs: [`results/cscv_followup/`](results/cscv_followup/): the canonical
+  and embargoed PBO and loss counts of every series (Layer 1) and of every
+  series, sub-grid and block count (Layer 2), every rate with
+  its 95% Wilson interval, the decision file, the checks and the logs. The
+  Layer 2 per-event return matrices are not published (they are E17's, and
+  stay private); E17's published block statistics give every canonical Layer 2
+  count except arm R's, and the embargoed block statistics published here give
+  every embargoed one except arm R's.
+
+**Design.**
+- **Layer 1, synthetic return matrices.** E17's generator, 216 cells, arms,
+  replication counts and reference cell (T = 1000, M = 8, S = 16, ρ = 0.5,
+  GARCH), with new seeds `[18, a, c, j]`. Arms: N1 equal means (1,000 series
+  per cell); N2 means falling from an annual Sharpe ratio of 0 to −1.0 (1,000);
+  N3 the means of P2 lowered by the edge (500, each on the shocks of P2 series
+  j); P1, P2, P3 one configuration at 0.5, 1.0 or 2.0, the others at 0 (500
+  each). In N1, N2 and N3 the best configuration has mean 0.
+- **Layer 2, E17's pipeline matrices** (a secondary analysis of existing data,
+  descriptive only). The T × 24 out-of-sample per-event return matrices of E17,
+  sub-grids M = 4, 8, 16, 24 at S = 8 and 16. E17 defines the arms as:
+  - A: demeaned i.i.d. bootstrap, BTC, ETH and SOL, 200 each;
+  - D: the same with the mean kept (BTC, 200);
+  - C: demeaned stationary bootstrap (BTC, 200);
+  - B0, B1, B2: E15's planted mechanism near a feature (BTC, 100 each);
+  - F1, F2: a planted effect on the 40-day return, only partly spanned by the
+    features, at β = 0.058 and 0.077 (BTC, 100 each);
+  - R: the real BTC series, for illustration only.
+- **Statistics.**
+  - PBO is E17's canonical CSCV.
+  - PoL: in each split, the out-of-sample Sharpe ratio of the configuration
+    selected in-sample (the one whose rank PBO uses); PoL is the share of splits
+    in which it is below 0. It is gross of costs, as PBO is.
+  - Embargo: the first e rows of every block are removed before the half
+    statistics are formed; e = 9 in Layer 1 (the dependence length of MA10),
+    applied under every serial structure so that its cost can be measured;
+    e = 20 events in Layer 2 (E15's purge length, a convention, not a derived
+    dependence length).
+  - Screens: P(τ) is PBO < τ, L(π) is PoL < π, C(τ, π) is both. The primary
+    screen is C(0.20, 0.05). Every rate is compared exactly, as a fraction of
+    integer counts.
+
+**Checks.**
+- Before the run (`checks/unit.json`):
+  - the generator reproduced 300 published E17 PBO counts from E17's seeds (PBO
+    counts only);
+  - on development seeds, the CSCV code matched E15's PBO on 120 matrices under
+    every serial structure at S = 8 and 16, and a direct loop over splits gave
+    the same PBO and loss counts as the run's code on 54 matrices at e = 0 and
+    e = 9 (108 comparisons);
+  - every embargoed block kept the required spacing of at least 10 rows from
+    the previous block;
+  - a self-test of the decision code gave the right verdict at the exact
+    boundaries of F1–F4.
+
+  The timing check projected 0.47 h against a 6 h limit.
+- The run gates required these checks with the committed files, `run.py` and
+  the pre-registration identical to `origin/main` at 801cc0d, no other run in
+  the same output folder, and a lock with their sha256 (`checks/lock.json`).
+  Layer 1 took 33.4 min with two workers and no restart, against a projected
+  28 min; Layer 2 took 31 s. The expected end is not a stop condition, and the
+  computation is deterministic.
+- Layer 2 identity, before any Layer 2 statistic: all 1,500 series except R
+  reproduced E17's `stage3_blockstats.npz` exactly, and arm R its eight
+  published PBO counts (`checks/layer2_identity.json`).
+- After the run:
+  - every decision and count below was recomputed from the row files with
+    separately written code;
+  - the 1,000 reference-cell P2 and N3 series behind F1, with 2,000 more drawn
+    at random, were regenerated from their seeds twice: with the run's
+    generator on a second platform, and with a separately written generator
+    (two different random samples). Every regenerated series gave its stored
+    canonical and embargoed PBO and loss counts;
+  - all 24,016 Layer 2 rows, arm R's included, were recomputed from the
+    private matrices with separately written CSCV code.
+
+  No mismatch was found.
+  [`recompute.py`](experiments/cscv_followup/recompute.py) repeats, from the
+  published files, the decisions, every count and mean in the two rates files,
+  and the 24,000 Layer 2 rows of every arm except R from the block statistics;
+  with `--regen N` it regenerates, with a generator written from the
+  pre-registrations, the 1,000 series behind F1 and N more. Arm R's 16 rows
+  need the per-event return matrices, which are not published.
+
+**Results: F1, does the combined screen tell an edge from a spread of means?**
+Reference cell, C(0.20, 0.05) without embargo, 500 pairs (P2 series j and N3
+series j, on the same shocks). Exact two-sided McNemar test. Rule (E17's D4
+thresholds): "separates" if P2 − N3 is at least 10 points with p < 0.05; "does
+not separate" if |P2 − N3| is under 5 points; "unclear" otherwise.
+
+| P2 | N3 | P2 only / N3 only | P2 − N3 (pp) | p | Verdict |
+|---|---|---|---|---|---|
+| 146 of 500 (29.2%) | 13 of 500 (2.6%) | 133 / 0 | +26.6 | 1.8e-40 | **separates** |
+
+The pre-registration expected this by construction: in the reference cell the
+edge configuration of P2 has a full-sample t-statistic of about 2.0, and the
+best configuration of N3 one of about 0. Outside the rule, and without a
+McNemar test, P2 − N3 under C(0.20, 0.05) is at least 10 points in 102 of the
+216 cells and under 5 points in 94 (IID 44 and 18 of 72, GARCH 52 and 16, MA10
+6 and 60); the rule was evaluated in the reference cell only.
+
+**Results: F2, does PoL < 0.05 hold its level after selection?** L(0.05)
+without embargo, for N1, N2 and N3 (in each, the best configuration has mean 0),
+over the 144 IID and GARCH cells. The span is the highest cell rate minus the
+lowest; R95 is the span expected from Monte Carlo error alone (95th
+percentile, 10,000 draws). Rule: "level
+holds" if, for each arm, the pooled 95% Wilson upper bound is at most 6.5% and
+span − R95 is at most 2 points; "level fails" otherwise.
+
+| Arm | Pooled | Wilson upper bound | Span | R95 | Span − R95 | Met |
+|---|---|---|---|---|---|---|
+| N1 | 4,130 of 144,000 (2.87%) | 2.96% | 7.1 | 3.3 | 3.8 | no |
+| N2 | 3,493 of 144,000 (2.43%) | 2.51% | 6.8 | 3.1 | 3.7 | no |
+| N3 | 2,845 of 72,000 (3.95%) | 4.10% | 10.0 | 5.4 | 4.6 | no |
+
+**Outcome F2: level fails.** Every arm meets the pooled-bound condition and
+fails the span condition. The bounds were fixed in advance and are not
+adjusted.
+
+*How it fails (descriptive, outside the rule).* The pooled rate is below the
+nominal 5% in each arm, but the cell rates range from 0.0% to 7.1% (N1), 6.8%
+(N2) and 10.0% (N3), and exceed 5% in 33, 13 and 49 of the 144 cells. The rate
+moves mainly with the correlation between configurations: N1 0.99%, 2.06% and
+5.55% at ρ = 0, 0.5 and 0.9 (N2 1.31, 1.71, 4.25%; N3 2.94, 3.37, 5.55%). It
+falls with the number of configurations (N1 3.87, 3.00, 2.40, 2.20% at M = 4,
+8, 16, 32), most at ρ = 0 (2.40% to 0.19%) and little at ρ = 0.9 (5.98% to
+5.33%), and is lower at S = 16 than at S = 8 (N1 2.44% against 3.30%). N2 and
+N3 rise with T (N2 1.95, 2.41, 2.92%; N3 2.10, 3.99, 5.77% at T = 250, 1000,
+2500); N1 does not (2.87, 2.80, 2.93%). These factor means are descriptive.
+
+Beside F2, without a verdict as pre-registered, the 72 MA10 cells (span − R95
+in points):
+
+| Variant | N1 | N2 | N3 |
+|---|---|---|---|
+| canonical | 2,550 of 72,000 (3.54%), 6.6 | 1,864 of 72,000 (2.59%), 3.8 | 801 of 36,000 (2.23%), 3.4 |
+| embargoed | 2,013 of 72,000 (2.80%), 4.3 | 1,505 of 72,000 (2.09%), 2.7 | 645 of 36,000 (1.79%), 2.0 |
+
+For one configuration without selection, the pre-registration expected MA10
+without an embargo to raise the level of PoL < 0.05 at T = 250 to about 7.3%
+(S = 16) and 6.0% (S = 8). After selection, N1 under MA10 at T = 250 passes
+4.36% (S = 16) and 4.81% (S = 8) without the embargo, and 2.07% and 3.54% with
+it. The two are not like for like: selection is exactly what F2 measures.
+
+**Results: F3, is the combined screen useful in the reference cell?**
+C(0.20, 0.05) without embargo. Rule: "useful" if N1, N2 and N3 each pass at most
+10.0% and P2 at least 50%; "safe but weak" if the first condition holds and P2
+passes under 50%; "not useful" otherwise.
+
+| N1 | N2 | N3 | P2 | Verdict |
+|---|---|---|---|---|
+| 8 of 1,000 (0.8%) | 14 of 1,000 (1.4%) | 13 of 500 (2.6%) | 146 of 500 (29.2%) | **safe but weak** |
+
+Outside the rule, P1 passes 19 of 500 (3.8%) and P3 480 of 500 (96.0%). The
+pre-registration expected the P2 condition to be the one near its bound: the
+edge configuration alone, before selection, would pass L(0.05) about 64% of the
+time, and selection and the conjunction with PBO < 0.20 would lower that. The
+result is 29.2%, well below the bound. The limiting part of the screen is
+L(0.05), which P2 passes at 30.0% in this cell (P(0.20) 66.4%). Why selection
+lowers it this much is not established here.
+
+The primary screen was C(0.20, 0.20) in the draft before the first review (see
+Design). Under that screen, outside the rule, the reference cell passes N1
+5.9%, N2 8.1%, N3 12.6% and P2 56.4%, so F3 would read "not useful"; the first
+review had expected N3 at roughly 10–15%. Outside the rule, across all 216
+cells, N1, N2 and N3 pass C(0.20, 0.05) at most 10.0% in every cell, and P2
+passes at least 50% in 52 cells.
+
+**Results: F4, does the embargo restore the equal-means rate under MA10 in
+short samples?** N1, P(0.20), T = 250, each serial structure pooled over its 24
+cells (24,000 series). excess₀ = MA10 − IID without embargo; excess_E = the same
+with the embargo. Rule, first row that holds: "premise not reproduced" if
+excess₀ < 3.0 points; "restores" if |excess_E| ≤ 1.0; "overshoots" if
+excess_E < −1.0; "does not restore" if excess_E ≥ 3.0; "partial" otherwise.
+
+| Variant | MA10 | IID | GARCH (reported) | MA10 − IID (pp) |
+|---|---|---|---|---|
+| canonical | 3,548 (14.78%) | 2,300 (9.58%) | 2,274 (9.48%) | excess₀ = +5.20 |
+| embargoed | 2,098 (8.74%) | 2,358 (9.83%) | 2,215 (9.23%) | excess_E = −1.083 |
+
+**Outcome F4: overshoots.** The premise reproduced on the new seeds (5.20
+points; 5.575 on E17's series). With the embargo, MA10 passes 1.083 points less
+often than IID, beyond the −1.0 bound. The pre-registration expected "restores"
+by construction, since with e = 9 the two halves of every split are independent
+under MA10, and noted that F4 mainly checks the implementation. The result
+differs from that expectation. The embargoed path was checked before the run
+(the direct loop at e = 9 and the spacing check) and after it (the embargoed
+counts regenerated for 3,000 series with each of two generators, including the
+same 1,000 reference-cell series, and recomputed with separately written CSCV code); these found no
+mismatch. Why the result differs from the expectation is not established. The
+verdict is not adjusted, and no other embargo length was tried.
+
+*How it overshoots (descriptive, outside the rule).* The embargo moves the
+centre back: the mean N1 PBO under MA10 at T = 250 goes from 0.444 to 0.500
+(IID 0.500 and 0.498, GARCH 0.501 and 0.499). The pass rate at 0.20, a tail of
+the distribution, falls below the IID rate. As in F3, the rule compares point
+estimates; the pre-registration allows for Monte Carlo error in F2 only. The
+standard error of the difference is about 0.26 points, so ±2 standard errors
+around −1.083 span about −1.6 to −0.6. The margin beyond the bound (0.083
+points) is small, and the interval includes values on both sides of the −1.0
+bound, so Monte Carlo error alone could move the point estimate across it. The
+verdict follows the rule's point estimate. The pre-registration noted that
+within-block effects on the spread of PBO across series would remain; whether
+they explain the overshoot is not established here.
+
+**Results: F5, what does the embargo cost?** Descriptive, no verdict. P2 pass
+rates, canonical → embargoed (%):
+
+| Design | P(0.20) | C(0.20, 0.05) |
+|---|---|---|
+| IID, T = 250 (12,000 series) | 33.17 → 22.19 | 7.28 → 3.98 |
+| IID, T = 1000 | 62.61 → 60.33 | 31.27 → 28.11 |
+| IID, T = 2500 | 86.24 → 85.43 | 63.98 → 61.93 |
+| GARCH, T = 250 | 36.68 → 25.48 | 9.51 → 5.35 |
+| GARCH, T = 1000 | 64.92 → 61.85 | 35.11 → 32.38 |
+| GARCH, T = 2500 | 87.21 → 86.31 | 66.84 → 65.21 |
+| MA10, T = 250 | 17.70 → 10.97 | 2.68 → 1.23 |
+| MA10, T = 1000 | 20.03 → 17.41 | 3.20 → 2.61 |
+| MA10, T = 2500 | 34.03 → 32.53 | 8.28 → 7.69 |
+| Reference cell (500 series) | 66.40 → 58.00 | 29.20 → 25.40 |
+
+The cost is largest at T = 250, where the embargo removes 9 of about 16 or 31
+rows per block, and small at T = 2,500.
+
+**Use of the outcomes.** The pre-registration (§4) ties the recommendations to
+the verdicts. F1 = separates and F2 = level fails, so its second row applies:
+"report that PoL separates in the reference cell but does not hold its level
+after selection under IID and GARCH returns. Recommend measuring its pass rate
+on matched data without an edge." F4 = overshoots, so its last row applies:
+"report it as such." The row that would recommend an embargo applies only if
+F4 = restores, so no embargo is recommended. The type of paper E17 assigned (a
+short paper on the size and power of PBO thresholds) does not change.
+
+**Other observations, outside the decision rules.**
+- *Reference cell, every arm* (%; canonical, then embargoed):
+
+  | Arm | P(0.20) | L(0.05) | C(0.20, 0.05) | Mean PBO | Mean PoL |
+  |---|---|---|---|---|---|
+  | N1, equal means | 11.9, 11.5 | 1.7, 1.8 | 0.8, 0.8 | 0.491, 0.486 | 0.498, 0.499 |
+  | N2, unequal means, no positive edge | 46.4, 40.7 | 1.4, 1.3 | 1.4, 1.3 | 0.270, 0.295 | 0.610, 0.608 |
+  | N3, the spread of P2, no positive edge | 65.0, 58.0 | 2.6, 2.4 | 2.6, 2.4 | 0.181, 0.218 | 0.620, 0.628 |
+  | P1, one edge, annual Sharpe 0.5 | 21.0, 21.4 | 4.6, 4.8 | 3.8, 3.0 | 0.423, 0.427 | 0.416, 0.426 |
+  | P2, one edge, annual Sharpe 1.0 | 66.4, 58.0 | 30.0, 27.4 | 29.2, 25.4 | 0.181, 0.217 | 0.183, 0.216 |
+  | P3, one edge, annual Sharpe 2.0 | 99.6, 99.4 | 96.0, 91.4 | 96.0, 91.4 | 0.008, 0.013 | 0.008, 0.015 |
+
+  On the new seeds PBO < 0.20 again does not tell P2 from N3 (66.4% and 65.0%;
+  E17: 69.6% and 70.2%), and their mean PBO is 0.181 for both, to three
+  decimals. Their mean PoL
+  differs (0.183 and 0.620). The separation in F1 comes from PoL.
+- *P2, L(0.05) by serial structure and T* (%, T = 250, 1000, 2500): IID 8.8,
+  31.9, 64.2; GARCH 10.8, 35.7, 67.0; MA10 5.4, 5.3, 9.5.
+- *Layer 2, M = 8, S = 16* (%; canonical → embargoed, e = 20):
+
+  | Arm | n | P(0.20) | L(0.05) | C(0.20, 0.05) | Mean PBO | Mean PoL |
+  |---|---|---|---|---|---|---|
+  | A-BTC | 200 | 15.5 → 12.5 | 3.5 → 2.5 | 1.5 → 1.0 | 0.483 → 0.501 | 0.464 → 0.471 |
+  | A-ETH | 200 | 15.0 → 17.0 | 5.0 → 2.5 | 4.0 → 2.0 | 0.483 → 0.460 | 0.461 → 0.469 |
+  | A-SOL | 200 | 19.5 → 16.0 | 6.0 → 2.0 | 2.0 → 0.5 | 0.453 → 0.476 | 0.486 → 0.484 |
+  | D | 200 | 26.0 → 21.5 | 16.0 → 11.0 | 11.5 → 8.0 | 0.418 → 0.441 | 0.279 → 0.328 |
+  | C | 200 | 14.5 → 10.5 | 19.5 → 15.5 | 4.0 → 5.0 | 0.463 → 0.481 | 0.294 → 0.328 |
+  | B0 | 100 | 13.0 → 13.0 | 2.0 → 3.0 | 0.0 → 0.0 | 0.482 → 0.491 | 0.491 → 0.501 |
+  | B1 | 100 | 26.0 → 18.0 | 48.0 → 36.0 | 20.0 → 11.0 | 0.384 → 0.426 | 0.111 → 0.139 |
+  | B2 | 100 | 46.0 → 31.0 | 94.0 → 91.0 | 44.0 → 30.0 | 0.274 → 0.371 | 0.007 → 0.021 |
+  | F1 | 100 | 17.0 → 12.0 | 21.0 → 16.0 | 9.0 → 5.0 | 0.460 → 0.485 | 0.317 → 0.344 |
+  | F2 | 100 | 13.0 → 12.0 | 45.0 → 31.0 | 6.0 → 8.0 | 0.462 → 0.469 | 0.179 → 0.220 |
+
+  The canonical P(0.20) column repeats E17, as it should. Among the arms without
+  a planted effect, L(0.05) passes the demeaned i.i.d. arms A at 3.5–6.0%, but
+  arm D, which keeps the drift, at 16.0%, and arm C, demeaned with serial
+  dependence kept, at 19.5%. Arm D's rate is consistent with PoL measuring
+  out-of-sample performance, which there includes the drift; why arm C passes
+  as often is not established here.
+  The F arms, whose effect PBO < 0.20 passes at about the B0 rate (E17), pass
+  L(0.05) at 21% and 45% but the combined screen at 9% and 6%. Every sub-grid
+  and block count is in `results/cscv_followup/rates_layer2.csv`.
+- *R, the real BTC series* (one series, illustration only): at M = 8, S = 16,
+  PBO 0.27 → 0.41 and PoL 0.21 → 0.30 with the embargo, and it passes none of
+  the three screens. Over the eight sub-grid and block settings, PBO is
+  0.10–0.50 and PoL 0.04–0.30 without the embargo, and 0.09–0.69 and 0.16–0.51
+  with it. It passes C(0.20, 0.05) at M = 4, S = 8 without the embargo (PBO
+  0.14, PoL 0.04), and P(0.20) at M = 4 in three of the four variants (not at
+  S = 16 with the embargo, PBO 0.28).
+
+**What this means.**
+- In the reference cell, requiring a low probability of loss beside a low PBO
+  tells a set with an edge from the same set with the edge removed, which PBO
+  alone did not (F1), as the pre-registration expected by construction. That
+  cell is one design; the rule was not evaluated elsewhere, and outside the
+  rule the separation is under 5 points in 94 of the 216 cells, most of them
+  under MA10.
+- PoL < 0.05 does not hold a fixed level once the configuration is selected
+  in-sample (F2). With equal or falling means and no positive edge, it passes
+  0.0–10.0% of sets across the IID and GARCH cells, more when the configurations
+  are strongly correlated. Like a PBO threshold, it is not a test level.
+- In the reference cell the combined screen passes few sets without a positive
+  edge (0.8–2.6%) but passes the set with an edge at an annual Sharpe ratio of
+  1.0 only 29.2% of the time (F3). Its power there is weak.
+- The embargo moves the centre of the MA10 PBO distribution back to 0.5 at
+  T = 250 but takes the pass rate at 0.20 below the IID rate (F4), and it costs
+  power at T = 250 (F5). The study makes no recommendation for an embargo.
+
+**Limits.**
+- Layer 1 matrices are stylised, as in E17: constant means, one form each of
+  volatility clustering and serial dependence, Gaussian copulas.
+- F1 and F3 are measured in the reference cell only.
+- PoL is computed gross of costs.
+- Layer 2 is one daily pipeline, one model family (CatBoost) and one grid, on
+  resampled exchange data, and is descriptive only. Its planted effects are of
+  two kinds.
+- e = 9 is the known dependence length of MA10; the dependence length of real
+  data is not known. In Layer 2, e = 20 events is a convention, and it does not
+  remove dependence shared by all events of one cross-validation fold.
+- Not tested (pre-registration §7): other embargo lengths, embargoes only at the
+  boundary between the two halves, intraday data, and other companion
+  statistics.
+
+**What this study does not change** (pre-registration §7). E17's verdicts and
+published numbers, and the checklist wording.
+
+Rates in this entry are rounded half up from exact fractions.
+
+**Supersedes.** Nothing. It adds the probability of loss and the embargo to
+E17's measurements.
 
 ## Unchanged
 

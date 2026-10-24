@@ -1,0 +1,26 @@
+{
+ "ok": true,
+ "at": "2026-10-23T15:56:40.620748+00:00",
+ "generator_identity_E17": {
+  "n": 300,
+  "mismatch": 0
+ },
+ "cscv_identity_E15": {
+  "n": 120,
+  "mismatch": 0
+ },
+ "direct_loop": {
+  "n": 108,
+  "mismatch": 0
+ },
+ "embargo_spacing": {
+  "ok": true,
+  "min_rows_left": 6
+ },
+ "decision_selftest": {
+  "ok": true
+ },
+ "run_py_sha256": "374cbf0fd0517c285987556807a42032ecfce57821a579eb4f08cd9ba0a8585e",
+ "prereg_body_sha256": "113407fbe33b6d51826f9d1a088bf691ff47130d87fb1b7cab1c5aa106daef78",
+ "prereg_sha256": "53a88fe6720ee31696d5fda55d0a85f06b527eeceef86a991976672482fd896f"
+}

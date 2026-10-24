@@ -1,0 +1,12 @@
+{
+ "series": 1500,
+ "mismatch": 0,
+ "arm_R_pbo_counts": 8,
+ "arm_R_mismatch": 0,
+ "stage3_R_sha256": "fdcb89da596280ac61343e5e478d68ca8d5a80cbcd3c2717db2311806afbd7ec",
+ "at": "2026-10-23T16:31:14.137659+00:00",
+ "run_py_sha256": "374cbf0fd0517c285987556807a42032ecfce57821a579eb4f08cd9ba0a8585e",
+ "prereg_body_sha256": "113407fbe33b6d51826f9d1a088bf691ff47130d87fb1b7cab1c5aa106daef78",
+ "prereg_sha256": "53a88fe6720ee31696d5fda55d0a85f06b527eeceef86a991976672482fd896f",
+ "prereg_commit": "801cc0d3f4fd9652bc13d993ef20abc8cca8c3cb"
+}
