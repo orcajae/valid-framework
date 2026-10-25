@@ -65,8 +65,11 @@ RETIRED = (r"of 75|75 papers|0/75|25/75|64/75|72%|x\.com/jwquant|@jwquant"
            # restated in CHANGELOG_CR.md E16
            r"|52% of our 340"
            # workshop name: the official page (sites.google.com/view/kdd-mlf-2026)
-           # does not say ACM SIGKDD; record-area package, INBOX #26
-           r"|ACM SIGKDD")
+           # does not say ACM SIGKDD (INBOX #26). "SIGKDD" alone also catches the
+           # name split across a line break, since the raw scan reads line by line
+           # (INBOX #29; case-sensitive; a hyphenated split such as "SIG-" / "KDD"
+           # is not caught)
+           r"|SIGKDD")
 
 # ---------------------------------------------------------------- gate 3
 # October 2026 correction state (CHANGELOG_CR.md, E13). Each entry must
@@ -113,10 +116,13 @@ SERVICE_BANNED = (
 # and were re-checked against CHANGELOG_CR.md at the base commit.
 LABEL_CONTEXTS = [
     r"AUC > 0\.55", r"PBO < 0\.20", r"18 bp", r"95% intervals", r"N of 12",
-    r"KDD-MLF 2026", r"KDD 2026", r"October 2026", r"9th ACM", r"9th Workshop",
+    r"KDD-MLF 2026", r"KDD 2026", r"October 2026", r"9th Workshop",
     r"Paper 18", r"[Pp]aper 6508779", r"\bT[123]\b",
     r"\bTier [123]\b", r"\bE1[3-8]\b", r"version 3\.4", r"15-minute", r"1-hour",
     r"jwim1101", r"jaewookkim1101", r"VALID v1\.0",
+    # engagement, contact and who-does-the-work copy (INBOX #29)
+    r"1–2 weeks", r"3–4 weeks", r"6–8 weeks", r"2 business days",
+    r"UTC\+9",
 ]
 # Any digit counts, glued to letters or after a decimal point too.
 NUM_TOKEN = re.compile(r"\.?\d[\d.,]*(?:–\d[\d.,]*)?%?")
@@ -807,6 +813,12 @@ def selftest():
         print("  %s want %-10s got %s" % ("PASS" if good else "FAIL",
                                           ",".join(sorted(want)),
                                           ",".join(sorted(got)) or "-"))
+    lines = [("README.md:1", "the 9th ACM"), ("README.md:2", "SIGKDD Workshop on ML")]
+    with contextlib.redirect_stdout(io.StringIO()):
+        caught = not scan(lines, RETIRED, "x", flags=0)
+    ok = ok and caught
+    print("  %s RETIRED catches the workshop name split across a line break"
+          % ("PASS" if caught else "FAIL"))
     dec = js_decode('a \\u2014 b')
     good = "—" in dec
     ok = ok and good

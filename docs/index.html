@@ -52,7 +52,10 @@
     <nav class="page-nav" aria-label="On this page">
       <a href="#how">How it works</a>
       <a href="#review">Reviews</a>
+      <a href="#engagement">Engagement</a>
+      <a href="#fees">Fees</a>
       <a href="#why">Independence</a>
+      <a href="#who">Who</a>
       <a href="#record">Record</a>
       <a href="#faq">FAQ</a>
       <a href="#scorer">Self-score</a>
@@ -165,6 +168,62 @@
   </div>
 </section>
 
+<!-- 4b. HOW AN ENGAGEMENT WORKS ======================================== -->
+<section id="engagement" class="engagement" data-gate="service" aria-labelledby="engagement-h">
+  <div class="wrap">
+    <h2 id="engagement-h">How an engagement works</h2>
+    <ol class="steps steps-6">
+      <li><b>You write.</b> A line on your pipeline and the checks it relies on.
+        You get a reply within 2 business days (KST).</li>
+      <li><b>Written scope.</b> The level, the inputs, the deliverables, the
+        time frame and the fee, agreed in writing before any work. If you
+        want to share code before that, we can sign a mutual non-disclosure
+        agreement.</li>
+      <li><b>You send the materials.</b> Code, the checks with their cutoffs,
+        your confirmation that the data licence permits the analysis, and either
+        the data or a request to run our scripts on your side. If your stated
+        results cannot be reproduced from your code and data, the review stops
+        and says so.</li>
+      <li><b>Rules fixed (T2, T3).</b> The test data with known answers and the
+        pass rules are written down; you receive their fingerprint before
+        anything runs.</li>
+      <li><b>Draft report.</b> You point out errors of fact and we correct them.
+        You can correct facts, not conclusions.</li>
+      <li><b>Final report.</b> T1: written findings. T2: the report with rates,
+        intervals and recommendations on the checks, plus the rules, scripts
+        and outputs needed to reproduce it. T3: the same, plus
+        pipeline findings.</li>
+    </ol>
+    <p class="uses-line">Expected time from receiving complete code and data (or,
+      when our scripts run on your side, the full output) to the final report,
+      not counting the time you take to review the draft: T1 1–2 weeks, T2 3–4
+      weeks, T3 6–8 weeks. The written scope sets the date for each
+      engagement.</p>
+  </div>
+</section>
+
+<!-- 4c. HOW FEES ARE SET ================================================= -->
+<section id="fees" class="fees" data-gate="service" aria-labelledby="fees-h">
+  <div class="wrap">
+    <h2 id="fees-h">How fees are set</h2>
+    <p class="sect-lede">Each fee is quoted for the engagement and fixed in the
+      written scope before any result exists. It does not change with the
+      findings. What sets it:</p>
+    <ul class="fee-factors">
+      <li><b>Level.</b> T1, T2 or T3.</li>
+      <li><b>Size of the pipeline.</b> How many configurations were tried, and how
+        long a full backtest takes to run.</li>
+      <li><b>Number of checks.</b> How many pass-or-fail checks are measured, and
+        against how many planted forms.</li>
+      <li><b>Where the scripts run.</b> On data you send us, or in your own
+        environment when your data licence bars sharing.</li>
+      <li><b>Re-check.</b> A re-check of an earlier review is quoted on its
+        own.</li>
+    </ul>
+    <p class="uses-line">Payment terms are set in the written scope.</p>
+  </div>
+</section>
+
 <!-- 5. WHY RELY ON IT ==================================================== -->
 <section id="why" class="why" data-gate="service" aria-labelledby="why-h">
   <div class="wrap">
@@ -184,6 +243,29 @@
       develops systematic trading strategies of his own. Client code, data and
       results are never used in his own trading.
       <a href="#coi">Conflicts of interest (under Questions below)</a></p>
+  </div>
+</section>
+
+<!-- 5b. WHO DOES THE WORK ================================================ -->
+<section id="who" class="who" data-gate="service" aria-labelledby="who-h">
+  <div class="wrap">
+    <h2 id="who-h">Who does the work</h2>
+    <p class="who-name"><b>Jaewook Kim</b> carries out every review himself.
+      Based in South Korea · replies within 2 business days (KST, UTC+9).</p>
+    <ul class="who-list">
+      <li>Degree in industrial engineering, with a minor in business
+        administration, from UNIST (Ulsan National Institute of Science and
+        Technology).</li>
+      <li>Presented (oral) at the 9th Workshop on Machine Learning in Finance at
+        KDD 2026; author of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6508779">SSRN working paper 6508779</a>.
+        He later withdrew most of its empirical results in public, in the
+        repository's correction log and a revised SSRN version.</li>
+      <li>Maintains the open-source <a href="https://github.com/orcajae/valid-framework">VALID framework</a>
+        and the pre-registered studies listed under Record.</li>
+    </ul>
+    <p class="why-note">He also develops systematic trading strategies of his
+      own; client code, data and results are never used in his own trading.
+      <a href="#coi">Conflicts of interest</a></p>
   </div>
 </section>
 
@@ -480,16 +562,21 @@
 <footer id="contact" data-gate="service" aria-labelledby="footer-h">
   <div class="wrap">
     <h2 id="footer-h">Contact</h2>
-    <p class="foot-lede">To ask about a review, write with a line on your
-      pipeline and the checks it relies on. Found an error in our work? Write
-      to the same address; corrections are logged in the public changelog.</p>
+    <p class="foot-lede">To ask about a review, email jwim1101@gmail.com with a
+      line on your pipeline, the checks it relies on and their cutoffs, your
+      data source and licence, and the level you have in mind. The link below
+      opens a message with these headings. Replies within 2 business days (KST,
+      UTC+9). Found an error in our work? Write to the same address;
+      corrections are logged in the public changelog.</p>
     <p class="foot-meta">
       Jaewook Kim ·
-      <a href="mailto:jwim1101@gmail.com?subject=VALID%20review">jwim1101@gmail.com</a>
+      <a href="mailto:jwim1101@gmail.com?subject=VALID%20review&amp;body=Pipeline%20(one%20line)%3A%20%0D%0AChecks%20and%20cutoffs%3A%20%0D%0AData%20source%20and%20licence%3A%20%0D%0ALevel%20(T1%2C%20T2%2C%20T3%20or%20not%20sure)%3A%20%0D%0A">jwim1101@gmail.com</a>
       · <a href="https://www.linkedin.com/in/jaewookkim1101/">linkedin.com/in/jaewookkim1101</a>
       · <a href="https://orcajae.github.io/valid-framework/">orcajae.github.io/valid-framework</a>
     </p>
-    <p class="foot-fine">No cookies, no trackers. VALID v1.0: the checklist has had
+    <p class="foot-fine">No cookies, no trackers. GitHub Pages, which hosts this
+      page, logs visitors' IP addresses for security purposes.</p>
+    <p class="foot-fine">VALID v1.0: the checklist has had
       no formal Delphi review; community revision is invited.</p>
   </div>
 </footer>
