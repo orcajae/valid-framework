@@ -34,6 +34,8 @@
   --paper: #FFFFFF;
   --slate: #1E2A32;
   --wrap: 68rem;
+  --measure: 36rem;       /* running text: at most about 80 characters a line */
+  --t-min: .8125rem;      /* 13px, the smallest text on the page */
   --sans: "InterLocal", system-ui, -apple-system, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
@@ -122,7 +124,7 @@ a:hover { color: var(--green-d); }
 
 /* ---------- sections ---------- */
 section { padding: clamp(2.5rem, 6vw, 4.2rem) 0; }
-.sect-lede { color: var(--soft); max-width: 42rem; margin-top: -.3rem; }
+.sect-lede { color: var(--soft); max-width: var(--measure); margin-top: -.3rem; }
 
 /* ---------- 2. scorer ---------- */
 .scorer { border-bottom: 1px solid var(--rule); }
@@ -135,7 +137,7 @@ legend {
 }
 .stage-tag {
   display: inline-block; background: var(--green); color: #fff;
-  font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+  font-size: var(--t-min); font-weight: 700; letter-spacing: .06em;
   text-transform: uppercase; padding: .18rem .5rem; border-radius: 4px;
   margin-right: .5rem; vertical-align: 2px;
 }
@@ -226,10 +228,10 @@ legend {
 .story-more { border-top: 1px solid var(--rule); }
 .story-more[open] > summary { margin-bottom: .2rem; }
 .story-box h2 { margin-bottom: .45em; }
-.story-text { font-size: clamp(1rem, 1.9vw, 1.1rem); max-width: 46rem; }
+.story-text { font-size: clamp(1rem, 1.9vw, 1.1rem); max-width: var(--measure); }
 .story-self {
   margin: 0; padding-top: 1rem; border-top: 1px solid var(--rule);
-  font-size: .97rem;
+  font-size: .97rem; max-width: var(--measure);
 }
 .story-self b { color: var(--red); font-size: 1.25rem; }
 
@@ -283,7 +285,7 @@ footer { background: var(--green-l); border-top: 1px solid var(--rule); padding:
 footer h2 { color: var(--green-d); }
 .foot-lede { max-width: 34rem; color: var(--ink); }
 .foot-meta { margin-top: 1.6rem; font-size: .95rem; }
-.foot-fine { font-size: .84rem; color: var(--soft); margin-bottom: 0; max-width: 40rem; }
+.foot-fine { font-size: .84rem; color: var(--soft); margin-bottom: 0; max-width: var(--measure); }
 
 /* ---------- service page (October 2026) ---------- */
 .hero-grid { display: grid; gap: 2rem; align-items: center; }
@@ -300,6 +302,13 @@ footer h2 { color: var(--green-d); }
 .matrix .m-bad { fill: #8E2A20; }
 .matrix .m-good { fill: #D9EFE5; }
 .matrix .m-on-light { fill: #0B3D2C; }
+/* the figure scales down with the phone; larger units keep its text at 13px from
+   375px up (at 360px a larger size would run into the cells) */
+@media (max-width: 26rem) {
+  .matrix .m-col, .matrix .m-row, .matrix .m-row-sub, .matrix .m-cell-sub { font-size: 15.6px; }
+  .matrix .m-row { transform: translate(-12px, -2px); }
+  .matrix .m-row-sub { transform: translateX(-12px); }
+}
 .matrix figcaption { font-size: .86rem; color: #BFE3D2; margin-top: .5rem; }
 
 .page-nav {
@@ -321,7 +330,7 @@ footer h2 { color: var(--green-d); }
 .tile-s a { color: #FFFFFF; font-weight: 600; }
 .tile-s a:hover { color: #9FD8BF; }
 @media (min-width: 40rem) and (max-width: 61.99rem) { .tiles-3 { grid-template-columns: 1fr; } }
-.tiles-foot { margin: 1.8rem 0 0; color: #C9D6DD; font-size: .95rem; max-width: 46rem; }
+.tiles-foot { margin: 1.8rem 0 0; color: #C9D6DD; font-size: .95rem; max-width: var(--measure); }
 
 .how { border-bottom: 1px solid var(--rule); }
 .steps { list-style: none; counter-reset: step; margin: 1.4rem 0 0; padding: 0; display: grid; gap: 1rem; }
@@ -329,7 +338,7 @@ footer h2 { color: var(--green-d); }
 .steps li::before { content: counter(step); position: absolute; left: 1rem; top: 1rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--green); color: #fff; font-weight: 700; font-size: .9rem; display: flex; align-items: center; justify-content: center; }
 .steps b { display: block; color: var(--green-d); }
 @media (min-width: 56rem) { .steps { grid-template-columns: repeat(3, 1fr); } }
-.uses-line { margin: 1.4rem 0 0; font-size: .95rem; color: var(--soft); }
+.uses-line { margin: 1.4rem 0 0; font-size: .95rem; color: var(--soft); max-width: var(--measure); }
 
 .review { background: #F4F7F8; border-bottom: 1px solid var(--rule); }
 .tiers { display: grid; gap: 1.2rem; margin-top: 1.4rem; }
@@ -340,23 +349,23 @@ footer h2 { color: var(--green-d); }
   border-radius: 8px; padding: 1.2rem 1.25rem; background: #fff;
 }
 .tier p { font-size: .95rem; }
-.tier-tag { margin: 0 0 .2rem; font-size: .78rem; font-weight: 700; letter-spacing: .08em; color: var(--green); }
+.tier-tag { margin: 0 0 .2rem; font-size: var(--t-min); font-weight: 700; letter-spacing: .08em; color: var(--green); }
 .tier h3 { font-size: 1.2rem; margin-bottom: .5rem; }
 .tier-out { margin: auto 0 0; padding-top: .8rem; border-top: 1px solid var(--rule); font-size: .92rem; }
-.tiers-foot { margin: 1.2rem 0 0; font-size: .92rem; color: var(--soft); }
+.tiers-foot { margin: 1.2rem 0 0; font-size: .92rem; color: var(--soft); max-width: var(--measure); }
 .tier-sample { margin: .8rem 0 0; font-size: .92rem; }
 .tier-sample a { font-weight: 600; }
-.tier-sample-note { display: block; margin-top: .25rem; font-size: .8rem; color: var(--soft); }
+.tier-sample-note { display: block; margin-top: .25rem; font-size: var(--t-min); color: var(--soft); }
 
 /* ---------- engagement, fees, who (INBOX #29) ---------- */
 .engagement { border-bottom: 1px solid var(--rule); }
 .fees { background: #F4F7F8; border-bottom: 1px solid var(--rule); }
-.fee-factors { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: .8rem; max-width: 50rem; }
+.fee-factors { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: .8rem; max-width: var(--measure); }
 .fee-factors li { border-left: 4px solid var(--green); padding: .1rem 0 .1rem .9rem; font-size: .95rem; color: var(--soft); }
 .fee-factors b { color: var(--ink); }
 .who { border-top: 1px solid var(--rule); }
-.who-name { font-size: 1.02rem; max-width: 50rem; }
-.who-list { margin: .8rem 0 0; padding-left: 1.1rem; max-width: 50rem; }
+.who-name { font-size: 1.02rem; max-width: var(--measure); }
+.who-list { margin: .8rem 0 0; padding-left: 1.1rem; max-width: var(--measure); }
 .who-list li { margin-bottom: .45rem; font-size: .97rem; }
 
 .badges { list-style: none; margin: 1.4rem 0 0; padding: 0; display: grid; gap: 1rem; }
@@ -364,16 +373,16 @@ footer h2 { color: var(--green-d); }
 .badges b { display: block; color: var(--ink); font-size: 1rem; }
 @media (min-width: 46rem) { .badges { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 62rem) { .badges { grid-template-columns: repeat(4, 1fr); } }
-.why-note { margin: 1.4rem 0 0; font-size: .92rem; color: var(--soft); }
+.why-note { margin: 1.4rem 0 0; font-size: .92rem; color: var(--soft); max-width: var(--measure); }
 
-.record-list { margin: 1rem 0 0; padding-left: 1.1rem; max-width: 50rem; }
+.record-list { margin: 1rem 0 0; padding-left: 1.1rem; max-width: var(--measure); }
 .record-list li { margin-bottom: .45rem; font-size: .97rem; }
 
 .faq-sect { border-top: 1px solid var(--rule); }
 .faq-sect details { border-bottom: 1px solid var(--rule); max-width: 50rem; }
 .faq-sect summary, .story-more summary { cursor: pointer; padding: .9rem 0; font-weight: 600; min-height: 44px; }
 .faq-sect summary:hover, .story-more summary:hover { color: var(--green-d); }
-.faq-sect details p { margin: 0 0 1rem; font-size: .95rem; color: var(--ink); }
+.faq-sect details p { margin: 0 0 1rem; font-size: .95rem; color: var(--ink); max-width: var(--measure); }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
