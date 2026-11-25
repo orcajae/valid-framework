@@ -92,6 +92,13 @@ code.hash {
   #s8 .rtable:has(.ci) th:first-child,
   #s8 .tscroll + .tscroll th:first-child { min-width: calc(100cqi - 12.9rem); }
 }
+/* on the narrowest phones the seven-column table needs tighter cells to keep its
+   last three columns whole; the text size stays */
+@media (max-width: 23.4rem) {
+  .rtable:has(thead th:nth-child(7)) :is(th, td) { padding-inline: .45rem; }
+  .rtable:has(thead th:nth-child(7)) th:first-child { min-width: calc(100cqi - 14rem); }
+  .rtable:has(thead th:nth-child(7)) caption { text-wrap: balance; }
+}
 .rtable td { font-variant-numeric: tabular-nums; }
 .rtable .ci { display: block; font-size: .8rem; color: var(--soft); }
 .v-ok { color: var(--green-d); font-weight: 600; }
