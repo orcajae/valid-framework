@@ -7,6 +7,7 @@
   border-bottom: 1px solid #E5C777;
   font-size: .86rem; font-weight: 600; text-align: center;
   padding: .55rem 1rem;
+  text-wrap: balance;     /* two even lines on a phone, never a forced one-liner */
 }
 
 .sample-head { background: var(--slate); color: #fff; padding: clamp(2rem, 6vw, 3.6rem) 0 2rem; }
@@ -57,13 +58,40 @@ code.hash {
 .hashes th, .hashes td { text-align: left; padding: .35rem .5rem; border-top: 1px solid var(--rule); vertical-align: top; font-size: .88rem; }
 .hashes th { white-space: nowrap; font-weight: 600; }
 
-.tscroll { overflow-x: auto; margin: 1rem 0 1.4rem; -webkit-overflow-scrolling: touch; }
+/* scroll hint: a shadow on the right edge while columns remain off-screen.
+   The first layer moves with the table and covers the shadow at its end, so
+   a table that fits, or one scrolled to the end, shows no shadow. */
+.tscroll {
+  overflow-x: auto; margin: 1rem 0 1.4rem; -webkit-overflow-scrolling: touch;
+  background:
+    linear-gradient(to left, var(--paper) 40%, rgba(255, 255, 255, 0)) right center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, rgba(19, 24, 29, .18), rgba(19, 24, 29, 0)) right center / 1rem 100% no-repeat scroll,
+    var(--paper);
+}
 .tscroll:focus-visible { outline-offset: 4px; }
 .rtable { border-collapse: collapse; min-width: 100%; font-size: .9rem; }
 .rtable caption { text-align: left; font-weight: 600; font-size: .92rem; margin-bottom: .5rem; }
 .rtable th, .rtable td { padding: .5rem .6rem; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; }
 .rtable thead th { border-top: 2px solid var(--ink); font-size: .82rem; color: var(--soft); font-weight: 600; }
 .rtable tbody th { font-weight: 600; white-space: nowrap; position: sticky; left: 0; background: var(--paper); }
+/* the header cell above the sticky column sticks with it, so column labels
+   never slide over the row labels */
+.rtable thead th:first-child { position: sticky; left: 0; z-index: 1; background: var(--paper); }
+/* on a phone the sticky row label may wrap, leaving room for the data */
+@media (max-width: 39.99rem) { .rtable tbody th { white-space: normal; width: 8rem; } }
+/* on a narrow phone the sticky column (header cell and row labels alike) fills
+   what the last three columns leave, so a table scrolled to its end stops on a
+   column edge and no piece of a half-covered column shows beside it */
+.tscroll { container-type: inline-size; }
+@media (max-width: 27rem) {
+  .rtable:has(thead th:nth-child(7)) th:first-child { min-width: calc(100cqi - 14.9rem); }
+  .rtable-full th:first-child { min-width: calc(100cqi - 14rem); }
+}
+/* the same for two five-column tables of section 8, which fit on wider phones */
+@media (max-width: 25.5rem) {
+  #s8 .rtable:has(.ci) th:first-child,
+  #s8 .tscroll + .tscroll th:first-child { min-width: calc(100cqi - 12.9rem); }
+}
 .rtable td { font-variant-numeric: tabular-nums; }
 .rtable .ci { display: block; font-size: .8rem; color: var(--soft); }
 .v-ok { color: var(--green-d); font-weight: 600; }

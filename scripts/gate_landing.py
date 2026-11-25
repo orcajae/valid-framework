@@ -178,7 +178,7 @@ CLAIM_HREFS = {
 # sha256 of the normalised text of the record region: the correction box as
 # published at 1ca480f and the scorer section of 1ca480f with its four
 # em-dashes replaced (": " or ", ").
-RECORD_SHA = "36e87acaabb54797dbafeda198b5e89c8314ef4cc64412cabfb229fa997e4d74"
+RECORD_SHA = "9281d30a42dec94aaabc5692f1f35ef8224c6503cdbb644ccc65999e48d248ef"
 RECORD_SECTIONS = ["correction", "scorer"]
 
 # ---------------------------------------------------------------- gate 1f

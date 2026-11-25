@@ -221,7 +221,10 @@ legend {
 
 /* ---------- 1b. story (absorbs the former honesty box) ---------- */
 .story { padding-bottom: 0; }
-.story-box { border: 2px solid var(--red); border-radius: 8px; padding: 1.5rem; }
+/* a quiet callout: one neutral rule on the left; red stays for verdicts */
+.story-box { border-left: 3px solid #8A969E; padding: .25rem 0 .25rem 1.25rem; }
+.story-more { border-top: 1px solid var(--rule); }
+.story-more[open] > summary { margin-bottom: .2rem; }
 .story-box h2 { margin-bottom: .45em; }
 .story-text { font-size: clamp(1rem, 1.9vw, 1.1rem); max-width: 46rem; }
 .story-self {
@@ -368,8 +371,8 @@ footer h2 { color: var(--green-d); }
 
 .faq-sect { border-top: 1px solid var(--rule); }
 .faq-sect details { border-bottom: 1px solid var(--rule); max-width: 50rem; }
-.faq-sect summary { cursor: pointer; padding: .9rem 0; font-weight: 600; min-height: 44px; }
-.faq-sect summary:hover { color: var(--green-d); }
+.faq-sect summary, .story-more summary { cursor: pointer; padding: .9rem 0; font-weight: 600; min-height: 44px; }
+.faq-sect summary:hover, .story-more summary:hover { color: var(--green-d); }
 .faq-sect details p { margin: 0 0 1rem; font-size: .95rem; color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
